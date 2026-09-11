@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Royal Palace Hotel</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f7f7f7;
+ color:#222;
+}
+
+header{
+ background:#111;
+ color:white;
+ padding:15px 20px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ position:sticky;
+ top:0;
+ z-index:100;
+}
+
+.logo{
+ font-size:22px;
+ font-weight:bold;
+}
+
+.header-right{
+ display:flex;
+ gap:10px;
+ align-items:center;
+}
+
+button{
+ border:0;
+ padding:11px 16px;
+ border-radius:7px;
+ cursor:pointer;
+ font-size:15px;
+}
+
+.account-btn{
+ background:#fff;
+ color:#111;
+}
+
+.menu-btn{
+ background:#333;
+ color:#fff;
+ font-size:20px;
+}
+
+.menu{
+ display:none;
+ position:absolute;
+ right:15px;
+ top:65px;
+ background:#fff;
+ color:#111;
+ width:180px;
+ box-shadow:0 5px 20px #0003;
+ border-radius:8px;
+ overflow:hidden;
+}
+
+.menu button{
+ width:100%;
+ text-align:left;
+ background:#fff;
+ border-radius:0;
+}
+
+.menu button:hover{
+ background:#eee;
+}
+
+.hero{
+ min-height:420px;
+ background:
+ linear-gradient(#0008,#0008),
+ url("images/hotel-front.jpg") center/cover;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ color:white;
+ padding:30px;
+}
+
+.hero h1{
+ font-size:45px;
+ margin:0 0 12px;
+}
+
+.hero p{
+ font-size:20px;
+}
+
+.container{
+ max-width:1100px;
+ margin:auto;
+ padding:35px 18px;
+}
+
+.title{
+ text-align:center;
+ margin-bottom:25px;
+}
+
+.title h2{
+ font-size:30px;
+ margin-bottom:8px;
+}
+
+.gallery{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:15px;
+}
+
+.gallery img{
+ width:100%;
+ height:230px;
+ object-fit:cover;
+ border-radius:12px;
+}
+
+.facilities{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:15px;
+}
+
+.facility{
+ background:white;
+ padding:22px;
+ border-radius:12px;
+ text-align:center;
+ box-shadow:0 2px 10px #0001;
+ font-weight:bold;
+}
+
+.rooms{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:20px;
+}
+
+.room{
+ background:white;
+ border-radius:14px;
+ overflow:hidden;
+ box-shadow:0 3px 15px #0002;
+}
+
+.room img{
+ width:100%;
+ height:220px;
+ object-fit:cover;
+}
+
+.room-content{
+ padding:20px;
+}
+
+.room h3{
+ margin-top:0;
+ font-size:23px;
+}
+
+.price{
+ font-size:22px;
+ font-weight:bold;
+ margin:12px 0;
+}
+
+.book-btn{
+ background:#111;
+ color:white;
+ width:100%;
+}
+
+.notice{
+ background:#fff8d8;
+ padding:15px;
+ border-radius:8px;
+ margin:20px 0;
+ text-align:center;
+}
+
+#bookingSection{
+ display:none;
+}
+
+#bookingSection.show{
+ display:block;
+}
+
+.booking-box{
+ max-width:650px;
+ margin:auto;
+ background:white;
+ padding:25px;
+ border-radius:14px;
+ box-shadow:0 3px 15px #0002;
+}
+
+.booking-box label{
+ display:block;
+ margin-top:14px;
+ margin-bottom:6px;
+ font-weight:bold;
+}
+
+.booking-box input,
+.booking-box select{
+ width:100%;
+ padding:12px;
+ border:1px solid #ccc;
+ border-radius:7px;
+ font-size:16px;
+}
+
+.confirm-btn{
+ width:100%;
+ margin-top:20px;
+ background:#111;
+ color:white;
+}
+
+.selected-room{
+ background:#f0f0f0;
+ padding:14px;
+ border-radius:8px;
+ margin-bottom:15px;
+ font-weight:bold;
+}
+
+.history{
+ display:none;
+ background:white;
+ padding:20px;
+ border-radius:12px;
+ margin-top:20px;
+}
+
+.history-item{
+ border-bottom:1px solid #ddd;
+ padding:15px 0;
+}
+
+footer{
+ background:#111;
+ color:white;
+ text-align:center;
+ padding:25px;
+ margin-top:40px;
+}
+
+@media(max-width:800px){
+ .rooms{
+  grid-template-columns:1fr;
+ }
+
+ .gallery{
+  grid-template-columns:1fr;
+ }
+
+ .facilities{
+  grid-template-columns:repeat(2,1fr);
+ }
+
+ .hero h1{
+  font-size:32px;
+ }
+}
+
+@media(max-width:450px){
+ .facilities{
+  grid-template-columns:1fr;
+ }
+
+ header{
+  padding:12px;
+ }
+
+ .logo{
+  font-size:18px;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+Royal Palace Hotel
+</div>
+
+<div class="header-right">
+
+<button
+class="account-btn"
+id="accountBtn"
+onclick="accountAction()">
+Login
+</button>
+
+<button
+class="menu-btn"
+onclick="toggleMenu()">
+⋮
+</button>
+
+</div>
+
+<div class="menu" id="menu">
+
+<button onclick="showHistory()">
+My Bookings
+</button>
+
+<button onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</header>
+
+
+<section class="hero">
+
+<div>
+
+<h1>Royal Palace Hotel</h1>
+
+<p>
+Comfort • Luxury • Hospitality
+</p>
+
+<p>
+आपका स्वागत है
+</p>
+
+</div>
+
+</section>
+
+
+<section class="container">
+
+<div class="title">
+
+<h2>Our Hotel</h2>
+
+<p>
+Royal Palace Hotel में आपका स्वागत है।
+</p>
+
+</div>
+
+
+<div class="gallery">
+
+<img
+src="images/hotel-front.jpg"
+alt="Hotel Front">
+
+<img
+src="images/lobby.jpg"
+alt="Hotel Lobby">
+
+<img
+src="images/reception.jpg"
+alt="Reception">
+
+</div>
+
+</section>
+
+
+<section class="container">
+
+<div class="title">
+
+<h2>Facilities</h2>
+
+<p>हमारी सुविधाएँ</p>
+
+</div>
+
+
+<div class="facilities">
+
+<div class="facility">
+📶 Free Wi-Fi
+</div>
+
+<div class="facility">
+🚗 Parking
+</div>
+
+<div class="facility">
+🍽️ Restaurant
+</div>
+
+<div class="facility">
+❄️ AC Rooms
+</div>
+
+<div class="facility">
+📺 Smart TV
+</div>
+
+<div class="facility">
+🛎️ Room Service
+</div>
+
+<div class="facility">
+🛏️ Comfortable Beds
+</div>
+
+<div class="facility">
+🔒 24×7 Security
+</div>
+
+</div>
+
+</section>
+
+
+<section class="container">
+
+<div class="title">
+
+<h2>Our Rooms</h2>
+
+<p>
+अपना पसंदीदा कमरा चुनें
+</p>
+
+</div>
+
+
+<div class="rooms">
+
+
+<div class="room">
+
+<img
+src="images/deluxe-room.jpg"
+alt="Deluxe Room">
+
+<div class="room-content">
+
+<h3>
+Deluxe Room
+</h3>
+
+<p>
+आरामदायक और खूबसूरत Deluxe Room।
+</p>
+
+<div class="price">
+₹2,499 / Night
+</div>
+
+<button
+class="book-btn"
+onclick="bookRoom('Deluxe Room',2499)">
+Book Now
+</button>
+
+</div>
+
+</div>
+
+
+<div class="room">
+
+<img
+src="images/premium-room.jpg"
+alt="Premium Room">
+
+<div class="room-content">
+
+<h3>
+Premium Room
+</h3>
+
+<p>
+Premium सुविधाओं के साथ शानदार कमरा।
+</p>
+
+<div class="price">
+₹3,499 / Night
+</div>
+
+<button
+class="book-btn"
+onclick="bookRoom('Premium Room',3499)">
+Book Now
+</button>
+
+</div>
+
+</div>
+
+
+<div class="room">
+
+<img
+src="images/royal-suite.jpg"
+alt="Royal Suite">
+
+<div class="room-content">
+
+<h3>
+Royal Suite
+</h3>
+
+<p>
+Royal अनुभव के लिए हमारा सबसे शानदार Suite।
+</p>
+
+<div class="price">
+₹5,999 / Night
+</div>
+
+<button
+class="book-btn"
+onclick="bookRoom('Royal Suite',5999)">
+Book Now
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="notice">
+
+ℹ️ Booking करने के लिए पहले Customer Account में Login करना जरूरी है।
+
+</div>
+
+</section>
+
+
+<section
+class="container"
+id="bookingSection">
+
+<div class="title">
+
+<h2>
+Complete Your Booking
+</h2>
+
+<p>
+अपनी booking details भरें
+</p>
+
+</div>
+
+
+<div class="booking-box">
+
+<div
+class="selected-room"
+id="selectedRoom">
+Selected Room
+</div>
+
+
+<label>
+Guest Name
+</label>
+
+<input
+type="text"
+id="guestName"
+placeholder="अपना नाम लिखें"
+>
+
+
+<label>
+Mobile Number
+</label>
+
+<input
+type="tel"
+id="mobile"
+placeholder="Mobile Number"
+>
+
+
+<label>
+Check-in
+</label>
+
+<input
+type="date"
+id="checkin"
+>
+
+
+<label>
+Check-out
+</label>
+
+<input
+type="date"
+id="checkout"
+>
+
+
+<label>
+Guests
+</label>
+
+<select id="guests">
+
+<option value="1">
+1 Guest
+</option>
+
+<option value="2">
+2 Guests
+</option>
+
+<option value="3">
+3 Guests
+</option>
+
+<option value="4">
+4 Guests
+</option>
+
+<option value="5">
+5 Guests
+</option>
+
+</select>
+
+
+<button
+class="confirm-btn"
+onclick="confirmBooking()">
+
+Confirm Booking
+
+</button>
+
+</div>
+
+</section>
+
+
+<section class="container">
+
+<div
+class="history"
+id="historyBox">
+
+<h2>
+My Bookings
+</h2>
+
+<div id="historyList"></div>
+
+</div>
+
+</section>
+
+
+<footer>
+
+© 2026 Royal Palace Hotel
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://mvvfqkcgaxcipjkiyuae.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_YbyO8KHdQxXyv6afqJZfWg_Eu2aw57x";
+
+const db =
+window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
+
+
+let selectedRoom = "";
+let selectedPrice = 0;
+
+
+/* MENU */
+
+function toggleMenu(){
+
+ const menu =
+ document.getElementById("menu");
+
+ menu.style.display =
+ menu.style.display === "block"
+ ? "none"
+ : "block";
+
+}
+
+
+/* ACCOUNT */
+
+async function accountAction(){
+
+ const {data} =
+ await db.auth.getSession();
+
+ if(data.session){
+
+  toggleMenu();
+
+ }else{
+
+  window.location.href =
+  "user-login.html";
+
+ }
+
+}
+
+
+/* BOOK ROOM */
+
+async function bookRoom(room,price){
+
+ const {data} =
+ await db.auth.getSession();
+
+ if(!data.session){
+
+  window.location.href =
+  "user-login.html?room="
+  + encodeURIComponent(room)
+  + "&price="
+  + encodeURIComponent(price);
+
+  return;
+
+ }
+
+ openBooking(room,price);
+
+}
+
+
+/* OPEN BOOKING */
+
+function openBooking(room,price){
+
+ selectedRoom = room;
+
+ selectedPrice =
+ Number(price);
+
+ document.getElementById(
+  "selectedRoom"
+ ).innerHTML =
+ "Selected Room: "
+ + room
+ + " — ₹"
+ + selectedPrice
+ + " / Night";
+
+ document.getElementById(
+  "bookingSection"
+ ).classList.add("show");
+
+ document.getElementById(
+  "bookingSection"
+ ).scrollIntoView({
+  behavior:"smooth"
+ });
+
+}
+
+
+/* RETURN FROM LOGIN */
+
+async function checkBookingReturn(){
+
+ const params =
+ new URLSearchParams(
+  window.location.search
+ );
+
+ const room =
+ params.get("room");
+
+ const price =
+ params.get("price");
+
+ if(room && price){
+
+  const {data} =
+  await db.auth.getSession();
+
+  if(data.session){
+
+   openBooking(
+    room,
+    Number(price)
+   );
+
+   window.history.replaceState(
+    {},
+    document.title,
+    window.location.pathname
+   );
+
+  }
+
+ }
+
+}
+
+
+/* CONFIRM BOOKING */
+
+async function confirmBooking(){
+
+ const {data} =
+ await db.auth.getSession();
+
+ if(!data.session){
+
+  window.location.href =
+  "user-login.html";
+
+  return;
+
+ }
+
+
+ const name =
+ document.getElementById(
+  "guestName"
+ ).value.trim();
+
+
+ const mobile =
+ document.getElementById(
+  "mobile"
+ ).value.trim();
+
+
+ const checkin =
+ document.getElementById(
+  "checkin"
+ ).value;
+
+
+ const checkout =
+ document.getElementById(
+  "checkout"
+ ).value;
+
+
+ const guests =
+ Number(
+  document.getElementById(
+   "guests"
+  ).value
+ );
+
+
+ if(
+  !name ||
+  !mobile ||
+  !checkin ||
+  !checkout
+ ){
+
+  alert(
+   "Please fill all booking details."
+  );
+
+  return;
+
+ }
+
+
+ const start =
+ new Date(checkin);
+
+ const end =
+ new Date(checkout);
+
+ const diff =
+ end - start;
+
+ const nights =
+ Math.ceil(
+  diff /
+  (1000*60*60*24)
+ );
+
+
+ if(nights <= 0){
+
+  alert(
+   "Check-out date must be after check-in date."
+  );
+
+  return;
+
+ }
+
+
+ const total =
+ nights *
+ selectedPrice;
+
+
+ const id =
+ "RPH-" +
+ Date.now();
+
+
+ const bookingData = {
+
+  booking_id:id,
+
+  guest_name:name,
+
+  mobile:mobile,
+
+  room:selectedRoom,
+
+  checkin:checkin,
+
+  checkout:checkout,
+
+  guests:guests,
+
+  nights:nights,
+
+  price_per_night:selectedPrice,
+
+  total:total,
+
+  status:"Confirmed"
+
+ };
+
+
+ const {error} =
+ await db
+ .from("bookings")
+ .insert([bookingData]);
+
+
+ if(error){
+
+  console.error(error);
+
+  alert(
+   "Booking failed: "
+   + error.message
+  );
+
+  return;
+
+ }
+
+
+ /* LOCAL HISTORY */
+
+ let history =
+ JSON.parse(
+  localStorage.getItem(
+   "royalPalaceBookings"
+  ) || "[]"
+ );
+
+
+ history.push({
+
+  booking_id:id,
+
+  guest_name:name,
+
+  mobile:mobile,
+
+  room:selectedRoom,
+
+  checkin:checkin,
+
+  checkout:checkout,
+
+  guests:guests,
+
+  nights:nights,
+
+  price_per_night:selectedPrice,
+
+  total:total,
+
+  status:"Confirmed"
+
+ });
+
+
+ /*
+  सिर्फ सही Booking ID वाली
+  नई entries रखेंगे।
+ */
+
+ history =
+ history.filter(
+  b =>
+  b &&
+  b.booking_id &&
+  String(b.booking_id)
+  .trim() !== ""
+ );
+
+
+ localStorage.setItem(
+  "royalPalaceBookings",
+  JSON.stringify(history)
+ );
+
+
+ alert(
+  "Booking Confirmed!\n\nBooking ID: "
+  + id
+ );
+
+
+ document.getElementById(
+  "guestName"
+ ).value="";
+
+ document.getElementById(
+  "mobile"
+ ).value="";
+
+ document.getElementById(
+  "checkin"
+ ).value="";
+
+ document.getElementById(
+  "checkout"
+ ).value="";
+
+ document.getElementById(
+  "bookingSection"
+ ).classList.remove("show");
+
+}
+
+
+/* SHOW HISTORY */
+
+async function showHistory(){
+
+ const {data} =
+ await db.auth.getSession();
+
+ if(!data.session){
+
+  window.location.href =
+  "user-login.html";
+
+  return;
+
+ }
+
+
+ const box =
+ document.getElementById(
+  "historyBox"
+ );
+
+
+ const list =
+ document.getElementById(
+  "historyList"
+ );
+
+
+ let history =
+ JSON.parse(
+  localStorage.getItem(
+   "royalPalaceBookings"
+  ) || "[]"
+ );
+
+
+ /*
+  undefined या खाली Booking ID
+  वाली पुरानी entries हटाएँ।
+ */
+
+ history =
+ history.filter(
+  b =>
+  b &&
+  b.booking_id &&
+  String(b.booking_id)
+  .trim() !== "" &&
+  String(b.booking_id)
+  .toLowerCase()
+  !== "undefined"
+ );
+
+
+ localStorage.setItem(
+  "royalPalaceBookings",
+  JSON.stringify(history)
+ );
+
+
+ if(history.length === 0){
+
+  list.innerHTML =
+  "<p>No bookings found.</p>";
+
+ }else{
+
+  list.innerHTML =
+  history.map(
+   b => `
+
+   <div class="history-item">
+
+    <b>Booking ID:</b>
+    ${b.booking_id}<br>
+
+    <b>Room:</b>
+    ${b.room}<br>
+
+    <b>Check-in:</b>
+    ${b.checkin}<br>
+
+    <b>Check-out:</b>
+    ${b.checkout}<br>
+
+    <b>Guests:</b>
+    ${b.guests}<br>
+
+    <b>Total:</b>
+    ₹${b.total}<br>
+
+    <b>Status:</b>
+    ${b.status}
+
+   </div>
+
+   `
+  ).join("");
+
+ }
+
+
+ box.style.display =
+ "block";
+
+
+ box.scrollIntoView({
+  behavior:"smooth"
+ });
+
+}
+
+
+/* LOGOUT */
+
+async function logout(){
+
+ await db.auth.signOut();
+
+ alert(
+  "You have been logged out."
+ );
+
+ window.location.reload();
+
+}
+
+
+/* ACCOUNT BUTTON */
+
+async function updateAccountButton(){
+
+ const {data} =
+ await db.auth.getSession();
+
+ const btn =
+ document.getElementById(
+  "accountBtn"
+ );
+
+ if(data.session){
+
+  btn.innerText =
+  "Account";
+
+ }else{
+
+  btn.innerText =
+  "Login";
+
+ }
+
+}
+
+
+/* START */
+
+updateAccountButton();
+
+checkBookingReturn();
+
+</script>
+
+</body>
+</html>
