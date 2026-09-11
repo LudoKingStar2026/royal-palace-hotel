@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Royal Palace Hotel - Premium Control Panel</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --navy:#0b1020;
+  --navy2:#111936;
+  --purple:#6d28d9;
+  --purple2:#8b5cf6;
+  --gold:#d4af37;
+  --bg:#f5f7fb;
+  --white:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:260px;
+  background:linear-gradient(180deg,var(--navy),var(--navy2));
+  color:white;
+  padding:24px 16px;
+  z-index:1000;
+  overflow-y:auto;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 10px 25px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  margin-bottom:20px;
+}
+
+.logo-icon{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--gold),#f5d76e);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#111827;
+  font-size:24px;
+  font-weight:bold;
+}
+
+.logo-text strong{
+  display:block;
+  font-size:17px;
+}
+
+.logo-text span{
+  display:block;
+  color:#9ca3af;
+  font-size:12px;
+  margin-top:3px;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.nav a{
+  text-decoration:none;
+  color:#cbd5e1;
+  padding:14px 15px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:15px;
+  transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+  background:linear-gradient(
+    90deg,
+    rgba(109,40,217,.9),
+    rgba(139,92,246,.75)
+  );
+  color:white;
+}
+
+.nav-icon{
+  width:25px;
+  text-align:center;
+  font-size:19px;
+}
+
+.logout{
+  margin-top:20px;
+  border-top:1px solid rgba(255,255,255,.1);
+  padding-top:20px;
+}
+
+.logout a{
+  color:#fca5a5;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  margin-left:260px;
+  min-height:100vh;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar{
+  height:90px;
+  background:white;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:500;
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.page-title{
+  font-size:25px;
+  font-weight:700;
+}
+
+.page-subtitle{
+  color:#8b929e;
+  margin-top:4px;
+  font-size:14px;
+}
+
+.mobile-menu{
+  display:none;
+  width:48px;
+  height:48px;
+  border:0;
+  border-radius:13px;
+  background:var(--navy);
+  color:white;
+  font-size:25px;
+  cursor:pointer;
+}
+
+.avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  font-size:20px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:30px;
+}
+
+.hero{
+  min-height:205px;
+  border-radius:28px;
+  padding:42px;
+  color:white;
+  background:
+    radial-gradient(
+      circle at 70% 30%,
+      rgba(139,92,246,.3),
+      transparent 35%
+    ),
+    linear-gradient(135deg,#101634,#281052);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:330px;
+  height:330px;
+  border:50px solid rgba(255,255,255,.05);
+  border-radius:50%;
+  right:-80px;
+  top:-100px;
+}
+
+.hero h1{
+  font-size:34px;
+  position:relative;
+  z-index:2;
+}
+
+.hero p{
+  color:#cbd5e1;
+  margin-top:12px;
+  font-size:17px;
+  max-width:700px;
+  line-height:1.5;
+  position:relative;
+  z-index:2;
+}
+
+/* =========================
+   QUICK ACCESS
+========================= */
+
+.quick-title{
+  margin:30px 0 18px;
+  font-size:23px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.card{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:22px;
+  padding:24px;
+  min-height:170px;
+  box-shadow:0 5px 20px rgba(15,23,42,.04);
+  transition:.2s;
+  cursor:pointer;
+}
+
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(15,23,42,.09);
+}
+
+.card-icon{
+  width:52px;
+  height:52px;
+  border-radius:16px;
+  background:#f0e9ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  margin-bottom:18px;
+}
+
+.card h3{
+  font-size:18px;
+  margin-bottom:7px;
+}
+
+.card p{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* =========================
+   MOBILE OVERLAY
+========================= */
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:900;
+}
+
+.overlay.show{
+  display:block;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+    width:280px;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    height:105px;
+    padding:0 22px;
+  }
+
+  .page-title{
+    font-size:23px;
+  }
+
+  .content{
+    padding:28px;
+  }
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .hero{
+    padding:35px;
+  }
+}
+
+@media(max-width:600px){
+
+  .topbar{
+    height:110px;
+    padding:0 18px;
+  }
+
+  .top-left{
+    gap:12px;
+  }
+
+  .page-title{
+    font-size:22px;
+  }
+
+  .page-subtitle{
+    font-size:13px;
+  }
+
+  .avatar{
+    width:46px;
+    height:46px;
+  }
+
+  .content{
+    padding:28px 20px;
+  }
+
+  .hero{
+    min-height:210px;
+    border-radius:25px;
+    padding:30px 25px;
+  }
+
+  .hero h1{
+    font-size:29px;
+  }
+
+  .hero p{
+    font-size:16px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .card{
+    min-height:155px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logo-icon">RP</div>
+
+    <div class="logo-text">
+      <strong>Royal Palace</strong>
+      <span>Hotel Administration</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <a href="dashboard.html" class="active">
+      <span class="nav-icon">📊</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="hotel.html">
+      <span class="nav-icon">🏨</span>
+      <span>Hotel Management</span>
+    </a>
+
+    <a href="photos.html">
+      <span class="nav-icon">🖼️</span>
+      <span>Hotel Photos</span>
+    </a>
+
+    <a href="rooms.html">
+      <span class="nav-icon">🛏️</span>
+      <span>Room Management</span>
+    </a>
+
+    <a href="bookings.html">
+      <span class="nav-icon">📋</span>
+      <span>Booking History</span>
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙️</span>
+      <span>Settings</span>
+    </a>
+
+    <div class="logout">
+      <a href="login.html">
+        <span class="nav-icon">🚪</span>
+        <span>Logout</span>
+      </a>
+    </div>
+
+  </nav>
+</aside>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+
+      <button
+        class="mobile-menu"
+        onclick="toggleSidebar()"
+        aria-label="Open menu">
+        ☰
+      </button>
+
+      <div>
+        <div class="page-title">Admin Control Panel</div>
+        <div class="page-subtitle">
+          Royal Palace Hotel administration
+        </div>
+      </div>
+
+    </div>
+
+    <div class="avatar">A</div>
+
+  </header>
+
+
+  <section class="content">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <h1>Welcome to Royal Palace 👑</h1>
+
+      <p>
+        Manage your hotel, rooms, bookings and other
+        operations from one premium control panel.
+      </p>
+
+    </div>
+
+
+    <!-- QUICK ACCESS -->
+
+    <h2 class="quick-title">Quick Access</h2>
+
+    <div class="grid">
+
+      <div class="card" onclick="go('dashboard.html')">
+        <div class="card-icon">📊</div>
+        <h3>Dashboard</h3>
+        <p>
+          View your hotel overview, statistics and
+          current activity.
+        </p>
+      </div>
+
+      <div class="card" onclick="go('hotel.html')">
+        <div class="card-icon">🏨</div>
+        <h3>Hotel Management</h3>
+        <p>
+          Manage hotel information, facilities and
+          property details.
+        </p>
+      </div>
+
+      <div class="card" onclick="go('photos.html')">
+        <div class="card-icon">🖼️</div>
+        <h3>Hotel Photos</h3>
+        <p>
+          Manage your hotel gallery and property images.
+        </p>
+      </div>
+
+      <div class="card" onclick="go('rooms.html')">
+        <div class="card-icon">🛏️</div>
+        <h3>Room Management</h3>
+        <p>
+          Add, edit and manage rooms and pricing.
+        </p>
+      </div>
+
+      <div class="card" onclick="go('bookings.html')">
+        <div class="card-icon">📋</div>
+        <h3>Booking History</h3>
+        <p>
+          View and manage all hotel reservations.
+        </p>
+      </div>
+
+      <div class="card" onclick="go('settings.html')">
+        <div class="card-icon">⚙️</div>
+        <h3>Settings</h3>
+        <p>
+          Configure your administration panel settings.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function go(page){
+  window.location.href = page;
+}
+
+
+/* =========================
+   MOBILE SIDEBAR
+========================= */
+
+function toggleSidebar(){
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  const overlay =
+    document.getElementById("overlay");
+
+  sidebar.classList.toggle("open");
+  overlay.classList.toggle("show");
+}
+
+
+function closeSidebar(){
+
+  document
+    .getElementById("sidebar")
+    .classList.remove("open");
+
+  document
+    .getElementById("overlay")
+    .classList.remove("show");
+}
+
+
+/* =========================
+   CLOSE MENU AFTER CLICK
+========================= */
+
+document.querySelectorAll(".nav a").forEach(function(link){
+
+  link.addEventListener("click",function(){
+
+    if(window.innerWidth <= 900){
+      closeSidebar();
+    }
+
+  });
+
+});
+
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener("keydown",function(e){
+
+  if(e.key === "Escape"){
+    closeSidebar();
+  }
+
+});
+
+</script>
+
+</body>
+</html>
