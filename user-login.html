@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Royal Palace Hotel - User Login</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:linear-gradient(135deg,#fff8e7,#f5e1b8);
+ min-height:100vh;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ padding:20px;
+}
+
+.container{
+ width:100%;
+ max-width:420px;
+ background:white;
+ border-radius:18px;
+ padding:28px;
+ box-shadow:0 8px 30px rgba(0,0,0,.15);
+}
+
+.logo{
+ text-align:center;
+ font-size:28px;
+ font-weight:bold;
+ color:#8b5a00;
+ margin-bottom:8px;
+}
+
+.subtitle{
+ text-align:center;
+ color:#666;
+ margin-bottom:25px;
+}
+
+h2{
+ text-align:center;
+ margin-bottom:20px;
+}
+
+input{
+ width:100%;
+ padding:14px;
+ margin-bottom:14px;
+ border:1px solid #ccc;
+ border-radius:10px;
+ font-size:16px;
+}
+
+button{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:10px;
+ background:#8b5a00;
+ color:white;
+ font-size:16px;
+ font-weight:bold;
+ cursor:pointer;
+ margin-bottom:12px;
+}
+
+button:hover{
+ background:#6f4700;
+}
+
+.secondary{
+ background:#eee;
+ color:#333;
+}
+
+.message{
+ text-align:center;
+ margin-top:10px;
+ font-size:14px;
+}
+
+.switch{
+ text-align:center;
+ margin-top:15px;
+ color:#555;
+}
+
+.hidden{
+ display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">🏨 Royal Palace Hotel</div>
+<div class="subtitle">Guest Account</div>
+
+
+<!-- LOGIN -->
+
+<div id="loginBox">
+
+<h2>Login</h2>
+
+<input
+ type="email"
+ id="loginEmail"
+ placeholder="Email ID"
+ autocomplete="email"
+>
+
+<input
+ type="password"
+ id="loginPassword"
+ placeholder="Password"
+ autocomplete="current-password"
+>
+
+<button onclick="loginUser()">Login</button>
+
+<button class="secondary" onclick="showSignup()">
+Create New Account
+</button>
+
+<div id="loginMessage" class="message"></div>
+
+</div>
+
+
+<!-- SIGN UP -->
+
+<div id="signupBox" class="hidden">
+
+<h2>Create Account</h2>
+
+<input
+ type="email"
+ id="signupEmail"
+ placeholder="Email ID"
+ autocomplete="email"
+>
+
+<input
+ type="password"
+ id="signupPassword"
+ placeholder="Create Password"
+ autocomplete="new-password"
+>
+
+<input
+ type="password"
+ id="signupConfirm"
+ placeholder="Confirm Password"
+ autocomplete="new-password"
+>
+
+<button onclick="signupUser()">
+Create Account
+</button>
+
+<button class="secondary" onclick="showLogin()">
+Back to Login
+</button>
+
+<div id="signupMessage" class="message"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://mvvfqkcgaxcipjkiyuae.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_YbyO8KHdQxXyv6afqJZfWg_Eu2aw57x";
+
+const db =
+window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
+
+
+/* =========================
+   RETURN URL
+========================= */
+
+function getReturnUrl(){
+
+ const params =
+ new URLSearchParams(
+  window.location.search
+ );
+
+ const room =
+ params.get("room");
+
+ const price =
+ params.get("price");
+
+ if(room && price){
+
+  return "index.html?room="
+   + encodeURIComponent(room)
+   + "&price="
+   + encodeURIComponent(price);
+
+ }
+
+ return "index.html";
+}
+
+
+/* =========================
+   SHOW SIGNUP
+========================= */
+
+function showSignup(){
+
+ document.getElementById("loginBox")
+ .classList.add("hidden");
+
+ document.getElementById("signupBox")
+ .classList.remove("hidden");
+
+}
+
+
+/* =========================
+   SHOW LOGIN
+========================= */
+
+function showLogin(){
+
+ document.getElementById("signupBox")
+ .classList.add("hidden");
+
+ document.getElementById("loginBox")
+ .classList.remove("hidden");
+
+}
+
+
+/* =========================
+   CREATE ACCOUNT
+========================= */
+
+async function signupUser(){
+
+ const email =
+ document.getElementById("signupEmail")
+ .value.trim();
+
+ const password =
+ document.getElementById("signupPassword")
+ .value;
+
+ const confirm =
+ document.getElementById("signupConfirm")
+ .value;
+
+ const msg =
+ document.getElementById("signupMessage");
+
+ msg.innerText="";
+
+
+ if(!email || !password || !confirm){
+
+  msg.innerText=
+  "Please fill all fields.";
+
+  return;
+ }
+
+
+ if(password !== confirm){
+
+  msg.innerText=
+  "Passwords do not match.";
+
+  return;
+ }
+
+
+ if(password.length < 6){
+
+  msg.innerText=
+  "Password must be at least 6 characters.";
+
+  return;
+ }
+
+
+ msg.innerText=
+ "Creating account...";
+
+
+ const {data,error} =
+ await db.auth.signUp({
+
+  email:email,
+  password:password
+
+ });
+
+
+ if(error){
+
+  msg.innerText=
+  error.message;
+
+  return;
+ }
+
+
+ if(data.session){
+
+  msg.innerText=
+  "Account created successfully.";
+
+  setTimeout(function(){
+
+   window.location.href=
+   getReturnUrl();
+
+  },700);
+
+ }else{
+
+  msg.innerText=
+  "Account created. Please check your email to verify your account, then login.";
+
+ }
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function loginUser(){
+
+ const email =
+ document.getElementById("loginEmail")
+ .value.trim();
+
+ const password =
+ document.getElementById("loginPassword")
+ .value;
+
+ const msg =
+ document.getElementById("loginMessage");
+
+ msg.innerText="";
+
+
+ if(!email || !password){
+
+  msg.innerText=
+  "Please enter email and password.";
+
+  return;
+ }
+
+
+ msg.innerText=
+ "Logging in...";
+
+
+ const {data,error} =
+ await db.auth.signInWithPassword({
+
+  email:email,
+  password:password
+
+ });
+
+
+ if(error){
+
+  msg.innerText=
+  error.message;
+
+  return;
+ }
+
+
+ if(data.session){
+
+  msg.innerText=
+  "Login successful...";
+
+  setTimeout(function(){
+
+   window.location.href=
+   getReturnUrl();
+
+  },700);
+
+ }
+
+}
+
+</script>
+
+</body>
+</html>
