@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0b1736">
+<title>Royal Palace Hotel - Room Management</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f5f7fb;
+color:#182033;
+}
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+bottom:0;
+width:250px;
+background:#0b1736;
+color:#fff;
+z-index:1000;
+display:flex;
+flex-direction:column;
+transition:transform .25s ease;
+}
+
+.logo{
+height:82px;
+display:flex;
+align-items:center;
+gap:12px;
+padding:0 22px;
+border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.logo-icon{
+width:42px;
+height:42px;
+border-radius:12px;
+background:linear-gradient(135deg,#8b5cf6,#6d28d9);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:21px;
+font-weight:bold;
+}
+
+.logo-text{
+font-size:16px;
+font-weight:800;
+line-height:1.2;
+}
+
+.logo-text span{
+display:block;
+color:#aab5d0;
+font-size:11px;
+font-weight:500;
+margin-top:3px;
+}
+
+.nav{
+padding:20px 14px;
+flex:1;
+}
+
+.nav-title{
+color:#687698;
+font-size:10px;
+font-weight:700;
+letter-spacing:1.2px;
+padding:0 12px 10px;
+}
+
+.nav button{
+width:100%;
+border:0;
+background:transparent;
+color:#aeb9d4;
+text-align:left;
+padding:13px;
+border-radius:9px;
+margin-bottom:5px;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.nav button:hover{
+background:rgba(255,255,255,.06);
+color:#fff;
+}
+
+.nav button.active{
+background:#7445e8;
+color:#fff;
+}
+
+.nav-icon{
+width:20px;
+text-align:center;
+font-size:17px;
+}
+
+.sidebar-bottom{
+padding:15px 14px 20px;
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+.website-btn{
+width:100%;
+border:1px solid rgba(255,255,255,.12);
+background:rgba(255,255,255,.05);
+color:#fff;
+padding:12px;
+border-radius:9px;
+cursor:pointer;
+font-weight:600;
+}
+
+.main{
+margin-left:250px;
+min-height:100vh;
+}
+
+.topbar{
+height:82px;
+background:#fff;
+border-bottom:1px solid #e9edf5;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
+}
+
+.topbar-left{
+display:flex;
+align-items:center;
+}
+
+.page-title h1{
+font-size:22px;
+}
+
+.page-title p{
+font-size:12px;
+color:#8992a7;
+margin-top:5px;
+}
+
+.profile{
+width:40px;
+height:40px;
+border-radius:50%;
+background:#7445e8;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:800;
+}
+
+.menu-button{
+display:none;
+width:42px;
+height:42px;
+border:0;
+border-radius:9px;
+background:#f0ecff;
+color:#6d3fe0;
+font-size:23px;
+cursor:pointer;
+margin-right:12px;
+}
+
+.content{
+padding:30px;
+}
+
+.hero{
+background:linear-gradient(135deg,#7142df,#8c5ce8);
+color:#fff;
+border-radius:16px;
+padding:25px 28px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.hero h2{
+font-size:23px;
+margin-bottom:7px;
+}
+
+.hero p{
+font-size:13px;
+color:#e7ddff;
+}
+
+.add-btn{
+border:0;
+background:#fff;
+color:#6435d1;
+padding:12px 18px;
+border-radius:9px;
+font-size:13px;
+font-weight:800;
+cursor:pointer;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+margin-bottom:25px;
+}
+
+.stat-card{
+background:#fff;
+border:1px solid #edf0f6;
+border-radius:14px;
+padding:20px;
+}
+
+.stat-icon{
+width:40px;
+height:40px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#f0ecff;
+font-size:19px;
+margin-bottom:12px;
+}
+
+.stat-number{
+font-size:25px;
+font-weight:800;
+}
+
+.stat-label{
+font-size:12px;
+color:#8992a7;
+}
+
+.section-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px;
+}
+
+.section-head h2{
+font-size:18px;
+}
+
+.room-count{
+color:#8b93a7;
+font-size:12px;
+}
+
+.rooms-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+
+.room-card{
+background:#fff;
+border:1px solid #e9edf5;
+border-radius:15px;
+box-shadow:0 6px 18px rgba(30,40,70,.045);
+position:relative;
+}
+
+.room-image{
+height:175px;
+background:#e9edf5;
+overflow:hidden;
+border-radius:15px 15px 0 0;
+position:relative;
+}
+
+.room-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+.no-image{
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:42px;
+color:#aeb6c8;
+}
+
+.status{
+position:absolute;
+top:12px;
+left:12px;
+padding:6px 10px;
+border-radius:20px;
+font-size:10px;
+font-weight:800;
+background:#fff;
+}
+
+.status.available{color:#16864b}
+.status.occupied{color:#d33c3c}
+.status.maintenance{color:#b06b00}
+
+.room-info{
+padding:18px;
+}
+
+.room-name{
+font-size:17px;
+font-weight:800;
+margin-bottom:5px;
+padding-right:40px;
+}
+
+.room-number{
+font-size:11px;
+color:#929bad;
+margin-bottom:14px;
+}
+
+.room-bottom{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.price{
+font-size:17px;
+font-weight:800;
+color:#6b3ed9;
+}
+
+.price span{
+color:#8e96a9;
+font-size:11px;
+font-weight:500;
+}
+
+.capacity{
+font-size:11px;
+color:#81899d;
+}
+
+.dots-btn{
+position:absolute;
+right:13px;
+top:188px;
+width:32px;
+height:32px;
+border:0;
+border-radius:8px;
+background:#f5f3ff;
+color:#6540d0;
+font-size:21px;
+cursor:pointer;
+z-index:20;
+}
+
+.action-menu{
+position:absolute;
+right:13px;
+top:226px;
+width:170px;
+background:#fff;
+border:1px solid #e7eaf1;
+border-radius:10px;
+padding:6px;
+box-shadow:0 15px 35px rgba(30,40,70,.15);
+z-index:200;
+display:none;
+}
+
+.action-menu.show{
+display:block;
+}
+
+.action-menu button{
+width:100%;
+border:0;
+background:#fff;
+text-align:left;
+padding:10px;
+border-radius:7px;
+font-size:12px;
+color:#374151;
+cursor:pointer;
+}
+
+.action-menu button:hover{
+background:#f5f3ff;
+}
+
+.action-menu .delete-option{
+color:#d33d3d;
+}
+
+.empty{
+background:#fff;
+border:1px dashed #d9deea;
+border-radius:15px;
+padding:50px 20px;
+text-align:center;
+color:#8d96aa;
+grid-column:1/-1;
+}
+
+.empty-icon{
+font-size:42px;
+margin-bottom:10px;
+}
+
+.empty h3{
+color:#4a5367;
+margin-bottom:5px;
+}
+
+.modal-overlay{
+position:fixed;
+inset:0;
+background:rgba(8,17,40,.58);
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:3000;
+}
+
+.modal-overlay.show{
+display:flex;
+}
+
+.modal{
+width:100%;
+max-width:520px;
+max-height:90vh;
+overflow-y:auto;
+background:#fff;
+border-radius:16px;
+}
+
+.modal-header{
+padding:20px 22px;
+border-bottom:1px solid #edf0f5;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.modal-header h2{
+font-size:18px;
+}
+
+.close-modal{
+width:34px;
+height:34px;
+border:0;
+border-radius:8px;
+background:#f4f5f8;
+cursor:pointer;
+font-size:20px;
+}
+
+.form{
+padding:22px;
+}
+
+.form-group{
+margin-bottom:16px;
+}
+
+.form-group label{
+display:block;
+font-size:12px;
+font-weight:700;
+color:#50596b;
+margin-bottom:7px;
+}
+
+.form-group input,
+.form-group select{
+width:100%;
+height:43px;
+border:1px solid #dfe4ed;
+border-radius:8px;
+padding:0 12px;
+outline:none;
+font-size:13px;
+background:#fff;
+}
+
+.form-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.modal-footer{
+display:flex;
+justify-content:flex-end;
+gap:10px;
+padding:0 22px 22px;
+}
+
+.cancel-btn,
+.save-btn{
+border:0;
+border-radius:8px;
+padding:11px 18px;
+font-size:12px;
+font-weight:700;
+cursor:pointer;
+}
+
+.cancel-btn{
+background:#f0f2f6;
+color:#566074;
+}
+
+.save-btn{
+background:#7445e8;
+color:#fff;
+}
+
+.toast{
+position:fixed;
+left:50%;
+bottom:25px;
+transform:translate(-50%,20px);
+background:#17213a;
+color:#fff;
+padding:12px 18px;
+border-radius:9px;
+font-size:12px;
+opacity:0;
+pointer-events:none;
+transition:.25s;
+z-index:5000;
+}
+
+.toast.show{
+opacity:1;
+transform:translate(-50%,0);
+}
+
+.sidebar-overlay{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(4,10,25,.48);
+z-index:900;
+}
+
+.sidebar-overlay.show{
+display:block;
+}
+
+@media(max-width:1000px){
+.rooms-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.stats{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+@media(max-width:800px){
+
+.sidebar{
+transform:translateX(-100%);
+}
+
+.sidebar.open{
+transform:translateX(0);
+}
+
+.main{
+margin-left:0;
+}
+
+.topbar{
+height:70px;
+padding:0 15px;
+}
+
+.menu-button{
+display:block;
+}
+
+.page-title h1{
+font-size:18px;
+}
+
+.page-title p{
+font-size:10px;
+}
+
+.profile{
+width:36px;
+height:36px;
+}
+
+.content{
+padding:18px 15px 30px;
+}
+
+.hero{
+display:block;
+padding:20px;
+}
+
+.hero h2{
+font-size:20px;
+}
+
+.hero p{
+margin-bottom:17px;
+}
+
+.add-btn{
+width:100%;
+}
+
+.rooms-grid{
+grid-template-columns:1fr;
+}
+
+.stats{
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.stat-card{
+padding:15px;
+}
+
+.stat-number{
+font-size:21px;
+}
+
+.room-image{
+height:190px;
+}
+
+.dots-btn{
+top:203px;
+}
+
+.action-menu{
+top:240px;
+}
+
+}
+
+@media(max-width:430px){
+
+.form-row{
+grid-template-columns:1fr;
+gap:0;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+<div class="logo">
+<div class="logo-icon">R</div>
+<div class="logo-text">
+Royal Palace
+<span>HOTEL ADMIN</span>
+</div>
+</div>
+
+<nav class="nav">
+
+<div class="nav-title">MAIN MENU</div>
+
+<button type="button" onclick="goPage('dashboard.html')">
+<span class="nav-icon">▦</span>
+<span>Dashboard</span>
+</button>
+
+<button type="button" class="active">
+<span class="nav-icon">▣</span>
+<span>Room Management</span>
+</button>
+
+<button type="button" onclick="goPage('bookings.html')">
+<span class="nav-icon">▤</span>
+<span>Booking History</span>
+</button>
+
+<button type="button" onclick="goPage('hotel.html')">
+<span class="nav-icon">⌂</span>
+<span>Hotel Details</span>
+</button>
+
+<button type="button" onclick="goPage('photos.html')">
+<span class="nav-icon">▧</span>
+<span>Photos</span>
+</button>
+
+<button type="button" onclick="goPage('settings.html')">
+<span class="nav-icon">⚙</span>
+<span>Settings</span>
+</button>
+
+</nav>
+
+<div class="sidebar-bottom">
+<button class="website-btn" type="button" onclick="goPage('index.html')">
+🌐 &nbsp; View Website
+</button>
+</div>
+
+</aside>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<main class="main">
+
+<header class="topbar">
+
+<div class="topbar-left">
+
+<button
+type="button"
+class="menu-button"
+id="menuButton"
+onclick="toggleSidebar()">
+☰
+</button>
+
+<div class="page-title">
+<h1>Room Management</h1>
+<p>Manage hotel rooms and availability</p>
+</div>
+
+</div>
+
+<div class="profile">A</div>
+
+</header>
+
+<section class="content">
+
+<div class="hero">
+
+<div>
+<h2>Room Management</h2>
+<p>Add, edit and manage all rooms of Royal Palace Hotel.</p>
+</div>
+
+<button
+type="button"
+class="add-btn"
+onclick="openAddRoom()">
+＋ Add New Room
+</button>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-card">
+<div class="stat-icon">🏨</div>
+<div class="stat-number" id="totalRooms">0</div>
+<div class="stat-label">Total Rooms</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-icon">✓</div>
+<div class="stat-number" id="availableRooms">0</div>
+<div class="stat-label">Available</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-icon">👤</div>
+<div class="stat-number" id="occupiedRooms">0</div>
+<div class="stat-label">Occupied</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-icon">🔧</div>
+<div class="stat-number" id="maintenanceRooms">0</div>
+<div class="stat-label">Maintenance</div>
+</div>
+
+</div>
+
+<div class="section-head">
+<h2>All Rooms</h2>
+<div class="room-count" id="roomCount">0 rooms</div>
+</div>
+
+<div class="rooms-grid" id="roomsGrid"></div>
+
+</section>
+
+</main>
+
+<div class="modal-overlay" id="roomModal">
+
+<div class="modal">
+
+<div class="modal-header">
+
+<h2 id="modalTitle">Add New Room</h2>
+
+<button
+type="button"
+class="close-modal"
+onclick="closeRoomModal()">
+×
+</button>
+
+</div>
+
+<div class="form">
+
+<div class="form-row">
+
+<div class="form-group">
+<label>Room Number</label>
+<input id="roomNumber" type="text" placeholder="e.g. 101">
+</div>
+
+<div class="form-group">
+<label>Room Name</label>
+<input id="roomName" type="text" placeholder="e.g. Premium Room">
+</div>
+
+</div>
+
+<div class="form-row">
+
+<div class="form-group">
+<label>Price / Night (₹)</label>
+<input id="roomPrice" type="number" min="0" placeholder="2500">
+</div>
+
+<div class="form-group">
+<label>Capacity</label>
+
+<select id="roomCapacity">
+<option value="1 Guest">1 Guest</option>
+<option value="2 Guests" selected>2 Guests</option>
+<option value="3 Guests">3 Guests</option>
+<option value="4 Guests">4 Guests</option>
+<option value="5 Guests">5 Guests</option>
+<option value="6 Guests">6 Guests</option>
+</select>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>Status</label>
+
+<select id="roomStatus">
+<option value="Available">Available</option>
+<option value="Occupied">Occupied</option>
+<option value="Maintenance">Maintenance</option>
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Image URL</label>
+
+<input
+id="roomImage"
+type="text"
+placeholder="premium-room.jpg">
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+type="button"
+class="cancel-btn"
+onclick="closeRoomModal()">
+Cancel
+</button>
+
+<button
+type="button"
+class="save-btn"
+onclick="saveRoom()">
+Save Room
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+var ROOM_KEY = "royal_palace_rooms";
+var editingId = null;
+
+var defaultRooms = [
+{
+id:"room_101",
+number:"101",
+name:"Premium Room",
+price:2500,
+capacity:"2 Guests",
+status:"Available",
+image:"premium-room.jpg"
+},
+{
+id:"room_102",
+number:"102",
+name:"Royal Suite",
+price:4500,
+capacity:"3 Guests",
+status:"Available",
+image:"royal-suite.jpg"
+},
+{
+id:"room_103",
+number:"103",
+name:"Royal Palace Suite",
+price:6500,
+capacity:"4 Guests",
+status:"Available",
+image:""
+}
+];
+
+var rooms = [];
+
+
+/* ================= NAVIGATION ================= */
+
+function goPage(page){
+
+closeSidebar();
+closeAllMenus();
+
+window.location.href = page;
+
+}
+
+
+/* ================= SIDEBAR ================= */
+
+function toggleSidebar(){
+
+var sidebar = document.getElementById("sidebar");
+var overlay = document.getElementById("sidebarOverlay");
+var button = document.getElementById("menuButton");
+
+if(sidebar.classList.contains("open")){
+
+closeSidebar();
+
+}else{
+
+sidebar.classList.add("open");
+overlay.classList.add("show");
+
+if(button){
+button.setAttribute("aria-expanded","true");
+}
+
+}
+
+}
+
+
+function closeSidebar(){
+
+var sidebar = document.getElementById("sidebar");
+var overlay = document.getElementById("sidebarOverlay");
+var button = document.getElementById("menuButton");
+
+if(sidebar){
+sidebar.classList.remove("open");
+}
+
+if(overlay){
+overlay.classList.remove("show");
+}
+
+if(button){
+button.setAttribute("aria-expanded","false");
+}
+
+}
+
+
+/* ================= STORAGE ================= */
+
+function saveRooms(){
+
+try{
+
+localStorage.setItem(
+ROOM_KEY,
+JSON.stringify(rooms)
+);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+
+function loadRooms(){
+
+var saved = null;
+
+try{
+saved = localStorage.getItem(ROOM_KEY);
+}catch(error){
+saved = null;
+}
+
+if(saved){
+
+try{
+
+var parsed = JSON.parse(saved);
+
+if(Array.isArray(parsed)){
+
+rooms = parsed;
+
+}else{
+
+rooms = defaultRooms.slice();
+
+}
+
+}catch(error){
+
+rooms = defaultRooms.slice();
+
+}
+
+}else{
+
+rooms = defaultRooms.slice();
+saveRooms();
+
+}
+
+renderRooms();
+updateStats();
+
+}
+
+
+/* ================= ESCAPE ================= */
+
+function esc(value){
+
+return String(value == null ? "" : value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* ================= STATS ================= */
+
+function updateStats(){
+
+var total = rooms.length;
+var available = 0;
+var occupied = 0;
+var maintenance = 0;
+
+rooms.forEach(function(room){
+
+var s = String(room.status || "").toLowerCase();
+
+if(s === "available") available++;
+if(s === "occupied") occupied++;
+if(s === "maintenance") maintenance++;
+
+});
+
+document.getElementById("totalRooms").textContent = total;
+document.getElementById("availableRooms").textContent = available;
+document.getElementById("occupiedRooms").textContent = occupied;
+document.getElementById("maintenanceRooms").textContent = maintenance;
+
+document.getElementById("roomCount").textContent =
+total === 1 ? "1 room" : total + " rooms";
+
+}
+
+
+/* ================= RENDER ================= */
+
+function renderRooms(){
+
+var grid = document.getElementById("roomsGrid");
+
+grid.innerHTML = "";
+
+if(rooms.length === 0){
+
+grid.innerHTML =
+'<div class="empty">' +
+'<div class="empty-icon">🏨</div>' +
+'<h3>No Rooms Found</h3>' +
+'<p>Add your first room using the button above.</p>' +
+'</div>';
+
+return;
+
+}
+
+
+rooms.forEach(function(room){
+
+var status = room.status || "Available";
+var statusClass = status.toLowerCase();
+
+var image = "";
+
+if(room.image){
+
+image =
+'<img src="' +
+esc(room.image) +
+'" alt="' +
+esc(room.name) +
+'" onerror="this.style.display=\'none\'">';
+
+}else{
+
+image =
+'<div class="no-image">🏨</div>';
+
+}
+
+
+var card = document.createElement("div");
+
+card.className = "room-card";
+
+card.innerHTML =
+
+'<div class="room-image">' +
+
+image +
+
+'<div class="status ' +
+esc(statusClass) +
+'">' +
+esc(status) +
+'</div>' +
+
+'</div>' +
+
+'<button ' +
+'type="button" ' +
+'class="dots-btn" ' +
+'data-id="' +
+esc(room.id) +
+'" ' +
+'onclick="toggleRoomMenu(this,event)">' +
+'⋮' +
+'</button>' +
+
+'<div class="action-menu" data-menu="' +
+esc(room.id) +
+'">' +
+
+'<button type="button" onclick="editFromMenu(this,event)">' +
+'✏️ &nbsp; Edit Room' +
+'</button>' +
+
+'<button type="button" onclick="duplicateFromMenu(this,event)">' +
+'📋 &nbsp; Duplicate' +
+'</button>' +
+
+'<button type="button" class="delete-option" onclick="deleteFromMenu(this,event)">' +
+'🗑️ &nbsp; Delete Room' +
+'</button>' +
+
+'</div>' +
+
+'<div class="room-info">' +
+
+'<div class="room-name">' +
+esc(room.name) +
+'</div>' +
+
+'<div class="room-number">' +
+'Room No. ' +
+esc(room.number) +
+'</div>' +
+
+'<div class="room-bottom">' +
+
+'<div class="price">' +
+'₹' +
+Number(room.price || 0).toLocaleString("en-IN") +
+' <span>/ night</span>' +
+'</div>' +
+
+'<div class="capacity">' +
+'👤 ' +
+esc(room.capacity || "2 Guests") +
+'</div>' +
+
+'</div>' +
+
+'</div>';
+
+grid.appendChild(card);
+
+});
+
+}
+
+
+/* ================= THREE DOT ================= */
+
+function closeAllMenus(){
+
+var menus = document.querySelectorAll(".action-menu");
+
+for(var i=0;i<menus.length;i++){
+menus[i].classList.remove("show");
+}
+
+}
+
+
+function toggleRoomMenu(button,event){
+
+if(event){
+event.stopPropagation();
+}
+
+var id = button.getAttribute("data-id");
+
+var menus = document.querySelectorAll(".action-menu");
+
+for(var i=0;i<menus.length;i++){
+
+var menu = menus[i];
+
+if(menu.getAttribute("data-menu") === id){
+
+var open = menu.classList.contains("show");
+
+closeAllMenus();
+
+if(!open){
+menu.classList.add("show");
+}
+
+}
+
+}
+
+}
+
+
+/* ================= GET ROOM ID ================= */
+
+function getIdFromButton(button){
+
+var card = button.closest(".room-card");
+
+if(!card){
+return null;
+}
+
+var dot = card.querySelector(".dots-btn");
+
+if(!dot){
+return null;
+}
+
+return dot.getAttribute("data-id");
+
+}
+
+
+/* ================= EDIT ================= */
+
+function editFromMenu(button,event){
+
+if(event){
+event.stopPropagation();
+}
+
+var id = getIdFromButton(button);
+
+if(id){
+editRoom(id);
+}
+
+}
+
+
+function editRoom(id){
+
+var room = null;
+
+rooms.forEach(function(item){
+
+if(String(item.id) === String(id)){
+room = item;
+}
+
+});
+
+if(!room){
+showToast("Room not found");
+return;
+}
+
+editingId = id;
+
+document.getElementById("modalTitle").textContent = "Edit Room";
+
+document.getElementById("roomNumber").value = room.number || "";
+document.getElementById("roomName").value = room.name || "";
+document.getElementById("roomPrice").value = room.price || "";
+document.getElementById("roomCapacity").value = room.capacity || "2 Guests";
+document.getElementById("roomStatus").value = room.status || "Available";
+document.getElementById("roomImage").value = room.image || "";
+
+closeAllMenus();
+
+document.getElementById("roomModal").classList.add("show");
+
+}
+
+
+/* ================= DUPLICATE ================= */
+
+function duplicateFromMenu(button,event){
+
+if(event){
+event.stopPropagation();
+}
+
+var id = getIdFromButton(button);
+
+var original = null;
+
+rooms.forEach(function(room){
+
+if(String(room.id) === String(id)){
+original = room;
+}
+
+});
+
+if(!original){
+return;
+}
+
+var copy = {
+
+id:"room_" + Date.now(),
+
+number:String(original.number) + "-COPY",
+
+name:String(original.name) + " Copy",
+
+price:Number(original.price || 0),
+
+capacity:original.capacity || "2 Guests",
+
+status:"Available",
+  
