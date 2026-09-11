@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Royal Palace Hotel - Control Panel</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f6fb;
+  color:#111827;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:260px;
+  background:#111827;
+  color:white;
+  z-index:1000;
+  padding:22px 15px;
+  transition:.3s;
+  overflow-y:auto;
+}
+
+.brand{
+  padding:5px 12px 25px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  margin-bottom:18px;
+}
+
+.brand-title{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.brand-sub{
+  color:#94a3b8;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.menu-title{
+  color:#64748b;
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:1px;
+  padding:10px 12px;
+}
+
+.menu-btn{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#cbd5e1;
+  padding:13px 12px;
+  border-radius:10px;
+  text-align:left;
+  font-size:15px;
+  cursor:pointer;
+  margin-bottom:4px;
+}
+
+.menu-btn:hover,
+.menu-btn.active{
+  background:#2563eb;
+  color:white;
+}
+
+.logout-menu{
+  margin-top:15px;
+  color:#fecaca;
+}
+
+.logout-menu:hover{
+  background:#dc2626;
+  color:white;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  margin-left:260px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:70px;
+  background:white;
+  border-bottom:1px solid #e5e7eb;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 25px;
+  position:sticky;
+  top:0;
+  z-index:500;
+}
+
+.top-title{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.menu-toggle{
+  display:none;
+  border:0;
+  background:#111827;
+  color:white;
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.admin-badge{
+  background:#eff6ff;
+  color:#1d4ed8;
+  padding:9px 13px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.container{
+  max-width:1250px;
+  margin:auto;
+  padding:25px;
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+.page-section{
+  display:none;
+}
+
+.page-section.active{
+  display:block;
+}
+
+.page-heading{
+  font-size:28px;
+  margin:0 0 7px;
+}
+
+.page-description{
+  color:#64748b;
+  margin:0 0 25px;
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+  margin-bottom:25px;
+}
+
+.stat-card{
+  background:white;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
+
+.stat-icon{
+  font-size:28px;
+  margin-bottom:12px;
+}
+
+.stat-title{
+  color:#64748b;
+  font-size:15px;
+  margin-bottom:8px;
+}
+
+.stat-value{
+  font-size:34px;
+  font-weight:bold;
+}
+
+
+/* =========================
+   COMMON CARD
+========================= */
+
+.panel{
+  background:white;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+  margin-bottom:22px;
+}
+
+.panel-title{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+.refresh{
+  background:#2563eb;
+  color:white;
+  border:0;
+  padding:11px 17px;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+
+/* =========================
+   PHOTO MANAGEMENT
+========================= */
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.photo-card{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:16px;
+  padding:15px;
+}
+
+.photo-card h3{
+  margin:0 0 13px;
+  font-size:18px;
+}
+
+.photo-preview{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:11px;
+  background:#e2e8f0;
+  display:block;
+  margin-bottom:12px;
+}
+
+.photo-input{
+  width:100%;
+  margin-bottom:10px;
+}
+
+.upload-btn,
+.delete-btn{
+  width:100%;
+  border:0;
+  color:white;
+  padding:12px;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:6px;
+}
+
+.upload-btn{
+  background:#2563eb;
+}
+
+.upload-btn:hover{
+  background:#1d4ed8;
+}
+
+.delete-btn{
+  background:#dc2626;
+}
+
+.delete-btn:hover{
+  background:#b91c1c;
+}
+
+.photo-status{
+  min-height:18px;
+  margin-top:9px;
+  font-size:13px;
+  color:#64748b;
+}
+
+
+/* =========================
+   HOTEL MANAGEMENT
+========================= */
+
+.hotel-box{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.info-box{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:14px;
+  padding:18px;
+}
+
+.info-box h3{
+  margin-top:0;
+}
+
+.facility-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.facility{
+  background:white;
+  border:1px solid #e5e7eb;
+  padding:12px;
+  border-radius:9px;
+}
+
+
+/* =========================
+   BOOKINGS
+========================= */
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1050px;
+}
+
+th{
+  background:#f8fafc;
+  text-align:left;
+  padding:14px;
+  font-size:13px;
+}
+
+td{
+  padding:14px;
+  border-top:1px solid #e5e7eb;
+  font-size:14px;
+}
+
+.status{
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:20px;
+  font-weight:bold;
+  font-size:12px;
+}
+
+.status-confirmed{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.status-cancelled{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.status-pending{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.action-box{
+  display:flex;
+  gap:7px;
+}
+
+.confirm-btn,
+.cancel-booking-btn{
+  border:0;
+  color:white;
+  padding:8px 11px;
+  border-radius:7px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.confirm-btn{
+  background:#16a34a;
+}
+
+.cancel-booking-btn{
+  background:#dc2626;
+}
+
+
+/* =========================
+   MOBILE BOOKING
+========================= */
+
+.mobile-bookings{
+  display:none;
+}
+
+.booking-card{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+}
+
+.booking-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.booking-id{
+  font-weight:bold;
+}
+
+.booking-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:9px 0;
+  border-bottom:1px solid #f1f5f9;
+}
+
+.booking-label{
+  color:#64748b;
+}
+
+.booking-value{
+  font-weight:bold;
+  text-align:right;
+}
+
+.mobile-actions{
+  display:flex;
+  gap:9px;
+  margin-top:15px;
+}
+
+.mobile-actions button{
+  flex:1;
+  border:0;
+  padding:12px;
+  border-radius:8px;
+  color:white;
+  font-weight:bold;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message{
+  display:none;
+  padding:13px;
+  border-radius:9px;
+  background:#fee2e2;
+  color:#991b1b;
+  margin-bottom:15px;
+}
+
+.photo-message{
+  display:none;
+  padding:13px;
+  border-radius:9px;
+  background:#fef3c7;
+  color:#92400e;
+  margin-bottom:18px;
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
+
+.setting-row{
+  padding:16px 0;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.setting-row:last-child{
+  border-bottom:0;
+}
+
+.setting-title{
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.setting-description{
+  color:#64748b;
+  font-size:14px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+.overlay{
+  display:none;
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-toggle{
+    display:block;
+  }
+
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:900;
+  }
+
+  .overlay.show{
+    display:block;
+  }
+
+  .dashboard{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .photo-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .topbar{
+    padding:0 14px;
+  }
+
+  .top-title{
+    font-size:16px;
+  }
+
+  .admin-badge{
+    display:none;
+  }
+
+  .container{
+    padding:15px;
+  }
+
+  .page-heading{
+    font-size:24px;
+  }
+
+  .dashboard{
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .stat-card{
+    padding:18px;
+  }
+
+  .stat-value{
+    font-size:28px;
+  }
+
+  .panel{
+    padding:16px;
+  }
+
+  .photo-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hotel-box{
+    grid-template-columns:1fr;
+  }
+
+  .facility-list{
+    grid-template-columns:1fr;
+  }
+
+  .table-wrap{
+    display:none;
+  }
+
+  .mobile-bookings{
+    display:block;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-title">
+      🏨 Royal Palace
+    </div>
+
+    <div class="brand-sub">
+      Premium Control Panel
+    </div>
+  </div>
+
+
+  <div class="menu-title">
+    MAIN
+  </div>
+
+  <button
+    class="menu-btn active"
+    onclick="showPage('dashboard',this)">
+    🏠 Dashboard
+  </button>
+
+
+  <button
+    class="menu-btn"
+    onclick="showPage('photos',this)">
+    📸 Hotel Photos
+  </button>
+
+
+  <button
+    class="menu-btn"
+    onclick="showPage('bookings',this)">
+    📋 Booking History
+  </button>
+
+
+  <div class="menu-title">
+    MANAGEMENT
+  </div>
+
+
+  <button
+    class="menu-btn"
+    onclick="showPage('hotel',this)">
+    🏨 Hotel Management
+  </button>
+
+
+  <button
+    class="menu-btn"
+    onclick="showPage('settings',this)">
+    ⚙️ Settings
+  </button>
+
+
+  <button
+    class="menu-btn logout-menu"
+    onclick="logout()">
+    🚪 Logout
+  </button>
+
+</aside>
+
+
+<div
+  class="overlay"
+  id="overlay"
+  onclick="closeSidebar()">
+</div>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+
+  <div class="topbar">
+
+    <button
+      class="menu-toggle"
+      onclick="openSidebar()">
+      ☰
+    </button>
+
+    <div
+      class="top-title"
+      id="topTitle">
+      Dashboard
+    </div>
+
+    <div class="admin-badge">
+      ADMIN
+    </div>
+
+  </div>
+
+
+  <div class="container">
+
+
+    <!-- =====================
+         DASHBOARD
+    ====================== -->
+
+    <section
+      id="dashboard"
+      class="page-section active">
+
+      <h1 class="page-heading">
+        Dashboard
+      </h1>
+
+      <p class="page-description">
+        Royal Palace Hotel overview
+      </p>
+
+
+      <div class="dashboard">
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            🏨
+          </div>
+
+          <div class="stat-title">
+            Total Rooms
+          </div>
+
+          <div class="stat-value">
+            3
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            📋
+          </div>
+
+          <div class="stat-title">
+            Total Bookings
+          </div>
+
+          <div
+            class="stat-value"
+            id="totalBookings">
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            ✅
+          </div>
+
+          <div class="stat-title">
+            Active Bookings
+          </div>
+
+          <div
+            class="stat-value"
+            id="activeBookings">
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            💰
+          </div>
+
+          <div class="stat-title">
+            Revenue
+          </div>
+
+          <div
+            class="stat-value"
+            id="revenue">
+            ₹0
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="panel">
+
+        <div class="panel-title">
+          📊 Booking Overview
+        </div>
+
+        <p>
+          सभी customer bookings और revenue यहाँ से manage करें।
+        </p>
+
+        <button
+          class="refresh"
+          onclick="showPageById('bookings')">
+          📋 Open Booking History
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================
+         PHOTOS
+    ====================== -->
+
+    <section
+      id="photos"
+      class="page-section">
+
+      <h1 class="page-heading">
+        📸 Hotel Photos
+      </h1>
+
+      <p class="page-description">
+        Hotel और rooms की photos यहाँ से upload या replace करें।
+      </p>
+
+
+      <div class="panel">
+
+        <div
+          id="photoMessage"
+          class="photo-message">
+        </div>
+
+
+        <div class="photo-grid">
+
+
+          <!-- HOTEL FRONT -->
+
+          <div class="photo-card">
+
+            <h3>
+              🏨 Hotel Front
+            </h3>
+
+            <img
+              id="preview-hotel-front"
+              class="photo-preview"
+              alt="Hotel Front"
+              src="https://mvvfqkcgaxcipjkiyuae.supabase.co/storage/v1/object/public/hotel-images/hotel-front.jpg"
+              onerror="this.style.display='none'"
+            >
+
+            <input
+              type="file"
+              id="file-hotel-front"
+              class="photo-input"
+              accept="image/*"
+            >
+
+            <button
+              class="upload-btn"
+              onclick="uploadPhoto('hotel-front.jpg','file-hotel-front','preview-hotel-front','status-hotel-front')">
+              📤 Upload / Replace
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deletePhoto('hotel-front.jpg','preview-hotel-front','status-hotel-front')">
+              🗑️ Delete
+            </button>
+
+            <div
+              id="status-hotel-front"
+              class="photo-status">
+            </div>
+
+          </div>
+
+
+          <!-- LOBBY -->
+
+          <div class="photo-card">
+
+            <h3>
+              🛋️ Lobby
+            </h3>
+
+            <img
+              id="preview-lobby"
+              class="photo-preview"
+              alt="Lobby"
+              src="https://mvvfqkcgaxcipjkiyuae.supabase.co/storage/v1/object/public/hotel-images/lobby.jpg"
+              onerror="this.style.display='none'"
+            >
+
+            <input
+              type="file"
+              id="file-lobby"
+              class="photo-input"
+              accept="image/*"
+            >
+
+            <button
+              class="upload-btn"
+              onclick="uploadPhoto('lobby.jpg','file-lobby','preview-lobby','status-lobby')">
+              📤 Upload / Replace
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deletePhoto('lobby.jpg','preview-lobby','status-lobby')">
+              🗑️ Delete
+            </button>
+
+            <div
+              id="status-lobby"
+              class="photo-status">
+            </div>
+
+          </div>
+
+
+          <!-- RECEPTION -->
+
+          <div class="photo-card">
+
+            <h3>
+              🛎️ Reception
+            </h3>
+
+            <img
+              id="preview-reception"
+              class="photo-preview"
+              alt="Reception"
+              src="https://mvvfqkcgaxcipjkiyuae.supabase.co/storage/v1/object/public/hotel-images/reception.jpg"
+              onerror="this.style.display='none'"
+            >
+
+            <input
+              type="file"
+              id="file-reception"
+              class="photo-input"
+              accept="image/*"
+            >
+
+            <button
+              class="upload-btn"
+              onclick="uploadPhoto('reception.jpg','file-reception','preview-reception','status-reception')">
+              📤 Upload / Replace
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deletePhoto('reception.jpg','preview-reception','status-reception')">
+              🗑️ Delete
+            </button>
+
+            <div
+              id="status-reception"
+              class="photo-status">
+            </div>
+
+          </div>
+
+
+          <!-- DELUXE -->
+
+          <div class="photo-card">
+
+            <h3>
+              🛏️ Deluxe Room
+            </h3>
+
+            <img
+              id="preview-deluxe"
+              class="photo-preview"
+              alt="Deluxe Room"
+              src="https://mvvfqkcgaxcipjkiyuae.supabase.co/storage/v1/object/public/hotel-images/deluxe-room.jpg"
+              onerror="this.style.display='none'"
+            >
+
+            <input
+              type="file"
+              id="file-deluxe"
+              class="photo-input"
+              accept="image/*"
+            >
+
+            <button
+              class="upload-btn"
+              onclick="uploadPhoto('deluxe-room.jpg','file-deluxe','preview-deluxe','status-deluxe')">
+              📤 Upload / Replace
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deletePhoto('deluxe-room.jpg','preview-deluxe','status-deluxe')">
+              🗑️ Delete
+            </button>
+
+            <div
+              id="status-deluxe"
+              class="photo-status">
+            </div>
+
+          </div>
+
+
+          <!-- PREMIUM -->
+
+          <div class="photo-card">
+
+            <h3>
+              🛏️ Premium Room
+            </h3>
+
+            <img
+              id="preview-premium"
+              class="photo-preview"
+              alt="Premium Room"
+              src="https://mvvfqkcgaxcipjkiyuae2.supabase.co/storage/v1/object/public/hotel-images/premium-room.jpg"
+              onerror="this.style.display='none'"
+            >
+
+            <input
+              type="file"
+              id="file-premium"
+              class="photo-input"
+              accept="image/*"
+            >
+
+            <button
+              class="upload-btn"
+              onclick="uploadPhoto('premium-room.jpg','file-premium','preview-premium','status-premium')">
+              📤 Upload / Replace
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deletePhoto('premium-room.jpg','preview-premium','status-premium')">
+              🗑️ Delete
+            </button>
+
+            <div
+              id="status-premium"
+              class="photo-status">
+            </div>
+
+          </div>
+
+
+          <!-- ROYAL SUITE -->
+
+          <div class="photo-card">
+
+            <h3>
+              👑 Royal Suite
+            </h3>
+
+            <img
+              id="preview-suite"
+              class="photo-preview"
+              alt="Royal Suite"
+              src="https://mvvfqkcgaxcipjkiyuae2.supabase.co/storage/v1/object/public/hotel-images/royal-suite.jpg"
+              onerror="this.style.display='none'"
+            >
+
+            <input
+              type="file"
+              id="file-suite"
+              class="photo-input"
+              accept="image/*"
+            >
+
+            <button
+              class="upload-btn"
+              onclick="uploadPhoto('royal-suite.jpg','file-suite','preview-suite','status-suite')">
+              📤 Upload / Replace
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deletePhoto('royal-suite.jpg','preview-suite','status-suite')">
+              🗑️ Delete
+            </button>
+
+            <div
+              id="status-suite"
+              class="photo-status">
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================
+         BOOKING HISTORY
+    ====================== -->
+
+    <section
+      id="bookings"
+      class="page-section">
+
+      <h1 class="page-heading">
+        📋 Booking History
+      </h1>
+
+      <p class="page-description">
+        सभी customer bookings यहाँ दिखाई देंगी।
+      </p>
+
+
+      <div class="panel">
+
+        <button
+          class="refresh"
+          onclick="loadBookings()">
+          🔄 Refresh Bookings
+        </button>
+
+        <div
+          id="message"
+          class="message">
+        </div>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Booking ID</th>
+                <th>Guest Name</th>
+                <th>Mobile</th>
+                <th>Room</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Guests</th>
+                <th>Nights</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="bookingTable">
+            </tbody
