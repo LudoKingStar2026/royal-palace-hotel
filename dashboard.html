@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Royal Palace Hotel - Dashboard</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f6fa;
+    color:#111827;
+}
+
+/* SIDEBAR */
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:250px;
+    background:#111827;
+    color:#fff;
+    padding:22px 14px;
+    z-index:1000;
+    transition:.3s;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+    padding:5px 12px 28px;
+}
+
+.logo span{
+    color:#8b5cf6;
+}
+
+.nav-title{
+    color:#8d95a5;
+    font-size:11px;
+    font-weight:bold;
+    padding:0 12px 10px;
+    text-transform:uppercase;
+}
+
+.nav a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:#cbd5e1;
+    padding:12px 13px;
+    margin:4px 0;
+    border-radius:9px;
+    font-size:14px;
+    transition:.2s;
+}
+
+.nav a:hover{
+    background:#1f2937;
+    color:#fff;
+}
+
+.nav a.active{
+    background:#7c3aed;
+    color:#fff;
+}
+
+.bottom-link{
+    position:absolute;
+    left:14px;
+    right:14px;
+    bottom:20px;
+}
+
+.bottom-link a{
+    background:#1f2937;
+}
+
+/* MAIN */
+.main{
+    margin-left:250px;
+    min-height:100vh;
+}
+
+/* TOPBAR */
+.topbar{
+    height:82px;
+    background:#fff;
+    border-bottom:1px solid #e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+}
+
+.top-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.menu-btn{
+    display:none;
+    border:0;
+    background:none;
+    font-size:27px;
+    cursor:pointer;
+}
+
+.page-title{
+    font-size:20px;
+    font-weight:700;
+}
+
+.profile{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#7c3aed;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+}
+
+/* CONTENT */
+.content{
+    padding:28px 30px 50px;
+}
+
+/* WELCOME */
+.welcome{
+    background:linear-gradient(135deg,#7c3aed,#9333ea);
+    color:#fff;
+    padding:27px 28px;
+    border-radius:15px;
+    margin-bottom:25px;
+    box-shadow:0 10px 25px rgba(124,58,237,.15);
+}
+
+.welcome h1{
+    margin:0 0 7px;
+    font-size:25px;
+}
+
+.welcome p{
+    margin:0;
+    opacity:.9;
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:28px;
+}
+
+.stat{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    padding:20px;
+}
+
+.stat-label{
+    color:#6b7280;
+    font-size:13px;
+    margin-bottom:9px;
+}
+
+.stat-number{
+    font-size:27px;
+    font-weight:800;
+}
+
+/* PANELS */
+.panels{
+    display:grid;
+    grid-template-columns:1.45fr 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:19px 20px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.panel-head h2{
+    margin:0;
+    font-size:17px;
+}
+
+.view-all{
+    color:#7c3aed;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* BOOKINGS */
+.booking-list{
+    padding:0;
+}
+
+.booking-row{
+    display:grid;
+    grid-template-columns:1.1fr 1fr .8fr .8fr;
+    gap:10px;
+    align-items:center;
+    padding:15px 20px;
+    border-bottom:1px solid #f0f1f4;
+}
+
+.booking-row:last-child{
+    border-bottom:0;
+}
+
+.booking-name{
+    font-size:13px;
+    font-weight:700;
+}
+
+.booking-id{
+    font-size:11px;
+    color:#8b92a1;
+    margin-top:3px;
+}
+
+.booking-room{
+    font-size:12px;
+    color:#4b5563;
+}
+
+.booking-price{
+    font-size:13px;
+    font-weight:700;
+}
+
+.badge{
+    display:inline-block;
+    width:max-content;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:700;
+}
+
+.badge.confirmed{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge.pending{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.badge.cancelled{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+/* ROOMS */
+.room-overview{
+    padding:16px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+}
+
+.overview-room{
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.overview-left{
+    min-width:0;
+}
+
+.overview-name{
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.overview-number{
+    color:#6b7280;
+    font-size:11px;
+}
+
+.overview-right{
+    text-align:right;
+}
+
+.overview-price{
+    color:#7c3aed;
+    font-weight:800;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.overview-status{
+    font-size:10px;
+    font-weight:700;
+}
+
+.overview-status.available{
+    color:#16a34a;
+}
+
+.overview-status.booked{
+    color:#dc2626;
+}
+
+.overview-status.maintenance{
+    color:#d97706;
+}
+
+.empty{
+    padding:30px 20px;
+    text-align:center;
+    color:#6b7280;
+    font-size:13px;
+}
+
+/* MOBILE SIDEBAR OVERLAY */
+.sidebar-overlay{
+    display:none;
+}
+
+/* RESPONSIVE */
+@media(max-width:1050px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .panels{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:800px){
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .topbar{
+        padding:0 18px;
+        height:70px;
+    }
+
+    .content{
+        padding:20px 16px 40px;
+    }
+
+    .sidebar-overlay{
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.45);
+        z-index:900;
+    }
+
+    .sidebar-overlay.show{
+        display:block;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+    }
+
+    .stat{
+        padding:16px;
+    }
+
+    .stat-number{
+        font-size:23px;
+    }
+
+    .welcome{
+        padding:22px 20px;
+    }
+
+    .welcome h1{
+        font-size:21px;
+    }
+
+    .booking-row{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .booking-price{
+        text-align:left;
+    }
+
+}
+
+@media(max-width:400px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+        Royal <span>Palace</span>
+    </div>
+
+    <div class="nav-title">MAIN MENU</div>
+
+    <nav class="nav">
+
+        <a href="dashboard.html"
+           class="active"
+           onclick="closeSidebar()">
+            📊 <span>Dashboard</span>
+        </a>
+
+        <a href="rooms.html"
+           onclick="closeSidebar()">
+            🛏️ <span>Room Management</span>
+        </a>
+
+        <a href="bookings.html"
+           onclick="closeSidebar()">
+            📅 <span>Booking History</span>
+        </a>
+
+        <a href="hotel.html"
+           onclick="closeSidebar()">
+            🏨 <span>Hotel Details</span>
+        </a>
+
+        <a href="photos.html"
+           onclick="closeSidebar()">
+            🖼️ <span>Photos</span>
+        </a>
+
+        <a href="settings.html"
+           onclick="closeSidebar()">
+            ⚙️ <span>Settings</span>
+        </a>
+
+    </nav>
+
+    <div class="bottom-link">
+
+        <a href="index.html"
+           onclick="closeSidebar()">
+            🌐 <span>View Website</span>
+        </a>
+
+    </div>
+
+</aside>
+
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    onclick="closeSidebar()">
+</div>
+
+
+<!-- MAIN -->
+<main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+        <div class="top-left">
+
+            <button
+                class="menu-btn"
+                id="menuButton"
+                type="button"
+                onclick="toggleSidebar()"
+                aria-label="Open menu"
+                aria-expanded="false">
+                ☰
+            </button>
+
+            <div class="page-title">
+                Dashboard
+            </div>
+
+        </div>
+
+        <div class="profile">
+            A
+        </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+    <section class="content">
+
+        <!-- WELCOME -->
+        <div class="welcome">
+
+            <h1>
+                Welcome Back, Admin 👋
+            </h1>
+
+            <p>
+                Here's what's happening with your hotel today.
+            </p>
+
+        </div>
+
+
+        <!-- STATS -->
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Total Bookings
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalBookings">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Total Rooms
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalRooms">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Available Rooms
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="availableRooms">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Total Revenue
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalRevenue">
+                    ₹0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PANELS -->
+        <div class="panels">
+
+            <!-- RECENT BOOKINGS -->
+            <div class="panel">
+
+                <div class="panel-head">
+
+                    <h2>
+                        Recent Bookings
+                    </h2>
+
+                    <a
+                        href="bookings.html"
+                        class="view-all">
+                        View All
+                    </a>
+
+                </div>
+
+                <div
+                    class="booking-list"
+                    id="recentBookings">
+                </div>
+
+            </div>
+
+
+            <!-- ROOM OVERVIEW -->
+            <div class="panel">
+
+                <div class="panel-head">
+
+                    <h2>
+                        Room Overview
+                    </h2>
+
+                    <a
+                        href="rooms.html"
+                        class="view-all">
+                        Manage Rooms
+                    </a>
+
+                </div>
+
+                <div
+                    class="room-overview"
+                    id="roomOverview">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+(function(){
+
+"use strict";
+
+
+var BOOKING_KEY =
+    "royal_palace_bookings";
+
+var ROOM_KEY =
+    "royal_palace_rooms";
+
+
+var defaultRooms = [
+
+    {
+        id:"room_101",
+        name:"Premium Room",
+        number:"101",
+        price:2500,
+        status:"available",
+        image:"premium-room.jpg"
+    },
+
+    {
+        id:"room_102",
+        name:"Royal Suite",
+        number:"102",
+        price:4500,
+        status:"available",
+        image:"royal-suite.jpg"
+    },
+
+    {
+        id:"room_103",
+        name:"Royal Palace Suite",
+        number:"103",
+        price:6500,
+        status:"available",
+        image:""
+    }
+
+];
+
+
+var defaultBookings = [
+
+    {
+        id:"RP1001",
+        name:"Rahul Kumar",
+        room:"Premium Room",
+        checkIn:"2026-09-12",
+        checkOut:"2026-09-14",
+        amount:5000,
+        status:"confirmed"
+    },
+
+    {
+        id:"RP1002",
+        name:"Amit Singh",
+        room:"Royal Suite",
+        checkIn:"2026-09-15",
+        checkOut:"2026-09-17",
+        amount:9000,
+        status:"pending"
+    },
+
+    {
+        id:"RP1003",
+        name:"Neha Sharma",
+        room:"Royal Palace Suite",
+        checkIn:"2026-09-18",
+        checkOut:"2026-09-20",
+        amount:13000,
+        status:"confirmed"
+    }
+
+];
+
+
+function $(id){
+
+    return document.getElementById(id);
+
+}
+
+
+/* ESCAPE */
+function escapeHTML(value){
+
+    return String(
+        value == null ? "" : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* MONEY */
+function money(value){
+
+    var number =
+        Number(value || 0);
+
+    return "₹" +
+        number.toLocaleString("en-IN");
+
+}
+
+
+/* GET ROOMS */
+function getRooms(){
+
+    var raw = null;
+
+    try{
+
+        raw =
+            localStorage.getItem(
+                ROOM_KEY
+            );
+
+    }catch(e){
+
+        raw = null;
+
+    }
+
+
+    /*
+      पहली बार localStorage में rooms नहीं हैं,
+      इसलिए default 3 rooms बनाए जाएंगे.
+    */
+
+    if(raw === null){
+
+        try{
+
+            localStorage.setItem(
+                ROOM_KEY,
+                JSON.stringify(defaultRooms)
+            );
+
+        }catch(e){}
+
+        return defaultRooms.slice();
+
+    }
+
+
+    try{
+
+        var parsed =
+            JSON.parse(raw);
+
+        /*
+          अगर rooms array है तो
+          वही actual rooms दिखेंगे.
+          अगर सारे rooms delete कर दिए,
+          तो Dashboard पर 0 आएगा.
+        */
+
+        if(Array.isArray(parsed)){
+
+            return parsed;
+
+        }
+
+        return [];
+
+    }catch(e){
+
+        return [];
+
+    }
+
+}
+
+
+/* GET BOOKINGS */
+function getBookings(){
+
+    var raw = null;
+
+    try{
+
+        raw =
+            localStorage.getItem(
+                BOOKING_KEY
+            );
+
+    }catch(e){
+
+        raw = null;
+
+    }
+
+
+    if(raw === null){
+
+        try{
+
+            localStorage.setItem(
+                BOOKING_KEY,
+                JSON.stringify(defaultBookings)
+            );
+
+        }catch(e){}
+
+        return defaultBookings.slice();
+
+    }
+
+
+    try{
+
+        var parsed =
+            JSON.parse(raw);
+
+        if(Array.isArray(parsed)){
+
+            return parsed;
+
+        }
+
+        return [];
+
+    }catch(e){
+
+        return [];
+
+    }
+
+}
+
+
+/* ROOM STATS */
+function updateRoomStats(rooms){
+
+    var total =
+        rooms.length;
+
+    var available = 0;
+
+    for(var i=0;i<rooms.length;i++){
+
+        var status =
+            rooms[i].status ||
+            "available";
+
+        if(status === "available"){
+
+            available++;
+
+        }
+
+    }
+
+
+    $("totalRooms").textContent =
+        total;
+
+    $("availableRooms").textContent =
+        available;
+
+}
+
+
+/* BOOKING STATS */
+function updateBookingStats(bookings){
+
+    var total =
+        bookings.length;
+
+    var revenue = 0;
+
+
+    for(var i=0;i<bookings.length;i++){
+
+        /*
+          Cancelled booking की amount
+          revenue में नहीं जोड़ी जाएगी.
+        */
+
+        if(
+            bookings[i].status !==
+            "cancelled"
+        ){
+
+            revenue +=
+                Number(
+                    bookings[i].amount ||
+                    bookings[i].price ||
+                    0
+                );
+
+        }
+
+    }
+
+
+    $("totalBookings").textContent =
+        total;
+
+    $("totalRevenue").textContent =
+        money(revenue);
+
+}
+
+
+/* ROOM OVERVIEW */
+function renderRoomOverview(rooms){
+
+    var box =
+        $("roomOverview");
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    if(!rooms.length){
+
+        box.innerHTML =
+            '<div class="empty">' +
+            'No rooms available.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    var html = "";
+
+
+    for(var i=0;i<rooms.length;i++){
+
+        var room =
+            rooms[i];
+
+        var status =
+            room.status ||
+            "available";
+
+
+        var statusText =
+            status.charAt(0).toUpperCase() +
+            status.slice(1);
+
+
+        html +=
+            '<div class="overview-room">';
+
+
+        html +=
+            '<div class="overview-left">';
+
+
+        html +=
+            '<div class="overview-name">' +
+            escapeHTML(
+                room.name ||
+                "Unnamed Room"
+            ) +
+            '</div>';
+
+
+        html +=
+            '<div class="overview-number">' +
+            'Room ' +
+            escapeHTML(
+                room.number ||
+                "-"
+            ) +
+            '</div>';
+
+
+        html +=
+            '</div>';
+
+
+        html +=
+            '<div class="overview-right">';
+
+
+        html +=
+            '<div class="overview-price">' +
+            money(room.price) +
+            '</div>';
+
+
+        html +=
+            '<div class="overview-status ' +
+            escapeHTML(status) +
+            '">' +
+            escapeHTML(statusText) +
+            '</div>';
+
+
+        html +=
+            '</div>';
+
+
+        html +=
+            '</div>';
+
+    }
+
+
+    box.innerHTML =
+        html;
+
+}
+
+
+/* RECENT BOOKINGS */
+function renderRecentBookings(bookings){
+
+    var box =
+        $("recentBookings");
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    if(!bookings.length){
+
+        box.innerHTML =
+            '<div class="empty">' +
+            'No bookings found.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    /*
+      सबसे नए bookings ऊपर.
+    */
+
+    var list =
+        bookings.slice().reverse();
+
+
+    /*
+      Dashboard पर maximum 5 bookings.
+    */
+
+    list =
+        list.slice(0,5);
+
+
+    var html = "";
+
+
+    for(var i=0;i<list.length;i++){
+
+        var booking =
+            list[i];
+
+
+        var status =
+            String(
+                booking.status ||
+                "pending"
+            ).toLowerCase();
+
+
+        var statusText =
+            status.charAt(0).toUpperCase() +
+            status.slice(1);
+
+
+        html +=
+            '<div class="booking-row">';
+
+
+        html +=
+            '<div>';
+
+        html +=
+            '<div class="booking-name">' +
+            escapeHTML(
+                booking.name ||
+                "Guest"
+            ) +
+            '</div>';
+
+        html +=
+            '<div class="booking-id">' +
+            escapeHTML(
+                booking.id ||
+                ""
+            ) +
+            '</div>';
+
+        html +=
+            '</div>';
+
+
+        html +=
+            '<div class="booking-room">' +
+            escapeHTML(
+                booking.room ||
+                booking.roomName ||
+                "-"
+            ) +
+            '</div>';
+
+
+        html +=
+            '<div class="booking-price">' +
+            money(
+                booking.amount ||
+                booking.price ||
+                0
+            ) +
+            '</div>';
+
+
+        html +=
+            '<div>' +
+
+            '<span class="badge ' +
+            escapeHTML(status) +
+            '">' +
+            escapeHTML(statusText) +
+            '</span>' +
+
+            '</div>';
+
+
+        html +=
+            '</div>';
+
+    }
+
+
+    box.innerHTML =
+        html;
+
+}
+
+
+/* DASHBOARD UPDATE */
+function updateDashboard(){
+
+    var rooms =
+        getRooms();
+
+    var bookings =
+        getBookings();
+
+
+    updateRoomStats(
+        rooms
+    );
+
+
+    updateBookingStats(
+        bookings
+    );
+
+
+    renderRoomOverview(
+        rooms
+    );
+
+
+    renderRecentBookings(
+        bookings
+    );
+
+}
+
+
+/* SIDEBAR OPEN/CLOSE */
+window.toggleSidebar =
+function(){
+
+    var sidebar =
+        $("sidebar");
+
+    var overlay =
+        $("sidebarOverlay");
+
+    var menuButton =
+        $("menuButton");
+
+
+    if(!sidebar || !overlay){
+
+        return;
+
+    }
+
+
+    var isOpen =
+        sidebar.classList.contains(
+            "open"
+        );
+
+
+    if(isOpen){
+
+        closeSidebar();
+
+    }else{
+
+        sidebar.classList.add(
+            "open"
+        );
+
+        overlay.classList.add(
+            "show"
+        );
+
+
+        if(menuButton){
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+        }
+
+    }
+
+};
+
+
+/* CLOSE SIDEBAR */
+window.closeSidebar =
+function(){
+
+    var sidebar =
+        $("sidebar");
+
+    var overlay =
+        $("sidebarOverlay");
+
+    var menuButton =
+        $("menuB
