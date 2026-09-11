@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Royal Palace Hotel - Bookings</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --navy:#0b1020;
+  --navy2:#111936;
+  --purple:#6d28d9;
+  --purple2:#8b5cf6;
+  --gold:#d4af37;
+  --bg:#f5f6fa;
+  --white:#fff;
+  --text:#172033;
+  --muted:#737b89;
+  --green:#159447;
+  --red:#dc3545;
+  --orange:#d88900;
+  --border:#e4e6ec;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:245px;
+  background:linear-gradient(180deg,#0b1020,#111936);
+  color:white;
+  padding:22px 14px;
+  z-index:1000;
+  overflow-y:auto;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px 25px;
+}
+
+.logo-icon{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  background:linear-gradient(135deg,#d4af37,#f4d675);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#111936;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.logo-text strong{
+  display:block;
+  font-size:16px;
+}
+
+.logo-text span{
+  color:#aab1c4;
+  font-size:11px;
+}
+
+.nav-title{
+  color:#727b94;
+  font-size:10px;
+  font-weight:bold;
+  padding:18px 14px 8px;
+  letter-spacing:1px;
+}
+
+.nav-btn{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#cbd1df;
+  padding:13px 14px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+  margin-bottom:4px;
+  transition:.2s;
+}
+
+.nav-btn:hover{
+  background:rgba(255,255,255,.07);
+  color:#fff;
+}
+
+.nav-btn.active{
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  color:#fff;
+  box-shadow:0 7px 18px rgba(109,40,217,.25);
+}
+
+.nav-icon{
+  width:23px;
+  text-align:center;
+  font-size:18px;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+  margin-left:245px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:78px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.top-left h1{
+  margin:0;
+  font-size:25px;
+}
+
+.top-left p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.avatar{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  font-size:19px;
+}
+
+.mobile-menu{
+  display:none;
+  border:0;
+  background:var(--navy);
+  color:#fff;
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  font-size:23px;
+}
+
+.content{
+  padding:28px;
+}
+
+/* ================= HEADER ================= */
+
+.page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+.page-header h2{
+  margin:0;
+  font-size:27px;
+}
+
+.page-header p{
+  margin:6px 0 0;
+  color:var(--muted);
+}
+
+/* ================= STATS ================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:22px;
+}
+
+.stat{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 5px 20px rgba(20,25,40,.04);
+}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stat-title{
+  color:#777f8e;
+  font-size:13px;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  margin-top:10px;
+  font-size:28px;
+  font-weight:800;
+}
+
+.stat-icon{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  background:#f0eaff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+}
+
+.stat small{
+  display:block;
+  margin-top:9px;
+  color:var(--green);
+}
+
+/* ================= TOOLBAR ================= */
+
+.panel{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:visible;
+  box-shadow:0 5px 20px rgba(20,25,40,.04);
+}
+
+.toolbar{
+  padding:20px;
+  display:flex;
+  gap:12px;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+}
+
+.search{
+  position:relative;
+  flex:1;
+  max-width:430px;
+}
+
+.search input{
+  width:100%;
+  height:46px;
+  border:1px solid #dfe2e9;
+  border-radius:12px;
+  padding:0 15px 0 42px;
+  outline:none;
+  background:#fafbfc;
+}
+
+.search input:focus{
+  border-color:var(--purple2);
+}
+
+.search span{
+  position:absolute;
+  left:15px;
+  top:13px;
+  color:#858c98;
+}
+
+select{
+  height:46px;
+  border:1px solid #dfe2e9;
+  border-radius:12px;
+  padding:0 35px 0 13px;
+  background:#fafbfc;
+  outline:none;
+}
+
+/* ================= TABLE ================= */
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:900px;
+}
+
+th{
+  text-align:left;
+  padding:15px 18px;
+  background:#fafbfc;
+  color:#747c89;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  border-bottom:1px solid var(--border);
+}
+
+td{
+  padding:17px 18px;
+  border-bottom:1px solid #eef0f4;
+  font-size:13px;
+}
+
+tr:last-child td{
+  border-bottom:0;
+}
+
+.guest{
+  font-weight:700;
+}
+
+.sub{
+  display:block;
+  color:#8a909b;
+  font-size:11px;
+  margin-top:4px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.confirmed{
+  color:#118443;
+  background:#e8f8ef;
+}
+
+.pending{
+  color:#a76a00;
+  background:#fff3d9;
+}
+
+.cancelled{
+  color:#c62828;
+  background:#ffe8ea;
+}
+
+/* ================= THREE DOT MENU ================= */
+
+.action{
+  position:relative;
+}
+
+.dots{
+  width:36px;
+  height:36px;
+  border:1px solid #e1e4ea;
+  border-radius:10px;
+  background:#fff;
+  font-size:21px;
+  color:#555e6d;
+  line-height:20px;
+}
+
+.dots:hover{
+  background:#f5f2ff;
+  color:var(--purple);
+}
+
+.dropdown{
+  display:none;
+  position:absolute;
+  right:0;
+  top:42px;
+  width:205px;
+  background:#fff;
+  border:1px solid #e2e4ea;
+  border-radius:13px;
+  padding:6px;
+  box-shadow:0 15px 35px rgba(10,15,30,.16);
+  z-index:500;
+}
+
+.dropdown.open{
+  display:block;
+}
+
+.dropdown button{
+  width:100%;
+  border:0;
+  background:#fff;
+  text-align:left;
+  padding:11px 12px;
+  border-radius:8px;
+  font-size:12px;
+  color:#303746;
+}
+
+.dropdown button:hover{
+  background:#f5f3ff;
+}
+
+.dropdown .success{
+  color:#128542;
+}
+
+.dropdown .danger{
+  color:#d33140;
+}
+
+.dropdown .sep{
+  height:1px;
+  background:#eee;
+  margin:5px 0;
+}
+
+/* ================= EMPTY ================= */
+
+.empty{
+  padding:60px 20px;
+  text-align:center;
+  color:#7c8491;
+}
+
+.empty-icon{
+  font-size:45px;
+  margin-bottom:10px;
+}
+
+/* ================= MODAL ================= */
+
+.modal-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(7,11,25,.62);
+  z-index:2000;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal-bg.show{
+  display:flex;
+}
+
+.modal{
+  width:100%;
+  max-width:550px;
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 25px 70px rgba(0,0,0,.3);
+}
+
+.modal-head{
+  padding:20px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-head h3{
+  margin:0;
+}
+
+.close{
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:9px;
+  background:#f1f2f5;
+  font-size:20px;
+}
+
+.modal-body{
+  padding:22px;
+}
+
+.detail{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.detail-box{
+  background:#f8f9fc;
+  padding:13px;
+  border-radius:11px;
+}
+
+.detail-box.full{
+  grid-column:1/-1;
+}
+
+.detail-label{
+  color:#818896;
+  font-size:11px;
+  margin-bottom:5px;
+}
+
+.detail-value{
+  font-weight:700;
+}
+
+.modal-foot{
+  padding:15px 22px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 16px;
+  font-weight:bold;
+}
+
+.btn-purple{
+  color:#fff;
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+}
+
+.btn-gray{
+  background:#f0f1f4;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:#101629;
+  color:#fff;
+  padding:13px 18px;
+  border-radius:12px;
+  box-shadow:0 12px 30px rgba(0,0,0,.2);
+  display:none;
+  z-index:3000;
+  font-size:13px;
+}
+
+.toast.show{
+  display:block;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 18px;
+  }
+
+  .top-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .top-left h1{
+    font-size:21px;
+  }
+
+  .top-left p{
+    font-size:11px;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:600px){
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .stat{
+    padding:16px;
+    border-radius:17px;
+  }
+
+  .stat-value{
+    font-size:23px;
+  }
+
+  .stat-icon{
+    width:40px;
+    height:40px;
+    font-size:18px;
+  }
+
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .search{
+    max-width:none;
+  }
+
+  .page-header{
+    align-items:flex-start;
+  }
+
+  .page-header h2{
+    font-size:22px;
+  }
+
+  .detail{
+    grid-template-columns:1fr;
+  }
+
+  .detail-box.full{
+    grid-column:auto;
+  }
+
+  .modal{
+    border-radius:16px;
+  }
+
+  .avatar{
+    width:40px;
+    height:40px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logo-icon">RP</div>
+    <div class="logo-text">
+      <strong>Royal Palace</strong>
+      <span>Premium Control Panel</span>
+    </div>
+  </div>
+
+  <div class="nav-title">MAIN</div>
+
+  <button class="nav-btn" onclick="go('dashboard.html')">
+    <span class="nav-icon">▦</span>
+    Dashboard
+  </button>
+
+  <button class="nav-btn" onclick="go('hotel.html')">
+    <span class="nav-icon">🏨</span>
+    Hotel Management
+  </button>
+
+  <button class="nav-btn" onclick="go('photos.html')">
+    <span class="nav-icon">▣</span>
+    Hotel Photos
+  </button>
+
+  <button class="nav-btn" onclick="go('rooms.html')">
+    <span class="nav-icon">🛏️</span>
+    Room Management
+  </button>
+
+  <button class="nav-btn active" onclick="go('bookings.html')">
+    <span class="nav-icon">📋</span>
+    Booking History
+  </button>
+
+  <div class="nav-title">SYSTEM</div>
+
+  <button class="nav-btn" onclick="go('settings.html')">
+    <span class="nav-icon">⚙️</span>
+    Settings
+  </button>
+
+  <button class="nav-btn" onclick="logout()">
+    <span class="nav-icon">↪</span>
+    Logout
+  </button>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+
+      <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+      <div>
+        <h1>Booking History</h1>
+        <p>Royal Palace Hotel Management</p>
+      </div>
+
+    </div>
+
+    <div class="avatar">A</div>
+
+  </header>
+
+
+  <section class="content">
+
+    <div class="page-header">
+
+      <div>
+        <h2>All Bookings</h2>
+        <p>Manage and track all hotel reservations.</p>
+      </div>
+
+    </div>
+
+
+    <!-- ================= STATS ================= -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-title">Total Bookings</div>
+          <div class="stat-icon">📋</div>
+        </div>
+        <div class="stat-value" id="totalBookings">0</div>
+        <small>● All bookings</small>
+      </div>
+
+
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-title">Active</div>
+          <div class="stat-icon">✅</div>
+        </div>
+        <div class="stat-value" id="activeBookings">0</div>
+        <small>● Confirmed / Pending</small>
+      </div>
+
+
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-title">Confirmed</div>
+          <div class="stat-icon">✓</div>
+        </div>
+        <div class="stat-value" id="confirmedBookings">0</div>
+        <small>● Confirmed reservations</small>
+      </div>
+
+
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-title">Revenue</div>
+          <div class="stat-icon">₹</div>
+        </div>
+        <div class="stat-value" id="revenue">₹0</div>
+        <small>● Booking revenue</small>
+      </div>
+
+    </div>
+
+
+    <!-- ================= BOOKING PANEL ================= -->
+
+    <div class="panel">
+
+      <div class="toolbar">
+
+        <div class="search">
+          <span>🔎</span>
+          <input
+            type="search"
+            id="search"
+            placeholder="Search guest, booking ID, phone..."
+            oninput="render()"
+          >
+        </div>
+
+        <select id="statusFilter" onchange="render()">
+          <option value="all">All Status</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="pending">Pending</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+
+      </div>
+
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Guest</th>
+              <th>Room</th>
+              <th>Check-in</th>
+              <th>Check-out</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="bookingBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- ================= DETAILS MODAL ================= -->
+
+<div class="modal-bg" id="modalBg" onclick="closeModalOutside(event)">
+
+  <div class="modal">
+
+    <div class="modal-head">
+      <h3>Booking Details</h3>
+      <button class="close" onclick="closeModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="detail">
+
+        <div class="detail-box">
+          <div class="detail-label">Booking ID</div>
+          <div class="detail-value" id="dId">—</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Status</div>
+          <div class="detail-value" id="dStatus">—</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Guest Name</div>
+          <div class="detail-value" id="dGuest">—</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Phone</div>
+          <div class="detail-value" id="dPhone">—</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Room</div>
+          <div class="detail-value" id="dRoom">—</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Amount</div>
+          <div class="detail-value" id="dAmount">—</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Check-in</div>
+          <div class="detail-value" id="dCheckin">—</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Check-out</div>
+          <div class="detail-value" id="dCheckout">—</div>
+        </div>
+
+        <div class="detail-box full">
+          <div class="detail-label">Special Request</div>
+          <div class="detail-value" id="dRequest">No special request</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn btn-gray" onclick="closeModal()">Close</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   ROYAL PALACE HOTEL - BOOKING SYSTEM
+===================================================== */
+
+const STORAGE_KEY = "royal_palace_bookings";
+
+
+/* ================= DEMO DATA ================= */
+
+const demoBookings = [
+
+  {
+    id:"RP1001",
+    guest:"Rahul Kumar",
+    phone:"9876543210",
+    room:"Premium Room",
+    checkin:"2026-09-12",
+    checkout:"2026-09-14",
+    amount:5000,
+    status:"confirmed",
+    request:"King bed requested"
+  },
+
+  {
+    id:"RP1002",
+    guest:"Amit Singh",
+    phone:"9876501234",
+    room:"Royal Suite",
+    checkin:"2026-09-15",
+    checkout:"2026-09-17",
+    amount:9000,
+    status:"pending",
+    request:"Late check-in"
+  },
+
+  {
+    id:"RP1003",
+    guest:"Neha Sharma",
+    phone:"9876512345",
+    room:"Royal Palace Suite",
+    checkin:"2026-09-18",
+    checkout:"2026-09-20",
+    amount:13000,
+    status:"confirmed",
+    request:"Airport pickup required"
+  }
+
+];
+
+
+function loadBookings(){
+
+  try{
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if(saved){
+
+      const data = JSON.parse(saved);
+
+      if(Array.isArray(data)){
+        return data;
+      }
+
+    }
+
+  }catch(e){
+
+    console.log(e);
+
+  }
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(demoBookings)
+  );
+
+  return [...demoBookings];
+}
+
+
+let bookings = loadBookings();
+
+
+function saveBookings(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(bookings)
+  );
+
+}
+
+
+/* ================= NAVIGATION ================= */
+
+function go(page){
+
+  window.location.href = page;
+
+}
+
+
+function toggleSidebar(){
+
+  document
+    .getElementById("sidebar")
+    .classList.toggle("open");
+
+}
+
+
+function logout(){
+
+  if(confirm("Are you sure you want to logout?")){
+
+    window.location.href = "login.html";
+
+  }
+
+}
+
+
+/* ================= MENU ================= */
+
+function closeMenus(){
+
+  document
+    .querySelectorAll(".dropdown")
+    .forEach(menu=>{
+      menu.classList.remove("open");
+    });
+
+}
+
+
+function toggleMenu(event,id){
+
+  event.stopPropagation();
+
+  const menu = document.getElementById("menu-"+id);
+
+  closeMenus();
+
+  if(menu){
+    menu.classList.add("open");
+  }
+
+}
+
+
+document.addEventListener("click",function(){
+
+  closeMenus();
+
+});
+
+
+document.addEventListener("keydown",function(e){
+
+  if(e.key==="Escape"){
+
+    closeMenus();
+    closeModal();
+
+  }
+
+});
+
+
+/* ================= SAFE HTML ================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function safeId(value){
+
+  return String(value)
+    .replace(/[^a-zA-Z0-9_-]/g,"_");
+
+}
+
+
+/* ================= STATUS ================= */
+
+function statusHTML(status){
+
+  const s = String(status || "pending").toLowerCase();
+
+  if(s==="confirmed"){
+    return '<span class="badge confirmed">● Confirmed</span>';
+  }
+
+  if(s==="cancelled"){
+    return '<span class="badge cancelled">● Cancelled</span>';
+  }
+
+  return '<span class="badge pending">● Pending</span>';
+
+}
+
+
+/* ================= FORMAT ================= */
+
+function money(value){
+
+  return "₹"+Number(value || 0).toLocaleString("en-IN");
+
+}
+
+
+function dateFormat(value){
+
+  if(!value) return "—";
+
+  const d = new Date(value+"T00:00:00");
+
+  if(isNaN(d.getTime())) return value;
+
+  return d.toLocaleDateString(
+    "en-IN",
+    {
+      day:"2-digit",
+      month:"short",
+      year:"numeric"
+    }
+  );
+
+}
+
+
+/* ================= RENDER ================= */
+
+function render(){
+
+  const body = document.getElementById("bookingBody");
+
+  const search = document
+    .getElementById("search")
+    .value
+    .trim()
+    .toLowerCase();
+
+  const filter = document
+    .getElementById("statusFilter")
+    .value;
+
+
+  let list = bookings.filter(b=>{
+
+    const text = [
+
+      b.id,
+      b.guest,
+      b.phone,
+      b.room
+
+    ].join(" ").toLowerCase();
+
+    const matchesSearch =
+      !search || text.includes(search);
+
+    const matchesStatus =
+      filter==="all" ||
+      String(b.status).toLowerCase()===filter;
+
+    return matchesSearch && matchesStatus;
+
+  });
+
+
+  document.getElementById("totalBookings").textContent =
+    bookings.length;
+
+
+  document.getElementById("activeBookings").textCo
