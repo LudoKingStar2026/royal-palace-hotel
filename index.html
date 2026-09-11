@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Royal Palace Hotel</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f6fb;
+  color:#111827;
+}
+
+header{
+  background:#101827;
+  color:white;
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:bold;
+}
+
+.logo span{
+  color:#f5c542;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  position:relative;
+}
+
+.menu-btn{
+  width:45px;
+  height:45px;
+  border:0;
+  background:#1f2937;
+  color:white;
+  border-radius:10px;
+  font-size:27px;
+}
+
+.account-btn{
+  border:0;
+  background:#f5c542;
+  color:#111827;
+  padding:11px 14px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.dropdown{
+  display:none;
+  position:absolute;
+  right:0;
+  top:55px;
+  width:240px;
+  background:white;
+  border-radius:14px;
+  box-shadow:0 8px 30px rgba(0,0,0,.2);
+  overflow:hidden;
+}
+
+.dropdown.show{
+  display:block;
+}
+
+.dropdown button{
+  width:100%;
+  background:white;
+  color:#111827;
+  border:0;
+  border-bottom:1px solid #eee;
+  padding:16px;
+  text-align:left;
+  font-size:15px;
+  font-weight:bold;
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:18px;
+}
+
+.hero{
+  min-height:300px;
+  border-radius:22px;
+  padding:35px 25px;
+  margin-bottom:20px;
+  color:white;
+  display:flex;
+  align-items:flex-end;
+  background:
+    linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.75)),
+    url("images/hotel-front.jpg") center/cover;
+}
+
+.hero h1{
+  margin:0 0 10px;
+  font-size:34px;
+}
+
+.hero p{
+  margin:0;
+  font-size:17px;
+}
+
+.card{
+  background:white;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+h2,h3{
+  margin-top:0;
+}
+
+.section-title{
+  font-size:25px;
+  margin-bottom:16px;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.gallery-item{
+  border-radius:15px;
+  overflow:hidden;
+  background:#e5e7eb;
+}
+
+.gallery-item img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  display:block;
+}
+
+.gallery-caption{
+  padding:12px;
+  font-weight:bold;
+  background:white;
+}
+
+.facilities{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.facility{
+  padding:18px 10px;
+  text-align:center;
+  background:#f8fafc;
+  border-radius:14px;
+  font-weight:bold;
+}
+
+.facility-icon{
+  font-size:28px;
+  display:block;
+  margin-bottom:7px;
+}
+
+.room-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.room{
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  overflow:hidden;
+  background:white;
+}
+
+.room-img{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  display:block;
+  background:#e5e7eb;
+}
+
+.room-content{
+  padding:17px;
+}
+
+.room h3{
+  margin-bottom:7px;
+  font-size:20px;
+}
+
+.price{
+  font-size:23px;
+  font-weight:bold;
+  margin:10px 0;
+  color:#9a6700;
+}
+
+.small{
+  color:#64748b;
+  font-size:13px;
+}
+
+.room-features{
+  line-height:1.8;
+  font-size:14px;
+  margin:10px 0;
+}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:11px;
+  padding:14px;
+  background:#111827;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.primary:hover{
+  background:#1f2937;
+}
+
+.gold-btn{
+  width:100%;
+  border:0;
+  border-radius:11px;
+  padding:14px;
+  background:#a66a00;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.login-notice{
+  background:#fff7df;
+  border:1px solid #f5c542;
+  border-radius:14px;
+  padding:18px;
+  text-align:center;
+  margin-bottom:18px;
+}
+
+#bookingSection{
+  display:none;
+}
+
+#bookingSection.show{
+  display:block;
+}
+
+input,
+select{
+  width:100%;
+  padding:13px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  font-size:16px;
+  background:white;
+}
+
+label{
+  display:block;
+  margin:12px 0 6px;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.booking-room{
+  padding:15px;
+  background:#f8fafc;
+  border-radius:12px;
+  margin-top:15px;
+}
+
+.booking-summary{
+  background:#f8fafc;
+  border-radius:12px;
+  padding:15px;
+  margin-top:15px;
+}
+
+.success{
+  background:#dcfce7;
+  color:#166534;
+  border-radius:12px;
+  padding:18px;
+  margin-top:15px;
+}
+
+.error{
+  background:#fee2e2;
+  color:#991b1b;
+  border-radius:12px;
+  padding:15px;
+  margin-top:12px;
+}
+
+.history-item{
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.history-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+
+.history-id{
+  font-weight:bold;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  background:#dcfce7;
+  color:#166534;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.history-row{
+  display:flex;
+  justify-content:space-between;
+  padding:7px 0;
+  border-bottom:1px solid #f1f5f9;
+}
+
+.close-btn{
+  width:100%;
+  border:0;
+  background:#eef2f7;
+  color:#111827;
+  padding:12px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.footer{
+  background:#101827;
+  color:white;
+  text-align:center;
+  padding:25px;
+  margin-top:25px;
+}
+
+.hidden{
+  display:none !important;
+}
+
+@media(max-width:700px){
+
+  .container{
+    padding:12px;
+  }
+
+  .hero{
+    min-height:280px;
+  }
+
+  .hero h1{
+    font-size:27px;
+  }
+
+  .gallery{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .gallery-item img{
+    height:130px;
+  }
+
+  .facilities{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .room-grid{
+    grid-template-columns:1fr;
+  }
+
+  .account-btn{
+    padding:9px 10px;
+    font-size:13px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    🏨 <span>Royal Palace</span> Hotel
+  </div>
+
+  <div class="header-right">
+
+    <button
+      id="accountBtn"
+      class="account-btn"
+      onclick="accountAction()">
+      Login
+    </button>
+
+    <button
+      class="menu-btn"
+      onclick="toggleMenu()">
+      ⋮
+    </button>
+
+    <div
+      id="menu"
+      class="dropdown">
+
+      <button onclick="showHistory()">
+        📋 My Bookings / History
+      </button>
+
+      <button onclick="goToRooms()">
+        🛏️ Rooms & Prices
+      </button>
+
+      <button onclick="showAbout()">
+        ℹ️ About Hotel
+      </button>
+
+      <button id="logoutMenuBtn"
+        class="hidden"
+        onclick="logoutUser()">
+        🚪 Logout
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<div class="container">
+
+
+  <!-- HERO -->
+
+  <div class="hero">
+
+    <div>
+
+      <h1>
+        Welcome to Royal Palace Hotel
+      </h1>
+
+      <p>
+        आरामदायक कमरे • शानदार सुविधाएँ • बेहतरीन hospitality
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- HOTEL PHOTOS -->
+
+  <div class="card">
+
+    <h2 class="section-title">
+      🏨 Our Hotel
+    </h2>
+
+    <div class="gallery">
+
+      <div class="gallery-item">
+
+        <img
+          src="images/hotel-front.jpg"
+          alt="Hotel Front"
+          onerror="this.style.display='none'">
+
+        <div class="gallery-caption">
+          Hotel Front
+        </div>
+
+      </div>
+
+      <div class="gallery-item">
+
+        <img
+          src="images/lobby.jpg"
+          alt="Hotel Lobby"
+          onerror="this.style.display='none'">
+
+        <div class="gallery-caption">
+          Beautiful Lobby
+        </div>
+
+      </div>
+
+      <div class="gallery-item">
+
+        <img
+          src="images/reception.jpg"
+          alt="Reception"
+          onerror="this.style.display='none'">
+
+        <div class="gallery-caption">
+          Reception
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- FACILITIES -->
+
+  <div class="card">
+
+    <h2 class="section-title">
+      ✨ Hotel Facilities
+    </h2>
+
+    <div class="facilities">
+
+      <div class="facility">
+        <span class="facility-icon">📶</span>
+        Free Wi-Fi
+      </div>
+
+      <div class="facility">
+        <span class="facility-icon">🚗</span>
+        Parking
+      </div>
+
+      <div class="facility">
+        <span class="facility-icon">🍽️</span>
+        Restaurant
+      </div>
+
+      <div class="facility">
+        <span class="facility-icon">❄️</span>
+        AC Rooms
+      </div>
+
+      <div class="facility">
+        <span class="facility-icon">📺</span>
+        Smart TV
+      </div>
+
+      <div class="facility">
+        <span class="facility-icon">🛎️</span>
+        Room Service
+      </div>
+
+      <div class="facility">
+        <span class="facility-icon">🛏️</span>
+        Comfortable Beds
+      </div>
+
+      <div class="facility">
+        <span class="facility-icon">🔒</span>
+        24×7 Security
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ROOMS -->
+
+  <div
+    id="roomsSection"
+    class="card">
+
+    <h2 class="section-title">
+      🛏️ Rooms & Prices
+    </h2>
+
+    <p class="small">
+      अपनी पसंद का कमरा देखें और Book Now दबाएँ।
+    </p>
+
+    <br>
+
+    <div class="room-grid">
+
+
+      <!-- DELUXE -->
+
+      <div class="room">
+
+        <img
+          class="room-img"
+          src="images/deluxe-room.jpg"
+          alt="Deluxe Room"
+          onerror="this.style.display='none'">
+
+        <div class="room-content">
+
+          <h3>
+            Deluxe Room
+          </h3>
+
+          <div class="price">
+            ₹2,499
+          </div>
+
+          <div class="small">
+            Per night
+          </div>
+
+          <div class="room-features">
+            🛏️ Comfortable Bed<br>
+            ❄️ AC<br>
+            📺 TV<br>
+            📶 Free Wi-Fi
+          </div>
+
+          <button
+            class="gold-btn"
+            onclick="bookRoom('Deluxe Room',2499)">
+            Book Now
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- PREMIUM -->
+
+      <div class="room">
+
+        <img
+          class="room-img"
+          src="images/premium-room.jpg"
+          alt="Premium Room"
+          onerror="this.style.display='none'">
+
+        <div class="room-content">
+
+          <h3>
+            Premium Room
+          </h3>
+
+          <div class="price">
+            ₹3,499
+          </div>
+
+          <div class="small">
+            Per night
+          </div>
+
+          <div class="room-features">
+            🛏️ Premium Bed<br>
+            ❄️ AC<br>
+            📺 Smart TV<br>
+            🚿 Premium Bathroom
+          </div>
+
+          <button
+            class="gold-btn"
+            onclick="bookRoom('Premium Room',3499)">
+            Book Now
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ROYAL SUITE -->
+
+      <div class="room">
+
+        <img
+          class="room-img"
+          src="images/royal-suite.jpg"
+          alt="Royal Suite"
+          onerror="this.style.display='none'">
+
+        <div class="room-content">
+
+          <h3>
+            Royal Suite
+          </h3>
+
+          <div class="price">
+            ₹5,999
+          </div>
+
+          <div class="small">
+            Per night
+          </div>
+
+          <div class="room-features">
+            👑 Luxury Suite<br>
+            🛏️ King Bed<br>
+            📺 Smart TV<br>
+            🛎️ Room Service
+          </div>
+
+          <button
+            class="gold-btn"
+            onclick="bookRoom('Royal Suite',5999)">
+            Book Now
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- LOGIN NOTICE -->
+
+  <div
+    id="loginNotice"
+    class="login-notice">
+
+    <h3>
+      🔐 Booking के लिए Account जरूरी है
+    </h3>
+
+    <p>
+      पहले Hotel और Rooms देखें।
+      जब आप कोई Room Book Now करेंगे,
+      तभी Login / Create Account का option आएगा।
+    </p>
+
+  </div>
+
+
+  <!-- BOOKING -->
+
+  <div
+    id="bookingSection"
+    class="card">
+
+    <h2>
+      🛏️ Complete Your Booking
+    </h2>
+
+    <div
+      id="selectedRoomBox"
+      class="booking-room">
+    </div>
+
+
+    <label>
+      Check-in
+    </label>
+
+    <input
+      type="date"
+      id="checkin">
+
+
+    <label>
+      Check-out
+    </label>
+
+    <input
+      type="date"
+      id="checkout">
+
+
+    <label>
+      Guests
+    </label>
+
+    <input
+      type="number"
+      id="guests"
+      min="1"
+      value="1">
+
+
+    <div
+      id="summary"
+      class="booking-summary hidden">
+    </div>
+
+
+    <label>
+      Guest Name
+    </label>
+
+    <input
+      id="guestName"
+      placeholder="Enter your name">
+
+
+    <label>
+      Mobile Number
+    </label>
+
+    <input
+      id="mobile"
+      inputmode="numeric"
+      maxlength="10"
+      placeholder="10 digit mobile number">
+
+
+    <button
+      class="primary"
+      onclick="confirmBooking()">
+
+      Confirm Booking
+
+    </button>
+
+
+    <div id="message">
+    </div>
+
+  </div>
+
+
+  <!-- HISTORY -->
+
+  <div
+    id="historySection"
+    class="card hidden">
+
+    <h2>
+      📋 My Bookings / History
+    </h2>
+
+    <div id="historyList">
+    </div>
+
+    <button
+      class="close-btn"
+      onclick="hideHistory()">
+
+      Close History
+
+    </button>
+
+  </div>
+
+
+  <!-- ABOUT -->
+
+  <div
+    id="aboutSection"
+    class="card hidden">
+
+    <h2>
+      🏨 About Royal Palace Hotel
+    </h2>
+
+    <p>
+      Royal Palace Hotel में आपका स्वागत है।
+      यहाँ आपको आरामदायक rooms, शानदार facilities
+      और बेहतरीन hospitality मिलेगी।
+    </p>
+
+    <p>
+      हमारे यहाँ Deluxe Room, Premium Room
+      और Royal Suite उपलब्ध हैं।
+    </p>
+
+    <button
+      class="close-btn"
+      onclick="hideAbout()">
+
+      Close
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<footer class="footer">
+
+  🏨 Royal Palace Hotel
+
+  <br><br>
+
+  आरामदायक stay और शानदार hospitality
+
+</footer>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://mvvfqkcgaxcipjkiyuae.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_YbyO8KHdQxXyv6afqJZfWg_Eu2aw57x";
+
+const db =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let selectedRoom = "";
+
+let selectedPrice = 0;
+
+
+/* =========================
+   MENU
+========================= */
+
+function toggleMenu(){
+
+  document
+    .getElementById("menu")
+    .classList.toggle("show");
+
+}
+
+
+document.addEventListener(
+  "click",
+  function(e){
+
+    const menu =
+      document.getElementById("menu");
+
+    const button =
+      document.querySelector(".menu-btn");
+
+    if(
+      menu &&
+      button &&
+      !menu.contains(e.target) &&
+      !button.contains(e.target)
+    ){
+
+      menu.classList.remove("show");
+
+    }
+
+  }
+);
+
+
+/* =========================
+   CHECK USER LOGIN
+========================= */
+
+async function getUser(){
+
+  const {
+    data
+  } = await db.auth.getSession();
+
+  return data.session
+    ? data.session.user
+    : null;
+
+}
+
+
+async function updateAccountButton(){
+
+  const user =
+    await getUser();
+
+  const btn =
+    document.getElementById("accountBtn");
+
+  const logout =
+    document.getElementById("logoutMenuBtn");
+
+  if(user){
+
+    btn.textContent="Account";
+
+    logout.classList.remove("hidden");
+
+  }else{
+
+    btn.textContent="Login";
+
+    logout.classList.add("hidden");
+
+  }
+
+}
+
+
+/* =========================
+   ACCOUNT BUTTON
+========================= */
+
+async function accountAction(){
+
+  const user =
+    await getUser();
+
+  if(user){
+
+    toggleMenu();
+
+  }else{
+
+    window.location.href =
+      "user-login.html";
+
+  }
+
+}
+
+
+/* =========================
+   BOOK ROOM
+========================= */
+
+async function bookRoom(
+  room,
+  price
+){
+
+  const user =
+    await getUser();
+
+  if(!user){
+
+    /*
+      Login तभी खुलेगा जब
+      user Book Now दबाएगा
+    */
+
+    window.location.href =
+      "user-login.html?room=" +
+      encodeURIComponent(room) +
+      "&price=" +
+      price;
+
+    return;
+
+  }
+
+
+  openBooking(
+    room,
+    price
+  );
+
+}
+
+
+/* =========================
+   OPEN BOOKING
+========================= */
+
+function openBooking(
+  room,
+  price
+){
+
+  selectedRoom = room;
+
+  selectedPrice = Number(price);
+
+
+  document
+    .getElementById("bookingSection")
+    .classList.add("show");
+
+
+  document
+    .getElementById("loginNotice")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("selectedRoomBox")
+    .innerHTML = `
+
+      <b>Selected Room</b>
+
+      <br><br>
+
+      🛏️ ${escapeHtml(room)}
+
+      <br>
+
+      💰 ₹${Number(price).toLocaleString("en-IN")}
+      / night
+
+  `;
+
+
+  document
+    .getElementById("bookingSection")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+
+  updateSummary();
+
+}
+
+
+/* =========================
+   ROOM FROM LOGIN RETURN
+========================= */
+
+function checkBookingReturn(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const room =
+    params.get("room");
+
+  const price =
+    params.get("price");
+
+
+  if(room && price){
+
+    /*
+      Login के बाद वापस आने पर
+      वही room select होगा
+    */
+
+    openBooking(
+      room,
+      Number(price)
+    );
+
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+  }
+
+}
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+function updateSummary(){
+
+  const checkin =
+    document.getElementById("checkin").value;
+
+  const checkout =
+    document.getElementById("checkout").value;
+
+  const guests =
+    Number(
+      document.getElementById("guests").value || 1
+    );
+
+
+  if(
+    !selectedRoom ||
+    !checkin ||
+    !checkout
+  ){
+
+    document
+      .getElementById("summary")
+      .classList.add("hidden");
+
+    return;
+
+  }
+
+
+  const start =
+    new Date(checkin);
+
+  const end =
+    new Date(checkout);
+
+
+  const nights =
+    Math.ceil(
+      (end-start) /
+      (1000*60*60*24)
+    );
+
+
+  if(nights <= 0){
+
+    document
+      .getElementById("summary")
+      .classList.add("hidden");
+
+    return;
+
+  }
+
+
+  const total =
+    nights * selectedPrice;
+
+
+  const summary =
+    document.getElementById("summary");
+
+
+  summary.classList.remove("hidden");
+
+
+  summary.innerHTML = `
+
+    <b>Booking Summary</b>
+
+    <br><br>
+
+    Room:
+    <b>${escapeHtml(selectedRoom)}</b>
+
+    <br>
+
+    Guests:
+    <b>${guests}</b>
+
+    <br>
+
+    Nights:
+    <b>${nights}</b>
+
+    <br>
+
+    Total:
+    <b>₹${total.toLocaleString("en-IN")}</b>
+
+  `;
+
+}
+
+
+document
+  .getElementById("checkin")
+  .addEventListener(
+    "change",
+    updateSummary
+  );
+
+
+document
+  .getElementById("checkout")
+  .addEventListener(
+    "change",
+    updateSummary
+  );
+
+
+document
+  .getElementById("guests")
+  .addEventListener(
+    "input",
+    updateSummary
+  );
+
+
+/* =========================
+   CONFIRM BOOKING
+========================= */
+
+async function confirmBooking(){
+
+  const user =
+    await getUser();
+
+  if(!user){
+
+    window.location.href =
+      "user-login.html";
+
+    return;
+
+  }
+
+
+  const name =
+    document
+      .getElementById("guestName")
+      .value
+      .trim();
+
+
+  const mobile =
+    document
+      .getElementById("mobile")
+      .value
+      .replace(/\D/g,"");
+
+
+  const checkin =
+    document
+      .getElementById("checkin")
+      .value;
+
+
+  const checkout =
+    document
+      .getElementById("checkout")
+      .value;
+
+
+  const guests =
+    Number(
+      document
+        .getElementById("guests")
+        .value || 1
+    );
+
+
+  const message =
+    document
+      .getElementById("message");
+
+
+  message.innerHTML="";
+
+
+  if(!name){
+
+    message.innerHTML =
+      `<div class="error">
+        कृपया Guest Name भरें।
+      </div>`;
+
+    return;
+
+  }
+
+
+  if(mobile.length !== 10){
+
+    message.innerHTML =
+      `<div class="error">
+        कृपया सही 10 अंकों का Mobile Number डालें।
+      </div>`;
+
+    return;
+
+  }
+
+
+  if(!checkin || !checkout){
+
+    message.innerHTML =
+      `<div class="error">
+        कृपया Check-in और Check-out date चुनें।
+      </div>`;
+
+    return;
+
+  }
+
+
+  if(!selectedRoom){
+
+    message.innerHTML =
+      `<div class="error">
+        कृपया Room Select करें।
+      </div>`;
+
+    return;
+
+  }
+
+
+  const start =
+    new Date(checkin);
+
+  const end =
+    new Date(checkout);
+
+
+  const nights =
+    Math.ceil(
+      (end-start) /
+      (1000*60*60*24)
+    );
+
+
+  if(nights <= 0){
+
+    message.in
