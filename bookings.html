@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Royal Palace Hotel - Booking History</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --navy:#0b1020;
+  --navy2:#111936;
+  --purple:#6d28d9;
+  --purple2:#8b5cf6;
+  --gold:#d4af37;
+  --bg:#f5f6fa;
+  --white:#fff;
+  --text:#182033;
+  --muted:#737b8c;
+  --border:#e5e7eb;
+  --green:#16a34a;
+  --red:#dc2626;
+  --orange:#d97706;
+  --shadow:0 10px 30px rgba(15,23,42,.08);
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:250px;
+  background:linear-gradient(180deg,var(--navy),var(--navy2));
+  color:white;
+  z-index:1000;
+  padding:22px 16px;
+  transition:.3s;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 10px 25px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  margin-bottom:18px;
+}
+
+.logo-icon{
+  width:43px;
+  height:43px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#fff,#ead7a2);
+  color:var(--gold);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  font-weight:bold;
+}
+
+.logo-text strong{
+  display:block;
+  font-size:17px;
+}
+
+.logo-text span{
+  font-size:11px;
+  color:#aeb5c7;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.nav a{
+  color:#cbd1df;
+  text-decoration:none;
+  padding:13px 14px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:14px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+
+.nav a.active{
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:#fff;
+  box-shadow:0 7px 18px rgba(109,40,217,.3);
+}
+
+.nav-icon{
+  width:24px;
+  text-align:center;
+  font-size:17px;
+}
+
+.logout{
+  position:absolute;
+  bottom:20px;
+  left:16px;
+  right:16px;
+}
+
+.logout a{
+  color:#ffb4b4!important;
+}
+
+/* MAIN */
+.main{
+  margin-left:250px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:82px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:500;
+}
+
+.top-title h1{
+  font-size:25px;
+  margin-bottom:5px;
+}
+
+.top-title p{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.admin-avatar{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),#9333ea);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.mobile-menu{
+  display:none;
+  border:0;
+  background:var(--navy);
+  color:#fff;
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  font-size:25px;
+}
+
+.content{
+  padding:30px;
+  max-width:1500px;
+  margin:auto;
+}
+
+/* PAGE HERO */
+.hero{
+  background:linear-gradient(135deg,#101633,#281252);
+  color:white;
+  border-radius:24px;
+  padding:30px;
+  margin-bottom:25px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:350px;
+  height:350px;
+  right:-130px;
+  top:-180px;
+  border-radius:50%;
+  border:45px solid rgba(255,255,255,.05);
+}
+
+.hero h2{
+  font-size:28px;
+  margin-bottom:8px;
+  position:relative;
+  z-index:2;
+}
+
+.hero p{
+  color:#cbd0e0;
+  position:relative;
+  z-index:2;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  overflow:visible;
+}
+
+.card-header{
+  padding:22px 25px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.card-header h2{
+  font-size:21px;
+}
+
+.card-header p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+}
+
+/* SEARCH */
+.tools{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.search{
+  width:240px;
+  height:42px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:0 13px;
+  outline:none;
+  font-size:14px;
+}
+
+.search:focus{
+  border-color:var(--purple2);
+  box-shadow:0 0 0 3px rgba(139,92,246,.12);
+}
+
+.refresh{
+  border:1px solid var(--border);
+  background:#fff;
+  height:42px;
+  padding:0 15px;
+  border-radius:11px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* TABLE */
+.table-wrap{
+  width:100%;
+  overflow:visible;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  background:#fafafa;
+  color:#6b7280;
+  text-align:left;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  padding:15px 18px;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+
+td{
+  padding:17px 18px;
+  border-bottom:1px solid #f0f1f4;
+  font-size:14px;
+  vertical-align:middle;
+}
+
+tr:last-child td{
+  border-bottom:0;
+}
+
+.booking-id{
+  font-weight:bold;
+  color:var(--purple);
+}
+
+.guest{
+  font-weight:bold;
+}
+
+.phone{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:3px;
+}
+
+.amount{
+  font-weight:bold;
+}
+
+/* STATUS */
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.status:before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+}
+
+.status.confirmed{
+  color:#15803d;
+  background:#dcfce7;
+}
+
+.status.confirmed:before{
+  background:#16a34a;
+}
+
+.status.pending{
+  color:#b45309;
+  background:#fef3c7;
+}
+
+.status.pending:before{
+  background:#f59e0b;
+}
+
+.status.cancelled{
+  color:#b91c1c;
+  background:#fee2e2;
+}
+
+.status.cancelled:before{
+  background:#ef4444;
+}
+
+/* ACTION MENU */
+.action{
+  position:relative;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.dots{
+  width:38px;
+  height:38px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:23px;
+  line-height:1;
+  color:#4b5563;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.dots:hover{
+  background:#f5f3ff;
+  border-color:#c4b5fd;
+  color:var(--purple);
+}
+
+.dropdown{
+  display:none;
+  position:absolute;
+  right:0;
+  top:45px;
+  width:220px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:0 18px 45px rgba(15,23,42,.18);
+  z-index:9999;
+  padding:7px;
+}
+
+.dropdown.open{
+  display:block;
+}
+
+.dropdown button{
+  width:100%;
+  border:0;
+  background:#fff;
+  padding:11px 12px;
+  text-align:left;
+  border-radius:9px;
+  cursor:pointer;
+  font-size:13px;
+  color:#263044;
+}
+
+.dropdown button:hover{
+  background:#f5f3ff;
+  color:var(--purple);
+}
+
+.dropdown button.success:hover{
+  background:#ecfdf5;
+  color:#15803d;
+}
+
+.dropdown button.danger:hover{
+  background:#fef2f2;
+  color:#dc2626;
+}
+
+.dropdown .sep{
+  height:1px;
+  background:var(--border);
+  margin:5px 0;
+}
+
+/* EMPTY */
+.empty{
+  text-align:center;
+  padding:65px 20px;
+  color:var(--muted);
+}
+
+.empty-icon{
+  font-size:48px;
+  margin-bottom:12px;
+}
+
+.empty h3{
+  color:var(--text);
+  margin-bottom:6px;
+}
+
+/* MOBILE BOOKING CARDS */
+.mobile-list{
+  display:none;
+}
+
+.booking-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:17px;
+  margin:12px;
+  position:relative;
+}
+
+.booking-card-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.booking-card h3{
+  font-size:16px;
+  margin-bottom:4px;
+}
+
+.booking-card .id{
+  color:var(--purple);
+  font-size:12px;
+  font-weight:bold;
+}
+
+.booking-info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.info-label{
+  color:#8a91a0;
+  font-size:11px;
+  margin-bottom:3px;
+}
+
+.info-value{
+  font-size:13px;
+  font-weight:600;
+}
+
+.booking-card .mobile-action{
+  position:absolute;
+  right:14px;
+  top:52px;
+}
+
+/* MODAL */
+.modal-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(5,10,25,.65);
+  backdrop-filter:blur(5px);
+  z-index:2000;
+  padding:20px;
+  overflow:auto;
+}
+
+.modal-bg.show{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal{
+  background:#fff;
+  width:100%;
+  max-width:570px;
+  border-radius:22px;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+
+.modal-head{
+  padding:20px 22px;
+  background:linear-gradient(135deg,var(--navy),var(--navy2));
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-head h2{
+  font-size:20px;
+}
+
+.close{
+  border:0;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.modal-body{
+  padding:22px;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.detail{
+  background:#f8f9fc;
+  border-radius:12px;
+  padding:13px;
+}
+
+.detail.full{
+  grid-column:1/-1;
+}
+
+.detail label{
+  display:block;
+  font-size:11px;
+  color:#8b92a1;
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+
+.detail strong{
+  font-size:14px;
+}
+
+.modal-footer{
+  padding:16px 22px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+}
+
+.btn{
+  border:0;
+  padding:11px 17px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.btn-primary{
+  color:#fff;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+}
+
+.btn-light{
+  background:#f1f3f6;
+  color:#374151;
+}
+
+/* EDIT FORM */
+.form-group{
+  margin-bottom:16px;
+}
+
+.form-group label{
+  display:block;
+  font-size:12px;
+  font-weight:bold;
+  color:#5b6475;
+  margin-bottom:7px;
+}
+
+.form-group input,
+.form-group select{
+  width:100%;
+  height:45px;
+  border:1px solid #dfe2e8;
+  border-radius:10px;
+  padding:0 12px;
+  font-size:14px;
+  outline:none;
+  background:#fff;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+  border-color:var(--purple2);
+  box-shadow:0 0 0 3px rgba(139,92,246,.1);
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  right:25px;
+  bottom:25px;
+  background:#111827;
+  color:#fff;
+  padding:13px 17px;
+  border-radius:11px;
+  box-shadow:var(--shadow);
+  z-index:5000;
+  display:none;
+  font-size:13px;
+}
+
+.toast.show{
+  display:block;
+  animation:toastIn .25s ease;
+}
+
+@keyframes toastIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    height:76px;
+    padding:0 18px;
+    gap:12px;
+  }
+
+  .top-title{
+    flex:1;
+  }
+
+  .top-title h1{
+    font-size:21px;
+  }
+
+  .top-title p{
+    font-size:12px;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .hero{
+    border-radius:20px;
+    padding:25px 22px;
+  }
+
+  .hero h2{
+    font-size:23px;
+  }
+
+  .hero p{
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .tools{
+    width:100%;
+  }
+
+  .search{
+    flex:1;
+    width:auto;
+  }
+
+  .table-wrap{
+    display:none;
+  }
+
+  .mobile-list{
+    display:block;
+  }
+
+  .card-header{
+    flex-wrap:wrap;
+  }
+
+  .card-header h2{
+    font-size:18px;
+  }
+
+  .admin-avatar{
+    width:40px;
+    height:40px;
+  }
+}
+
+@media(max-width:520px){
+
+  .content{
+    padding:14px;
+  }
+
+  .hero{
+    padding:23px 18px;
+    margin-bottom:16px;
+  }
+
+  .hero h2{
+    font-size:21px;
+  }
+
+  .card{
+    border-radius:18px;
+  }
+
+  .card-header{
+    padding:18px 16px;
+  }
+
+  .booking-card{
+    margin:10px;
+  }
+
+  .detail-grid{
+    grid-template-columns:1fr;
+  }
+
+  .detail.full{
+    grid-column:auto;
+  }
+
+  .modal-bg{
+    padding:10px;
+  }
+
+  .modal{
+    border-radius:18px;
+  }
+
+  .toast{
+    left:15px;
+    right:15px;
+    bottom:15px;
+    text-align:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logo-icon">♛</div>
+    <div class="logo-text">
+      <strong>Royal Palace</strong>
+      <span>Premium Control Panel</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <a href="dashboard.html">
+      <span class="nav-icon">▦</span>
+      Dashboard
+    </a>
+
+    <a href="hotel.html">
+      <span class="nav-icon">🏨</span>
+      Hotel Management
+    </a>
+
+    <a href="photos.html">
+      <span class="nav-icon">🖼️</span>
+      Hotel Photos
+    </a>
+
+    <a href="rooms.html">
+      <span class="nav-icon">🛏️</span>
+      Room Management
+    </a>
+
+    <a href="bookings.html" class="active">
+      <span class="nav-icon">📋</span>
+      Booking History
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙️</span>
+      Settings
+    </a>
+
+  </nav>
+
+  <div class="logout">
+    <a href="login.html">
+      <span class="nav-icon">↪</span>
+      Logout
+    </a>
+  </div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+  <header class="topbar">
+
+    <button class="mobile-menu" onclick="toggleSidebar()" aria-label="Menu">
+      ☰
+    </button>
+
+    <div class="top-title">
+      <h1>Booking History</h1>
+      <p>Royal Palace Hotel Management</p>
+    </div>
+
+    <div class="admin-avatar">A</div>
+
+  </header>
+
+
+  <section class="content">
+
+    <div class="hero">
+      <h2>Booking History 📋</h2>
+      <p>View, update and manage all hotel reservations from one place.</p>
+    </div>
+
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>All Bookings</h2>
+          <p>Manage your hotel reservations</p>
+        </div>
+
+        <div class="tools">
+          <input
+            class="search"
+            id="searchBox"
+            type="search"
+            placeholder="Search booking..."
+            oninput="renderBookings()"
+          >
+
+          <button class="refresh" onclick="renderBookings()">
+            ↻ Refresh
+          </button>
+        </div>
+
+      </div>
+
+
+      <!-- DESKTOP TABLE -->
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Guest</th>
+              <th>Room</th>
+              <th>Check-in</th>
+              <th>Check-out</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="bookingTable"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- MOBILE LIST -->
+      <div class="mobile-list" id="mobileList"></div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- DETAILS MODAL -->
+<div class="modal-bg" id="detailsModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+      <h2>Booking Details</h2>
+      <button class="close" onclick="closeModal('detailsModal')">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="detail-grid" id="detailsContent"></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-light" onclick="closeModal('detailsModal')">
+        Close
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="editModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+      <h2>✏️ Edit Booking</h2>
+      <button class="close" onclick="closeModal('editModal')">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <input type="hidden" id="editId">
+
+      <div class="form-group">
+        <label>Guest Name</label>
+        <input id="editGuest" type="text" placeholder="Guest name">
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input id="editPhone" type="text" placeholder="Phone number">
+      </div>
+
+      <div class="form-group">
+        <label>Room</label>
+        <select id="editRoom">
+          <option>Premium Room</option>
+          <option>Royal Suite</option>
+          <option>Royal Palace Suite</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Check-in</label>
+        <input id="editCheckin" type="date">
+      </div>
+
+      <div class="form-group">
+        <label>Check-out</label>
+        <input id="editCheckout" type="date">
+      </div>
+
+      <div class="form-group">
+        <label>Amount ₹</label>
+        <input id="editAmount" type="number" min="0" placeholder="Amount">
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <select id="editStatus">
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button class="btn btn-light" onclick="closeModal('editModal')">
+        Cancel
+      </button>
+
+      <button class="btn btn-primary" onclick="saveEdit()">
+        Save Changes
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   ROYAL PALACE HOTEL
+   BOOKING MANAGEMENT
+===================================================== */
+
+const STORAGE_KEY = "royal_palace_bookings";
+
+
+/* GET BOOKINGS */
+function getBookings(){
+
+  try{
+
+    const data = localStorage.getItem(STORAGE_KEY);
+
+    if(!data) return [];
+
+    const parsed = JSON.parse(data);
+
+    if(!Array.isArray(parsed)) return [];
+
+    return parsed.map(normalizeBooking);
+
+  }catch(error){
+
+    console.error(error);
+    return [];
+
+  }
+
+}
+
+
+/* SAVE BOOKINGS */
+function saveBookings(bookings){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(bookings)
+  );
+
+}
+
+
+/* NORMALIZE BOOKING */
+function normalizeBooking(b){
+
+  return {
+
+    id:
+      b.id ||
+      b.bookingId ||
+      b.booking_id ||
+      ("RP" + Date.now()),
+
+    guest:
+      b.guest ||
+      b.guestName ||
+      b.name ||
+      "Guest",
+
+    phone:
+      b.phone ||
+      b.mobile ||
+      b.phoneNumber ||
+      "-",
+
+    room:
+      b.room ||
+      b.roomName ||
+      "Premium Room",
+
+    checkin:
+      b.checkin ||
+      b.checkIn ||
+      b.check_in ||
+      "",
+
+    checkout:
+      b.checkout ||
+      b.checkOut ||
+      b.check_out ||
+      "",
+
+    amount:
+      Number(
+        b.amount ||
+        b.total ||
+        b.price ||
+        0
+      ),
+
+    status:
+      String(
+        b.status ||
+        "pending"
+      ).toLowerCase()
+
+  };
+
+}
+
+
+/* ESCAPE HTML */
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* SAFE ID */
+function safeId(id){
+
+  return encodeURIComponent(String(id));
+
+}
+
+
+/* FORMAT MONEY */
+function money(amount){
+
+  return "₹" + Number(amount || 0).toLocaleString("en-IN");
+
+}
+
+
+/* STATUS HTML */
+function statusHTML(status){
+
+  const s = String(status || "pending").toLowerCase();
+
+  if(s === "confirmed"){
+    return '<span class="status confirmed">Confirmed</span>';
+  }
+
+  if(s === "cancelled"){
+    return '<span class="status cancelled">Cancelled</span>';
+  }
+
+  return '<span class="status pending">Pending</span>';
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderBookings(){
+
+  const bookings = getBookings();
+
+  const search =
+    document.getElementById("searchBox")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const filtered = bookings.filter(b => {
+
+    const text = [
+      b.id,
+      b.guest,
+      b.phone,
+      b.room,
+      b.checkin,
+      b.checkout,
+      b.status
+    ].join(" ").toLowerCase();
+
+    return text.includes(search);
+
+  });
+
+
+  renderDesktop(filtered);
+  renderMobile(filtered);
+
+}
+
+
+/* DESKTOP */
+function renderDesktop(bookings){
+
+  const table =
+    document.getElementById("bookingTable");
+
+  if(!bookings.length){
+
+    table.innerHTML = `
+      <tr>
+        <td colspan="8">
+          <div class="empty">
+            <div class="empty-icon">📋</div>
+            <h3>No Bookings Found</h3>
+            <p>There are no reservations to display.</p>
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+
+  table.innerHTML = bookings.map(b => `
+
+    <tr>
+
+      <td>
+        <span class="booking-id">
+          ${escapeHTML(b.id)}
+        </span>
+      </
