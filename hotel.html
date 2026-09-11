@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Royal Palace Hotel - Hotel Management</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --navy:#0b1020;
+  --navy2:#111936;
+  --purple:#6d28d9;
+  --purple2:#8b5cf6;
+  --gold:#d4af37;
+  --bg:#f5f6fa;
+  --text:#172033;
+  --muted:#7b8495;
+  --border:#e3e5eb;
+  --white:#fff;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:250px;
+  background:linear-gradient(180deg,var(--navy),#111936);
+  color:white;
+  padding:24px 16px;
+  z-index:1000;
+  transition:.3s;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:5px 10px 28px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.logo-icon{
+  width:43px;
+  height:43px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#d4af37,#f3d36b);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#111;
+  font-size:23px;
+  font-weight:900;
+}
+
+.logo strong{
+  font-size:18px;
+}
+
+.logo small{
+  display:block;
+  color:#929ab0;
+  margin-top:3px;
+}
+
+.nav{
+  margin-top:25px;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  color:#aeb5c8;
+  text-decoration:none;
+  padding:14px 15px;
+  margin:5px 0;
+  border-radius:13px;
+  transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+  color:#fff;
+  background:linear-gradient(90deg,rgba(109,40,217,.9),rgba(139,92,246,.65));
+}
+
+.nav-icon{
+  width:25px;
+  text-align:center;
+  font-size:19px;
+}
+
+.logout{
+  position:absolute;
+  bottom:25px;
+  left:16px;
+  right:16px;
+}
+
+.main{
+  margin-left:250px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:92px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 34px;
+}
+
+.top-title h1{
+  margin:0;
+  font-size:29px;
+}
+
+.top-title p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),#a855f7);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.mobile-menu{
+  display:none;
+  border:0;
+  background:var(--navy);
+  color:#fff;
+  width:48px;
+  height:48px;
+  border-radius:13px;
+  font-size:26px;
+}
+
+.content{
+  padding:36px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.hero{
+  background:linear-gradient(110deg,#0b1020,#1b2554);
+  color:#fff;
+  border-radius:28px;
+  padding:34px 38px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.hero h2{
+  margin:0 0 8px;
+  font-size:31px;
+}
+
+.hero p{
+  margin:0;
+  color:#c2c8d8;
+  font-size:17px;
+}
+
+.hero-icon{
+  font-size:55px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:27px;
+  box-shadow:0 5px 18px rgba(20,25,40,.035);
+}
+
+.card h3{
+  margin:0 0 22px;
+  font-size:20px;
+}
+
+.field{
+  margin-bottom:18px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  color:#737c8d;
+  margin-bottom:8px;
+  font-weight:600;
+}
+
+.field input,
+.field textarea{
+  width:100%;
+  border:1px solid #dfe2e9;
+  background:#fafbfe;
+  border-radius:12px;
+  padding:14px;
+  outline:none;
+  color:var(--text);
+}
+
+.field input:focus,
+.field textarea:focus{
+  border-color:var(--purple2);
+  box-shadow:0 0 0 3px rgba(139,92,246,.1);
+}
+
+.field textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+.full{
+  grid-column:1 / -1;
+}
+
+.facilities{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.facility{
+  border:1px solid var(--border);
+  background:#fafbfe;
+  border-radius:13px;
+  padding:13px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.facility input{
+  accent-color:var(--purple);
+}
+
+.actions{
+  display:flex;
+  gap:12px;
+  margin-top:8px;
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:13px 23px;
+  font-weight:bold;
+}
+
+.btn-primary{
+  color:white;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  box-shadow:0 8px 18px rgba(109,40,217,.2);
+}
+
+.btn-secondary{
+  color:#343b4d;
+  background:#f0f1f5;
+}
+
+.status{
+  margin-top:15px;
+  padding:13px 15px;
+  border-radius:12px;
+  display:none;
+  background:#ecfdf3;
+  color:#137333;
+}
+
+@media(max-width:800px){
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .topbar{
+    height:105px;
+    padding:0 28px;
+    gap:15px;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+  }
+
+  .top-title h1{
+    font-size:25px;
+  }
+
+  .top-title p{
+    font-size:14px;
+  }
+
+  .content{
+    padding:28px;
+  }
+
+  .hero{
+    border-radius:25px;
+    padding:30px;
+  }
+
+  .hero h2{
+    font-size:27px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .facilities{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:520px){
+
+  .topbar{
+    padding:0 18px;
+  }
+
+  .content{
+    padding:25px 18px;
+  }
+
+  .hero{
+    padding:27px;
+  }
+
+  .hero-icon{
+    display:none;
+  }
+
+  .card{
+    padding:22px;
+    border-radius:20px;
+  }
+
+  .facilities{
+    grid-template-columns:1fr;
+  }
+
+  .actions{
+    flex-direction:column;
+  }
+
+  .btn{
+    width:100%;
+  }
+}
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  z-index:900;
+}
+
+.overlay.show{
+  display:block;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logo-icon">♛</div>
+    <div>
+      <strong>Royal Palace</strong>
+      <small>Admin Panel</small>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <a href="dashboard.html">
+      <span class="nav-icon">▦</span>
+      Dashboard
+    </a>
+
+    <a href="hotel.html" class="active">
+      <span class="nav-icon">🏨</span>
+      Hotel Management
+    </a>
+
+    <a href="photos.html">
+      <span class="nav-icon">▧</span>
+      Hotel Photos
+    </a>
+
+    <a href="rooms.html">
+      <span class="nav-icon">🛏️</span>
+      Room Management
+    </a>
+
+    <a href="bookings.html">
+      <span class="nav-icon">📋</span>
+      Booking History
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙️</span>
+      Settings
+    </a>
+
+  </nav>
+
+  <div class="logout">
+    <a href="login.html" class="nav">
+      <span class="nav-icon">↪</span>
+      Logout
+    </a>
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+      <div class="top-title">
+        <h1>Hotel Management</h1>
+        <p>Manage your hotel information and facilities</p>
+      </div>
+
+    </div>
+
+    <div class="avatar">A</div>
+
+  </header>
+
+  <section class="content">
+
+    <div class="hero">
+
+      <div>
+        <h2>Hotel Management 🏨</h2>
+        <p>Update your hotel details, contact information and facilities.</p>
+      </div>
+
+      <div class="hero-icon">🏨</div>
+
+    </div>
+
+    <div class="grid">
+
+      <!-- HOTEL INFORMATION -->
+      <div class="card">
+
+        <h3>Hotel Information</h3>
+
+        <div class="field">
+          <label>Hotel Name</label>
+          <input id="hotelName" type="text" value="Royal Palace Hotel">
+        </div>
+
+        <div class="field">
+          <label>Tagline</label>
+          <input id="tagline" type="text" value="Luxury & Comfort">
+        </div>
+
+        <div class="field">
+          <label>Address</label>
+          <input id="address" type="text" value="">
+        </div>
+
+        <div class="field">
+          <label>Phone Number</label>
+          <input id="phone" type="text" value="">
+        </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <input id="email" type="email" value="">
+        </div>
+
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="card">
+
+        <h3>Hotel Description</h3>
+
+        <div class="field">
+
+          <label>About Hotel</label>
+
+          <textarea id="description">Welcome to Royal Palace Hotel. Enjoy a premium stay with elegant rooms, modern facilities and comfortable hospitality.</textarea>
+
+        </div>
+
+        <div class="field">
+
+          <label>Check-in Time</label>
+
+          <input id="checkin" type="time" value="12:00">
+
+        </div>
+
+        <div class="field">
+
+          <label>Check-out Time</label>
+
+          <input id="checkout" type="time" value="11:00">
+
+        </div>
+
+      </div>
+
+      <!-- FACILITIES -->
+      <div class="card full">
+
+        <h3>Hotel Facilities</h3>
+
+        <div class="facilities">
+
+          <label class="facility">
+            <input type="checkbox" value="Free WiFi" checked>
+            📶 Free WiFi
+          </label>
+
+          <label class="facility">
+            <input type="checkbox" value="Parking" checked>
+            🚗 Parking
+          </label>
+
+          <label class="facility">
+            <input type="checkbox" value="Room Service" checked>
+            🛎️ Room Service
+          </label>
+
+          <label class="facility">
+            <input type="checkbox" value="Restaurant" checked>
+            🍽️ Restaurant
+          </label>
+
+          <label class="facility">
+            <input type="checkbox" value="Swimming Pool">
+            🏊 Swimming Pool
+          </label>
+
+          <label class="facility">
+            <input type="checkbox" value="Air Conditioning" checked>
+            ❄️ Air Conditioning
+          </label>
+
+          <label class="facility">
+            <input type="checkbox" value="24x7 Reception" checked>
+            🕐 24×7 Reception
+          </label>
+
+          <label class="facility">
+            <input type="checkbox" value="Security" checked>
+            🛡️ Security
+          </label>
+
+          <label class="facility">
+            <input type="checkbox" value="Laundry">
+            👕 Laundry
+          </label>
+
+        </div>
+
+      </div>
+
+      <!-- SAVE -->
+      <div class="card full">
+
+        <div class="actions">
+
+          <button class="btn btn-primary" onclick="saveHotel()">
+            💾 Save Changes
+          </button>
+
+          <button class="btn btn-secondary" onclick="loadHotel()">
+            ↻ Reset
+          </button>
+
+        </div>
+
+        <div class="status" id="status">
+          ✅ Hotel information saved successfully.
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+
+const STORAGE_KEY = "royal_palace_hotel_info";
+
+function toggleSidebar(){
+
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("overlay").classList.toggle("show");
+
+}
+
+function closeSidebar(){
+
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("show");
+
+}
+
+function getFacilities(){
+
+  return [...document.querySelectorAll('.facility input:checked')]
+    .map(x => x.value);
+
+}
+
+function saveHotel(){
+
+  const data = {
+
+    hotelName:document.getElementById("hotelName").value,
+    tagline:document.getElementById("tagline").value,
+    address:document.getElementById("address").value,
+    phone:document.getElementById("phone").value,
+    email:document.getElementById("email").value,
+    description:document.getElementById("description").value,
+    checkin:document.getElementById("checkin").value,
+    checkout:document.getElementById("checkout").value,
+    facilities:getFacilities()
+
+  };
+
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+
+  const status=document.getElementById("status");
+
+  status.style.display="block";
+
+  setTimeout(()=>{
+    status.style.display="none";
+  },2500);
+
+}
+
+function loadHotel(){
+
+  const saved=localStorage.getItem(STORAGE_KEY);
+
+  if(!saved)return;
+
+  try{
+
+    const data=JSON.parse(saved);
+
+    document.getElementById("hotelName").value=data.hotelName || "";
+    document.getElementById("tagline").value=data.tagline || "";
+    document.getElementById("address").value=data.address || "";
+    document.getElementById("phone").value=data.phone || "";
+    document.getElementById("email").value=data.email || "";
+    document.getElementById("description").value=data.description || "";
+    document.getElementById("checkin").value=data.checkin || "12:00";
+    document.getElementById("checkout").value=data.checkout || "11:00";
+
+    document.querySelectorAll('.facility input').forEach(input=>{
+      input.checked=(data.facilities || []).includes(input.value);
+    });
+
+  }catch(e){
+
+    console.log("Hotel data error",e);
+
+  }
+
+}
+
+document.addEventListener("DOMContentLoaded",loadHotel);
+
+</script>
+
+</body>
+        </html>
