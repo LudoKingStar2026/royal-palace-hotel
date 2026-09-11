@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Royal Palace Hotel - Admin Panel</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fb;
+    color:#111827;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:linear-gradient(180deg,#0b1020,#111936);
+    color:white;
+    z-index:1000;
+    padding:22px 15px;
+    overflow-y:auto;
+}
+
+.logo{
+    text-align:center;
+    padding:8px 5px 25px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+    margin-bottom:18px;
+}
+
+.logo-icon{
+    width:58px;
+    height:58px;
+    margin:auto;
+    border-radius:18px;
+    background:linear-gradient(135deg,#d4af37,#f5d77a);
+    color:#0b1020;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    font-weight:bold;
+    box-shadow:0 8px 25px rgba(212,175,55,.25);
+}
+
+.logo h2{
+    margin-top:12px;
+    font-size:18px;
+    letter-spacing:.5px;
+}
+
+.logo p{
+    margin-top:5px;
+    font-size:11px;
+    color:#aab2ca;
+}
+
+.nav-title{
+    font-size:10px;
+    color:#737d9c;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    margin:18px 10px 8px;
+}
+
+.nav-btn{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#cbd2e5;
+    padding:13px 14px;
+    border-radius:12px;
+    margin-bottom:5px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-align:left;
+    font-size:14px;
+    transition:.2s;
+}
+
+.nav-btn:hover{
+    background:rgba(255,255,255,.07);
+    color:white;
+}
+
+.nav-btn.active{
+    background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+    color:white;
+    box-shadow:0 8px 20px rgba(109,40,217,.25);
+}
+
+.nav-icon{
+    width:25px;
+    text-align:center;
+    font-size:17px;
+}
+
+.logout{
+    margin-top:20px;
+    color:#ff9b9b;
+}
+
+.logout:hover{
+    background:rgba(255,80,80,.1);
+    color:#ffb2b2;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+    margin-left:250px;
+    min-height:100vh;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar{
+    height:72px;
+    background:white;
+    border-bottom:1px solid #e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    position:sticky;
+    top:0;
+    z-index:900;
+}
+
+.page-title h1{
+    font-size:21px;
+    color:#111827;
+}
+
+.page-title p{
+    font-size:12px;
+    color:#6b7280;
+    margin-top:4px;
+}
+
+.admin-profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.admin-avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.admin-info strong{
+    display:block;
+    font-size:13px;
+}
+
+.admin-info span{
+    font-size:11px;
+    color:#6b7280;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:28px;
+}
+
+.welcome{
+    background:linear-gradient(135deg,#111936,#25104f);
+    color:white;
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:25px;
+    position:relative;
+    overflow:hidden;
+}
+
+.welcome:after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    border:35px solid rgba(212,175,55,.08);
+    right:-40px;
+    top:-50px;
+}
+
+.welcome h2{
+    font-size:24px;
+    margin-bottom:8px;
+}
+
+.welcome p{
+    color:#c5cbe0;
+    font-size:13px;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:white;
+    border:1px solid #e8eaf0;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.04);
+}
+
+.stat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stat-icon{
+    width:44px;
+    height:44px;
+    border-radius:13px;
+    background:#f1edff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+}
+
+.stat-card h3{
+    margin-top:18px;
+    font-size:27px;
+}
+
+.stat-card p{
+    margin-top:5px;
+    color:#6b7280;
+    font-size:12px;
+}
+
+/* =========================
+   EMPTY SECTION
+========================= */
+
+.panel{
+    background:white;
+    border:1px solid #e8eaf0;
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 5px 20px rgba(0,0,0,.04);
+}
+
+.panel-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.panel-header h2{
+    font-size:17px;
+}
+
+.panel-header span{
+    font-size:12px;
+    color:#6b7280;
+}
+
+.coming{
+    text-align:center;
+    padding:55px 20px;
+    color:#6b7280;
+}
+
+.coming-icon{
+    font-size:45px;
+    margin-bottom:12px;
+}
+
+.coming h3{
+    color:#374151;
+    margin-bottom:6px;
+}
+
+.coming p{
+    font-size:13px;
+}
+
+/* =========================
+   MOBILE BUTTON
+========================= */
+
+.mobile-menu{
+    display:none;
+    border:0;
+    background:#111936;
+    color:white;
+    width:42px;
+    height:42px;
+    border-radius:11px;
+    font-size:22px;
+    cursor:pointer;
+}
+
+/* =========================
+   OVERLAY
+========================= */
+
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:950;
+}
+
+.overlay.show{
+    display:block;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .topbar{
+        padding:0 15px;
+        gap:12px;
+    }
+
+    .page-title{
+        flex:1;
+    }
+
+    .page-title h1{
+        font-size:17px;
+    }
+
+    .admin-info{
+        display:none;
+    }
+
+    .content{
+        padding:15px;
+    }
+
+    .welcome{
+        padding:22px;
+    }
+
+    .welcome h2{
+        font-size:20px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:15px;
+    }
+
+    .stat-card h3{
+        font-size:22px;
+    }
+
+    .panel{
+        padding:18px;
+    }
+
+}
+
+@media(max-width:430px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .welcome{
+        border-radius:15px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            RP
+        </div>
+
+        <h2>Royal Palace Hotel</h2>
+        <p>PREMIUM CONTROL PANEL</p>
+
+    </div>
+
+    <div class="nav-title">Main Menu</div>
+
+    <button class="nav-btn active" onclick="showPage('dashboard',this)">
+        <span class="nav-icon">📊</span>
+        Dashboard
+    </button>
+
+    <button class="nav-btn" onclick="showPage('hotel',this)">
+        <span class="nav-icon">🏨</span>
+        Hotel Management
+    </button>
+
+    <button class="nav-btn" onclick="showPage('photos',this)">
+        <span class="nav-icon">🖼️</span>
+        Hotel Photos
+    </button>
+
+    <button class="nav-btn" onclick="showPage('rooms',this)">
+        <span class="nav-icon">🛏️</span>
+        Room Management
+    </button>
+
+    <button class="nav-btn" onclick="showPage('bookings',this)">
+        <span class="nav-icon">📋</span>
+        Booking History
+    </button>
+
+    <div class="nav-title">System</div>
+
+    <button class="nav-btn" onclick="showPage('settings',this)">
+        <span class="nav-icon">⚙️</span>
+        Settings
+    </button>
+
+    <button class="nav-btn logout" onclick="logout()">
+        <span class="nav-icon">🚪</span>
+        Logout
+    </button>
+
+</aside>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+        <button class="mobile-menu" onclick="toggleSidebar()">
+            ☰
+        </button>
+
+        <div class="page-title">
+            <h1 id="pageTitle">Dashboard</h1>
+            <p id="pageSubtitle">Royal Palace Hotel administration</p>
+        </div>
+
+        <div class="admin-profile">
+
+            <div class="admin-avatar">
+                A
+            </div>
+
+            <div class="admin-info">
+                <strong>Administrator</strong>
+                <span>Super Admin</span>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard">
+
+            <div class="welcome">
+
+                <h2>Welcome to Royal Palace 👑</h2>
+
+                <p>
+                    Manage your hotel, rooms, bookings and other
+                    operations from one premium control panel.
+                </p>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span>
+                            Total Rooms
+                        </span>
+
+                        <div class="stat-icon">
+                            🛏️
+                        </div>
+
+                    </div>
+
+                    <h3 id="totalRooms">3</h3>
+
+                    <p>Available room types</p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span>
+                            Total Bookings
+                        </span>
+
+                        <div class="stat-icon">
+                            📋
+                        </div>
+
+                    </div>
+
+                    <h3 id="totalBookings">0</h3>
+
+                    <p>All reservations</p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span>
+                            Active Bookings
+                        </span>
+
+                        <div class="stat-icon">
+                            ✅
+                        </div>
+
+                    </div>
+
+                    <h3 id="activeBookings">0</h3>
+
+                    <p>Current reservations</p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span>
+                            Revenue
+                        </span>
+
+                        <div class="stat-icon">
+                            💰
+                        </div>
+
+                    </div>
+
+                    <h3 id="revenue">₹0</h3>
+
+                    <p>Total booking revenue</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>Recent Activity</h2>
+
+                    <span>Dashboard overview</span>
+
+                </div>
+
+                <div class="coming">
+
+                    <div class="coming-icon">
+                        📊
+                    </div>
+
+                    <h3>Dashboard Ready</h3>
+
+                    <p>
+                        Booking activity will appear here
+                        when we add the Booking Management section.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- HOTEL -->
+
+        <section id="hotel" style="display:none">
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Hotel Management</h2>
+                    <span>Step 2</span>
+                </div>
+
+                <div class="coming">
+
+                    <div class="coming-icon">🏨</div>
+
+                    <h3>Hotel Management</h3>
+
+                    <p>
+                        This section will be added in the next step.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PHOTOS -->
+
+        <section id="photos" style="display:none">
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Hotel Photos</h2>
+                    <span>Step 3</span>
+                </div>
+
+                <div class="coming">
+
+                    <div class="coming-icon">🖼️</div>
+
+                    <h3>Hotel Photos</h3>
+
+                    <p>
+                        Photo management will be added next.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ROOMS -->
+
+        <section id="rooms" style="display:none">
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Room Management</h2>
+                    <span>Step 4</span>
+                </div>
+
+                <div class="coming">
+
+                    <div class="coming-icon">🛏️</div>
+
+                    <h3>Room Management</h3>
+
+                    <p>
+                        Premium room management will be added next.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- BOOKINGS -->
+
+        <section id="bookings" style="display:none">
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Booking History</h2>
+                    <span>Step 5</span>
+                </div>
+
+                <div class="coming">
+
+                    <div class="coming-icon">📋</div>
+
+                    <h3>Booking Management</h3>
+
+                    <p>
+                        Booking table and three-dot actions
+                        will be added in the next step.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+
+        <section id="settings" style="display:none">
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Settings</h2>
+                    <span>System</span>
+                </div>
+
+                <div class="coming">
+
+                    <div class="coming-icon">⚙️</div>
+
+                    <h3>Settings</h3>
+
+                    <p>
+                        System settings will be added later.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* =========================
+   PAGE SWITCH
+========================= */
+
+function showPage(page,button){
+
+    const pages = [
+        "dashboard",
+        "hotel",
+        "photos",
+        "rooms",
+        "bookings",
+        "settings"
+    ];
+
+    pages.forEach(function(id){
+
+        const section = document.getElementById(id);
+
+        if(section){
+            section.style.display = id === page ? "block" : "none";
+        }
+
+    });
+
+
+    document.querySelectorAll(".nav-btn").forEach(function(btn){
+
+        btn.classList.remove("active");
+
+    });
+
+
+    if(button){
+        button.classList.add("active");
+    }
+
+
+    const titles = {
+
+        dashboard: [
+            "Dashboard",
+            "Royal Palace Hotel administration"
+        ],
+
+        hotel: [
+            "Hotel Management",
+            "Manage hotel information"
+        ],
+
+        photos: [
+            "Hotel Photos",
+            "Manage hotel gallery"
+        ],
+
+        rooms: [
+            "Room Management",
+            "Manage rooms and pricing"
+        ],
+
+        bookings: [
+            "Booking History",
+            "Manage customer reservations"
+        ],
+
+        settings: [
+            "Settings",
+            "System configuration"
+        ]
+
+    };
+
+
+    if(titles[page]){
+
+        document.getElementById("pageTitle").textContent =
+            titles[page][0];
+
+        document.getElementById("pageSubtitle").textContent =
+            titles[page][1];
+
+    }
+
+
+    closeMobileMenu();
+
+}
+
+
+/* =========================
+   MOBILE SIDEBAR
+========================= */
+
+function toggleSidebar(){
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const overlay =
+        document.getElementById("overlay");
+
+    sidebar.classList.toggle("open");
+
+    overlay.classList.toggle("show");
+
+}
+
+
+function closeMobileMenu(){
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const overlay =
+        document.getElementById("overlay");
+
+    sidebar.classList.remove("open");
+
+    overlay.classList.remove("show");
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+
+    const confirmLogout =
+        confirm("Are you sure you want to logout?");
+
+    if(confirmLogout){
+
+        window.location.href = "login.html";
+
+    }
+
+}
+
+</script>
+
+</body>
+                  </html>
