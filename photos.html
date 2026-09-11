@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Royal Palace Hotel - Hotel Photos</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --navy:#0b1020;
+  --navy2:#111936;
+  --purple:#6d28d9;
+  --purple2:#8b5cf6;
+  --gold:#d4af37;
+  --bg:#f5f6fa;
+  --white:#ffffff;
+  --text:#182033;
+  --muted:#7d8493;
+  --border:#e5e7eb;
+  --green:#16a34a;
+  --red:#dc2626;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+  border:0;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:250px;
+  background:linear-gradient(180deg,var(--navy),var(--navy2));
+  color:white;
+  z-index:1000;
+  padding:24px 16px;
+  overflow-y:auto;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 10px 28px;
+}
+
+.logo-icon{
+  width:45px;
+  height:45px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--gold),#f4d675);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.logo-text{
+  font-size:18px;
+  font-weight:800;
+}
+
+.logo-sub{
+  color:#aab0c0;
+  font-size:11px;
+  margin-top:3px;
+}
+
+.nav-title{
+  color:#777f95;
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:1px;
+  padding:14px 12px 8px;
+}
+
+.nav-btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  color:#cbd0dd;
+  background:transparent;
+  padding:13px 14px;
+  border-radius:12px;
+  margin:3px 0;
+  text-align:left;
+  transition:.2s;
+}
+
+.nav-btn:hover{
+  background:rgba(255,255,255,.08);
+  color:white;
+}
+
+.nav-btn.active{
+  background:linear-gradient(90deg,var(--purple),var(--purple2));
+  color:white;
+  box-shadow:0 8px 20px rgba(109,40,217,.25);
+}
+
+.nav-icon{
+  width:23px;
+  text-align:center;
+  font-size:18px;
+}
+
+.logout{
+  margin-top:25px;
+  border-top:1px solid rgba(255,255,255,.08);
+  padding-top:18px;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:250px;
+  min-height:100vh;
+}
+
+/* TOPBAR */
+
+.topbar{
+  height:92px;
+  background:white;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 34px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.page-title{
+  font-size:28px;
+  font-weight:800;
+  margin:0;
+}
+
+.page-sub{
+  color:var(--muted);
+  margin-top:5px;
+  font-size:14px;
+}
+
+.profile{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),#9333ea);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+  font-weight:bold;
+}
+
+/* MOBILE MENU */
+
+.mobile-menu{
+  display:none;
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:var(--navy);
+  color:white;
+  font-size:25px;
+  margin-right:14px;
+}
+
+/* CONTENT */
+
+.content{
+  padding:36px;
+  max-width:1400px;
+  margin:auto;
+}
+
+/* HERO */
+
+.hero{
+  min-height:150px;
+  border-radius:28px;
+  background:linear-gradient(120deg,#0b1020,#19234b);
+  color:white;
+  padding:32px 36px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  box-shadow:0 18px 40px rgba(11,16,32,.12);
+}
+
+.hero h1{
+  margin:0;
+  font-size:30px;
+}
+
+.hero p{
+  margin:10px 0 0;
+  color:#b9c0d2;
+  font-size:16px;
+}
+
+/* ADD BUTTON */
+
+.add-btn{
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  color:white;
+  padding:15px 24px;
+  border-radius:15px;
+  font-weight:800;
+  box-shadow:0 10px 25px rgba(109,40,217,.3);
+  white-space:nowrap;
+}
+
+.add-btn:active{
+  transform:scale(.97);
+}
+
+/* PHOTO GRID */
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+  margin-top:28px;
+}
+
+.photo-card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 8px 25px rgba(20,30,50,.05);
+}
+
+.photo-box{
+  height:230px;
+  background:#eef0f5;
+  position:relative;
+  overflow:hidden;
+}
+
+.photo-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.photo-label{
+  position:absolute;
+  left:14px;
+  top:14px;
+  background:rgba(11,16,32,.78);
+  color:white;
+  padding:7px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+  backdrop-filter:blur(5px);
+}
+
+.photo-body{
+  padding:18px;
+}
+
+.photo-name{
+  font-size:18px;
+  font-weight:800;
+}
+
+.photo-info{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+}
+
+.photo-actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+}
+
+.preview-btn,
+.remove-btn{
+  flex:1;
+  padding:11px 12px;
+  border-radius:12px;
+  font-weight:700;
+}
+
+.preview-btn{
+  background:#f0eafe;
+  color:var(--purple);
+}
+
+.remove-btn{
+  background:#fff0f0;
+  color:var(--red);
+}
+
+/* UPLOAD CARD */
+
+.upload-card{
+  margin-top:28px;
+  background:white;
+  border:2px dashed #d8dce6;
+  border-radius:24px;
+  padding:36px;
+  text-align:center;
+}
+
+.upload-icon{
+  width:65px;
+  height:65px;
+  margin:0 auto 15px;
+  border-radius:20px;
+  background:#f0eafe;
+  color:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+}
+
+.upload-card h2{
+  margin:5px 0;
+  font-size:21px;
+}
+
+.upload-card p{
+  color:var(--muted);
+  margin:8px 0 20px;
+}
+
+.file-label{
+  display:inline-block;
+  background:var(--navy);
+  color:white;
+  padding:13px 22px;
+  border-radius:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#fileInput{
+  display:none;
+}
+
+/* INFO */
+
+.info-box{
+  margin-top:28px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:22px;
+}
+
+.info-title{
+  font-weight:800;
+  font-size:18px;
+}
+
+.info-text{
+  color:var(--muted);
+  line-height:1.6;
+  font-size:14px;
+  margin-top:8px;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.62);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:3000;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  background:white;
+  width:min(700px,100%);
+  border-radius:25px;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.3);
+}
+
+.modal-image{
+  width:100%;
+  max-height:70vh;
+  object-fit:contain;
+  background:#111;
+  display:block;
+}
+
+.modal-footer{
+  padding:15px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.modal-name{
+  font-weight:800;
+}
+
+.close-btn{
+  background:var(--navy);
+  color:white;
+  padding:10px 18px;
+  border-radius:11px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .topbar{
+    height:94px;
+    padding:0 18px;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .top-left{
+    display:flex;
+    align-items:center;
+  }
+
+  .page-title{
+    font-size:23px;
+  }
+
+  .page-sub{
+    font-size:13px;
+  }
+
+  .content{
+    padding:28px;
+  }
+
+  .photo-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px){
+
+  .topbar{
+    height:110px;
+    padding:0 18px;
+  }
+
+  .page-title{
+    font-size:22px;
+  }
+
+  .profile{
+    width:46px;
+    height:46px;
+  }
+
+  .content{
+    padding:28px;
+  }
+
+  .hero{
+    min-height:150px;
+    padding:28px;
+    border-radius:26px;
+    display:block;
+  }
+
+  .hero h1{
+    font-size:27px;
+  }
+
+  .hero p{
+    line-height:1.4;
+  }
+
+  .add-btn{
+    display:block;
+    margin-top:20px;
+    width:100%;
+  }
+
+  .photo-grid{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+  .photo-box{
+    height:230px;
+  }
+
+  .upload-card{
+    padding:28px 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logo-icon">H</div>
+
+    <div>
+      <div class="logo-text">Royal Palace</div>
+      <div class="logo-sub">HOTEL ADMIN PANEL</div>
+    </div>
+  </div>
+
+  <div class="nav-title">MAIN MENU</div>
+
+  <button class="nav-btn" onclick="go('dashboard.html')">
+    <span class="nav-icon">⌂</span>
+    Dashboard
+  </button>
+
+  <button class="nav-btn" onclick="go('hotel.html')">
+    <span class="nav-icon">🏨</span>
+    Hotel Management
+  </button>
+
+  <button class="nav-btn active" onclick="go('photos.html')">
+    <span class="nav-icon">🖼️</span>
+    Hotel Photos
+  </button>
+
+  <button class="nav-btn" onclick="go('rooms.html')">
+    <span class="nav-icon">🛏️</span>
+    Room Management
+  </button>
+
+  <button class="nav-btn" onclick="go('bookings.html')">
+    <span class="nav-icon">📋</span>
+    Booking History
+  </button>
+
+  <button class="nav-btn" onclick="go('settings.html')">
+    <span class="nav-icon">⚙️</span>
+    Settings
+  </button>
+
+  <div class="logout">
+    <button class="nav-btn" onclick="logout()">
+      <span class="nav-icon">↪</span>
+      Logout
+    </button>
+  </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+  <!-- TOPBAR -->
+
+  <header class="topbar">
+
+    <div class="top-left">
+
+      <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+      <div>
+        <h1 class="page-title">Hotel Photos</h1>
+        <div class="page-sub">
+          Manage your hotel gallery
+        </div>
+      </div>
+
+    </div>
+
+    <div class="profile">A</div>
+
+  </header>
+
+
+  <!-- CONTENT -->
+
+  <section class="content">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <div>
+        <h1>Hotel Photos 🖼️</h1>
+        <p>
+          Upload, preview and manage your hotel photos.
+        </p>
+      </div>
+
+      <button class="add-btn" onclick="openFilePicker()">
+        + Add Photo
+      </button>
+
+    </div>
+
+
+    <!-- PHOTO GRID -->
+
+    <div class="photo-grid" id="photoGrid">
+
+      <!-- PHOTO 1 -->
+
+      <div class="photo-card">
+
+        <div class="photo-box">
+
+          <img
+            src="hotel-front.jpg"
+            alt="Hotel Front"
+            onerror="this.src='https://via.placeholder.com/700x450?text=Hotel+Front'"
+          >
+
+          <div class="photo-label">MAIN PHOTO</div>
+
+        </div>
+
+        <div class="photo-body">
+
+          <div class="photo-name">Hotel Front</div>
+
+          <div class="photo-info">
+            Main hotel exterior photo
+          </div>
+
+          <div class="photo-actions">
+
+            <button
+              class="preview-btn"
+              onclick="previewImage('hotel-front.jpg','Hotel Front')">
+              👁️ Preview
+            </button>
+
+            <button
+              class="remove-btn"
+              onclick="removePhoto(this,'Hotel Front')">
+              🗑️ Remove
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PHOTO 2 -->
+
+      <div class="photo-card">
+
+        <div class="photo-box">
+
+          <img
+            src="lobby.jpg"
+            alt="Hotel Lobby"
+            onerror="this.src='https://via.placeholder.com/700x450?text=Hotel+Lobby'"
+          >
+
+          <div class="photo-label">LOBBY</div>
+
+        </div>
+
+        <div class="photo-body">
+
+          <div class="photo-name">Hotel Lobby</div>
+
+          <div class="photo-info">
+            Premium lobby interior
+          </div>
+
+          <div class="photo-actions">
+
+            <button
+              class="preview-btn"
+              onclick="previewImage('lobby.jpg','Hotel Lobby')">
+              👁️ Preview
+            </button>
+
+            <button
+              class="remove-btn"
+              onclick="removePhoto(this,'Hotel Lobby')">
+              🗑️ Remove
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PHOTO 3 -->
+
+      <div class="photo-card">
+
+        <div class="photo-box">
+
+          <img
+            src="reception.jpg"
+            alt="Reception"
+            onerror="this.src='https://via.placeholder.com/700x450?text=Reception'"
+          >
+
+          <div class="photo-label">RECEPTION</div>
+
+        </div>
+
+        <div class="photo-body">
+
+          <div class="photo-name">Reception</div>
+
+          <div class="photo-info">
+            Hotel reception area
+          </div>
+
+          <div class="photo-actions">
+
+            <button
+              class="preview-btn"
+              onclick="previewImage('reception.jpg','Reception')">
+              👁️ Preview
+            </button>
+
+            <button
+              class="remove-btn"
+              onclick="removePhoto(this,'Reception')">
+              🗑️ Remove
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <div class="upload-card">
+
+      <div class="upload-icon">📷</div>
+
+      <h2>Add New Hotel Photo</h2>
+
+      <p>
+        Select an image from your phone or computer.
+      </p>
+
+      <label class="file-label" for="fileInput">
+        📁 Choose Photo
+      </label>
+
+      <input
+        id="fileInput"
+        type="file"
+        accept="image/*"
+        onchange="handleFile(event)"
+      >
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div class="info-box">
+
+      <div class="info-title">
+        📌 Photo Management
+      </div>
+
+      <div class="info-text">
+        Recommended image format is JPG or PNG.
+        For best quality, use high-resolution hotel photos.
+        Existing photos are loaded from your website files.
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- PREVIEW MODAL -->
+
+<div class="modal" id="previewModal">
+
+  <div class="modal-box">
+
+    <img
+      id="modalImage"
+      class="modal-image"
+      src=""
+      alt="Preview"
+    >
+
+    <div class="modal-footer">
+
+      <div class="modal-name" id="modalName">
+        Photo Preview
+      </div>
+
+      <button class="close-btn" onclick="closePreview()">
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* NAVIGATION */
+
+function go(page){
+  window.location.href = page;
+}
+
+
+/* MOBILE SIDEBAR */
+
+function toggleSidebar(){
+
+  document
+    .getElementById("sidebar")
+    .classList
+    .toggle("open");
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+  const ok = confirm("Are you sure you want to logout?");
+
+  if(ok){
+    window.location.href = "login.html";
+  }
+
+}
+
+
+/* FILE PICKER */
+
+function openFilePicker(){
+
+  document
+    .getElementById("fileInput")
+    .click();
+
+}
+
+
+/* IMAGE PREVIEW */
+
+function previewImage(src,name){
+
+  document.getElementById("modalImage").src = src;
+
+  document.getElementById("modalName").textContent = name;
+
+  document
+    .getElementById("previewModal")
+    .classList
+    .add("show");
+
+}
+
+
+/* CLOSE PREVIEW */
+
+function closePreview(){
+
+  document
+    .getElementById("previewModal")
+    .classList
+    .remove("show");
+
+}
+
+
+/* CLICK OUTSIDE MODAL */
+
+document
+  .getElementById("previewModal")
+  .addEventListener("click",function(e){
+
+    if(e.target === this){
+      closePreview();
+    }
+
+  });
+
+
+/* ESCAPE */
+
+document.addEventListener("keydown",function(e){
+
+  if(e.key === "Escape"){
+    closePreview();
+  }
+
+});
+
+
+/* REMOVE PHOTO */
+
+function removePhoto(button,name){
+
+  const card = button.closest(".photo-card");
+
+  if(!card) return;
+
+  const ok = confirm(
+    "Remove \"" + name + "\" from this page?"
+  );
+
+  if(!ok) return;
+
+  card.remove();
+
+}
+
+
+/* NEW PHOTO */
+
+function handleFile(event){
+
+  const file = event.target.files[0];
+
+  if(!file) return;
+
+  if(!file.type.startsWith("image/")){
+
+    alert("Please select an image file.");
+
+    event.target.value = "";
+
+    return;
+
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+
+    const grid = document.getElementById("photoGrid");
+
+    const card = document.createElement("div");
+
+    card.className = "photo-card";
+
+    const imageSrc = e.target.result;
+
+    card.innerHTML = `
+
+      <div class="photo-box">
+
+        <img
+          src="${imageSrc}"
+          alt="New Hotel Photo"
+        >
+
+        <div class="photo-label">
+          NEW PHOTO
+        </div>
+
+      </div>
+
+      <div class="photo-body">
+
+        <div class="photo-name">
+          ${escapeHtml(file.name)}
+        </div>
+
+        <div class="photo-info">
+          New photo preview
+        </div>
+
+        <div class="photo-actions">
+
+          <button
+            class="preview-btn"
+            onclick="previewImage('${imageSrc}','${escapeHtml(file.name)}')">
+            👁️ Preview
+          </button>
+
+          <button
+            class="remove-btn"
+            onclick="removePhoto(this,'New Photo')">
+            🗑️ Remove
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+  };
+
+  reader.readAsDataURL(file);
+
+  event.target.value = "";
+
+}
+
+
+/* SAFE TEXT */
+
+function escapeHtml(text){
+
+  return text
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+            </html>
