@@ -1,0 +1,612 @@
+/* =========================================================
+   ROYAL PALACE HOTEL
+   PREMIUM ADMIN PANEL CSS
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f5f6fa;
+    color:#172033;
+}
+
+
+/* =========================================================
+   MOBILE MENU CHECKBOX
+========================================================= */
+
+#menuToggle{
+    display:none;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:260px;
+    background:#111827;
+    color:#fff;
+    z-index:1000;
+    display:flex;
+    flex-direction:column;
+    padding:24px 16px;
+    transition:transform .3s ease;
+    box-shadow:8px 0 25px rgba(0,0,0,.08);
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:4px 10px 28px;
+}
+
+.brand-logo{
+    width:46px;
+    height:46px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#7c3aed,#5b21b6);
+    color:#fff;
+    font-size:17px;
+    font-weight:800;
+    box-shadow:0 8px 20px rgba(124,58,237,.35);
+}
+
+.brand h2{
+    font-size:18px;
+    line-height:22px;
+    font-weight:700;
+}
+
+.brand span{
+    display:block;
+    color:#9ca3af;
+    font-size:12px;
+    margin-top:3px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.nav button,
+.sidebar-bottom button{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#c7cbd4;
+    min-height:48px;
+    padding:0 14px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    font-size:14px;
+    font-weight:600;
+    text-align:left;
+    cursor:pointer;
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+.nav button span,
+.sidebar-bottom button span{
+    width:22px;
+    text-align:center;
+    font-size:18px;
+    flex-shrink:0;
+}
+
+.nav button:hover,
+.sidebar-bottom button:hover{
+    background:#1f2937;
+    color:#fff;
+}
+
+.nav button.active{
+    background:linear-gradient(
+        135deg,
+        #7c3aed,
+        #6d28d9
+    );
+    color:#fff;
+    box-shadow:0 8px 18px rgba(124,58,237,.28);
+}
+
+.nav button:active,
+.sidebar-bottom button:active{
+    transform:scale(.98);
+}
+
+
+/* =========================================================
+   SIDEBAR BOTTOM
+========================================================= */
+
+.sidebar-bottom{
+    margin-top:auto;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+.sidebar-bottom button{
+    color:#9ca3af;
+}
+
+
+/* =========================================================
+   MOBILE OVERLAY
+========================================================= */
+
+.sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.55);
+    z-index:900;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+    min-height:100vh;
+    margin-left:260px;
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar{
+    height:78px;
+    width:100%;
+    background:#fff;
+    border-bottom:1px solid #e8eaf0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    position:sticky;
+    top:0;
+    z-index:500;
+}
+
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.topbar h3{
+    font-size:18px;
+    font-weight:700;
+    color:#172033;
+}
+
+.topbar p{
+    margin-top:3px;
+    font-size:12px;
+    color:#8b93a4;
+}
+
+
+/* =========================================================
+   MENU BUTTON
+========================================================= */
+
+.menu-button{
+    display:none;
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:#f3f4f6;
+    color:#374151;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    cursor:pointer;
+    user-select:none;
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.profile-info{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+}
+
+.profile-info strong{
+    font-size:13px;
+    color:#172033;
+}
+
+.profile-info span{
+    margin-top:3px;
+    font-size:11px;
+    color:#9299a8;
+}
+
+.profile-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(
+        135deg,
+        #7c3aed,
+        #6d28d9
+    );
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    font-weight:700;
+    box-shadow:0 5px 14px rgba(124,58,237,.25);
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content{
+    padding:30px;
+    max-width:1600px;
+    margin:0 auto;
+}
+
+
+/* =========================================================
+   VIEW SYSTEM
+========================================================= */
+
+.view{
+    display:none;
+    animation:viewFade .2s ease;
+}
+
+.view.active{
+    display:block;
+}
+
+@keyframes viewFade{
+    from{
+        opacity:0;
+        transform:translateY(4px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:26px;
+}
+
+.page-header h1{
+    font-size:27px;
+    line-height:34px;
+    font-weight:750;
+    color:#151c2e;
+}
+
+.page-header p{
+    margin-top:7px;
+    font-size:14px;
+    color:#7b8495;
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.dashboard-placeholder{
+    background:#fff;
+    border:1px solid #e9ebf0;
+    border-radius:18px;
+    min-height:330px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    padding:30px;
+    box-shadow:0 5px 20px rgba(15,23,42,.035);
+}
+
+.placeholder-icon{
+    width:64px;
+    height:64px;
+    border-radius:18px;
+    background:#f1eaff;
+    color:#7c3aed;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    margin-bottom:18px;
+}
+
+.dashboard-placeholder h2{
+    font-size:20px;
+    color:#20283a;
+    margin-bottom:8px;
+}
+
+.dashboard-placeholder p{
+    color:#8991a1;
+    font-size:14px;
+}
+
+
+/* =========================================================
+   GENERAL CARDS
+========================================================= */
+
+.card{
+    background:#fff;
+    border:1px solid #e8eaf0;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(15,23,42,.035);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+    width:7px;
+    height:7px;
+}
+
+::-webkit-scrollbar-track{
+    background:#f1f2f5;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#c7cbd4;
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#aeb4c0;
+}
+
+
+/* =========================================================
+   TABLE FOUNDATION
+========================================================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:14px 16px;
+    text-align:left;
+    border-bottom:1px solid #edf0f4;
+}
+
+th{
+    font-size:12px;
+    color:#727b8c;
+    font-weight:700;
+    background:#fafbfc;
+}
+
+td{
+    font-size:13px;
+    color:#30394b;
+}
+
+
+/* =========================================================
+   BUTTON FOUNDATION
+========================================================= */
+
+button{
+    font-family:inherit;
+}
+
+
+/* =========================================================
+   FORM FOUNDATION
+========================================================= */
+
+input,
+select,
+textarea{
+    font-family:inherit;
+    outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#7c3aed !important;
+    box-shadow:0 0 0 3px rgba(124,58,237,.10);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:800px){
+
+    .sidebar{
+        width:270px;
+        transform:translateX(-100%);
+        box-shadow:12px 0 35px rgba(0,0,0,.20);
+    }
+
+    #menuToggle:checked ~ .sidebar{
+        transform:translateX(0);
+    }
+
+    #menuToggle:checked ~ .sidebar-overlay{
+        display:block;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .menu-button{
+        display:flex;
+    }
+
+    .topbar{
+        height:70px;
+        padding:0 16px;
+    }
+
+    .topbar h3{
+        font-size:16px;
+    }
+
+    .topbar p{
+        font-size:11px;
+    }
+
+    .profile-info{
+        display:none;
+    }
+
+    .profile-avatar{
+        width:40px;
+        height:40px;
+    }
+
+    .content{
+        padding:22px 16px;
+    }
+
+    .page-header{
+        margin-bottom:20px;
+    }
+
+    .page-header h1{
+        font-size:22px;
+        line-height:29px;
+    }
+
+    .page-header p{
+        font-size:13px;
+        line-height:19px;
+    }
+
+    .dashboard-placeholder{
+        min-height:280px;
+        border-radius:15px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:480px){
+
+    .sidebar{
+        width:82%;
+        max-width:290px;
+    }
+
+    .topbar{
+        padding:0 13px;
+    }
+
+    .topbar-left{
+        gap:10px;
+    }
+
+    .menu-button{
+        width:40px;
+        height:40px;
+        font-size:20px;
+    }
+
+    .topbar h3{
+        font-size:15px;
+    }
+
+    .content{
+        padding:20px 13px;
+    }
+
+    .page-header h1{
+        font-size:20px;
+    }
+
+    .page-header p{
+        font-size:12px;
+    }
+
+    .dashboard-placeholder{
+        padding:22px 15px;
+    }
+  }
