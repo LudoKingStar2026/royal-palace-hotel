@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Royal Palace Hotel - Admin Panel</title>
+
+<link rel="stylesheet" href="css/admin.css">
+
+<!-- Supabase SDK
+     अभी modules direct REST/Core इस्तेमाल कर रहे हैं,
+     इसलिए admin.html में SDK की जरूरत नहीं है. -->
+
+</head>
+
+<body>
+
+<!-- MOBILE MENU CHECKBOX -->
+<input type="checkbox" id="menuToggle">
+
+<!-- OVERLAY -->
+<label class="sidebar-overlay" for="menuToggle"></label>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-logo">RP</div>
+
+        <div class="brand-text">
+            <strong>Royal Palace</strong>
+            <span>Hotel Admin</span>
+        </div>
+    </div>
+
+    <nav class="nav">
+
+        <button
+            id="navDashboard"
+            class="active"
+            onclick="showView('dashboard')">
+            ▣ Dashboard
+        </button>
+
+        <button
+            id="navRooms"
+            onclick="showView('rooms')">
+            ▦ Room Management
+        </button>
+
+        <button
+            id="navBookings"
+            onclick="showView('bookings')">
+            ▤ Booking History
+        </button>
+
+        <button
+            id="navSettings"
+            onclick="showView('settings')">
+            ⚙ Settings
+        </button>
+
+    </nav>
+
+    <button class="logout-btn" onclick="logout()">
+        ↪ Logout
+    </button>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+        <label class="hamburger" for="menuToggle">
+            ☰
+        </label>
+
+        <div class="top-title" id="topTitle">
+            Dashboard
+        </div>
+
+        <div class="profile">
+            <div class="profile-info">
+                <strong id="topAdminName">Admin</strong>
+                <span id="topAdminRole">Administrator</span>
+            </div>
+
+            <div class="profile-avatar" id="topProfileAvatar">
+                A
+            </div>
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         DASHBOARD
+    ========================================== -->
+
+    <section id="dashboardView" class="view active">
+
+        <div class="welcome-card">
+
+            <div>
+                <h1>
+                    Welcome back,
+                    <span id="welcomeAdminName">Admin</span>! 👋
+                </h1>
+
+                <p>
+                    Here's what's happening at
+                    <span id="welcomeHotelName">
+                        Royal Palace Hotel
+                    </span>
+                    today.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- STAT CARDS -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🏨
+                </div>
+
+                <div>
+                    <span>Total Rooms</span>
+                    <strong id="statRooms">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📅
+                </div>
+
+                <div>
+                    <span>Total Bookings</span>
+                    <strong id="statBookings">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div>
+                    <span>Confirmed</span>
+                    <strong id="statConfirmed">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    💰
+                </div>
+
+                <div>
+                    <span>Revenue</span>
+                    <strong id="statRevenue">₹0</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DASHBOARD GRID -->
+        <div class="dashboard-grid">
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Recent Bookings</h2>
+                        <p>Latest hotel reservations</p>
+                    </div>
+
+                </div>
+
+                <div id="recentBookings"
+                     class="recent-bookings">
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Room Overview</h2>
+                        <p>Current room availability</p>
+                    </div>
+
+                </div>
+
+                <div id="roomOverview"
+                     class="room-overview">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         ROOMS
+    ========================================== -->
+
+    <section id="roomsView" class="view">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Room Management</h1>
+                <p>Manage hotel rooms and availability.</p>
+            </div>
+
+            <button
+                class="primary-btn"
+                onclick="openRoomModal()">
+                + Add Room
+            </button>
+
+        </div>
+
+
+        <!-- ROOM STATS -->
+        <div class="stats-grid room-stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🏨
+                </div>
+
+                <div>
+                    <span>Total Rooms</span>
+                    <strong id="roomTotal">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div>
+                    <span>Available</span>
+                    <strong id="roomAvailable">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🔒
+                </div>
+
+                <div>
+                    <span>Booked</span>
+                    <strong id="roomBooked">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    💰
+                </div>
+
+                <div>
+                    <span>Average Price</span>
+                    <strong id="roomAverage">₹0</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+        <div class="search-box">
+
+            <input
+                type="text"
+                placeholder="Search room name or number..."
+                oninput="searchRooms(this.value)"
+            >
+
+        </div>
+
+
+        <!-- ROOMS -->
+        <div
+            id="roomsGrid"
+            class="rooms-grid">
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         ROOM MODAL
+    ========================================== -->
+
+    <div
+        id="roomModal"
+        class="modal-overlay">
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <h2 id="roomModalTitle">
+                        Add New Room
+                    </h2>
+
+                    <p>
+                        Enter room information below.
+                    </p>
+                </div>
+
+                <button
+                    class="modal-close"
+                    onclick="closeRoomModal()">
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="roomForm"
+                onsubmit="saveRoom(event)">
+
+                <input
+                    type="hidden"
+                    id="roomId"
+                >
+
+
+                <label>
+                    Room Name
+
+                    <input
+                        type="text"
+                        id="roomName"
+                        placeholder="e.g. Premium Room"
+                        required
+                    >
+                </label>
+
+
+                <label>
+                    Room Number
+
+                    <input
+                        type="text"
+                        id="roomNumber"
+                        placeholder="e.g. 101"
+                        required
+                    >
+                </label>
+
+
+                <label>
+                    Price / Night
+
+                    <input
+                        type="number"
+                        id="roomPrice"
+                        placeholder="2500"
+                        min="0"
+                        required
+                    >
+                </label>
+
+
+                <label>
+                    Room Type
+
+                    <select id="roomType">
+
+                        <option value="Premium">
+                            Premium
+                        </option>
+
+                        <option value="Deluxe">
+                            Deluxe
+                        </option>
+
+                        <option value="Suite">
+                            Suite
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <label>
+                    Status
+
+                    <select id="roomStatus">
+
+                        <option value="available">
+                            Available
+                        </option>
+
+                        <option value="booked">
+                            Booked
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        onclick="closeRoomModal()">
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-btn">
+                        Save Room
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         BOOKING HISTORY
+    ========================================== -->
+
+    <section
+        id="bookingsView"
+        class="view">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Booking History</h1>
+
+                <p>
+                    View and manage all hotel bookings.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="panel booking-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2>All Bookings</h2>
+
+                    <p>
+                        Live bookings from your hotel database.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- BOOKING SEARCH/FILTER -->
+            <div class="booking-toolbar">
+
+                <input
+                    id="bookingSearch"
+                    type="text"
+                    placeholder="Search booking ID, guest or room..."
+                    oninput="searchBookings(this.value)"
+                >
+
+
+                <select
+                    id="bookingStatusFilter"
+                    onchange="filterBookings(this.value)">
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="Confirmed">
+                        Confirmed
+                    </option>
+
+                    <option value="Cancelled">
+                        Cancelled
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- BOOKINGS ARE RENDERED HERE -->
+            <div
+                id="bookingHistory"
+                class="booking-history">
+
+                <div class="loading-box">
+                    Loading bookings...
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SETTINGS
+    ========================================== -->
+
+    <section
+        id="settingsView"
+        class="view">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Settings</h1>
+
+                <p>
+                    Manage your hotel admin panel settings.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div id="settingsContainer">
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Admin Settings</h2>
+
+                        <p>
+                            Configure your hotel administration preferences.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div id="settingsContent">
+
+                    <div class="loading-box">
+                        Loading settings...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================
+     CENTRAL JAVASCRIPT LOADER
+========================================== -->
+
+<script src="js/app-loader.js?v=1"></script>
+
+
+<!-- =========================================
+     LOGOUT
+========================================== -->
+
+<script>
+
+function logout(){
+
+    const confirmLogout =
+        confirm("Are you sure you want to logout?");
+
+    if(!confirmLogout){
+        return;
+    }
+
+    window.location.href = "login.html";
+
+}
+
+</script>
+
+</body>
+                      </html>
