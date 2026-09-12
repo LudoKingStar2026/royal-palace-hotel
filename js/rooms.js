@@ -1112,7 +1112,72 @@ function updateRoomCounters() {
 /* =========================================================
    RENDER ROOMS
    ========================================================= */
+function createRoomCard(room) {
+    const id = getRoomId(room);
+    const name = getRoomName(room);
+    const number = getRoomNumber(room);
+    const type = getRoomType(room);
+    const status = getRoomStatus(room);
+    const price = getRoomPrice(room);
 
+    const isBooked =
+        String(status).toLowerCase() === "booked";
+
+    const statusText =
+        isBooked ? "Booked" : "Available";
+
+    const statusClass =
+        isBooked ? "booked" : "available";
+
+    return `
+        <div class="room-card ${statusClass}">
+            <div class="room-card-top">
+                <div class="room-icon">🏨</div>
+
+                <span class="room-status ${statusClass}">
+                    ${statusText}
+                </span>
+            </div>
+
+            <div class="room-card-body">
+                <h3>${name}</h3>
+
+                <div class="room-number">
+                    Room ${number}
+                </div>
+
+                <div class="room-type">
+                    ${type}
+                </div>
+
+                <div class="room-price">
+                    ₹${Number(price || 0).toLocaleString("en-IN")}
+                    <span>/ night</span>
+                </div>
+            </div>
+
+            <div class="room-card-actions">
+                <button
+                    type="button"
+                    onclick="window.editRoom('${id}')">
+                    ✏️ Edit
+                </button>
+
+                <button
+                    type="button"
+                    onclick="window.toggleRoomStatus('${id}')">
+                    ${isBooked ? "🟢 Available" : "🔴 Booked"}
+                </button>
+
+                <button
+                    type="button"
+                    onclick="window.deleteRoom('${id}')">
+                    🗑️ Delete
+                </button>
+            </div>
+        </div>
+    `;
+ }
 function renderRooms(list) {
     try {
         const container =
