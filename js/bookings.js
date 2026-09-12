@@ -871,7 +871,7 @@
                 <tbody>
         `;
 
-        filteredBookings.forEach(function (booking) {
+        bookings.forEach(function (booking) {
 
             const id =
                 getBookingId(booking);
