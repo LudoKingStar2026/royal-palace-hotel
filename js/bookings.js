@@ -1788,6 +1788,22 @@ async function editBooking(id) {
         );
     }
 
+ /* =====================================================
+   BOOKING EVENT NOTIFIER
+===================================================== */
+
+function notifyBookingChange(eventName) {
+    try {
+        window.dispatchEvent(
+            new CustomEvent(eventName)
+        );
+    } catch (error) {
+        console.warn(
+            "Booking event error:",
+            error
+        );
+    }
+ }   
     
 /* =====================================================
    PUBLIC API
