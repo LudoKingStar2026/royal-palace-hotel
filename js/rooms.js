@@ -1637,33 +1637,30 @@ if (
 } else {
     bootRooms();
 }
-    /* =========================================================
-       ROOM COUNTERS
-    ========================================================= */
+    /* =====================================================
+   ROOM COUNTERS
+===================================================== */
 
-    function updateRoomCounters() {
-        const total =
-            rooms.length;
+function updateRoomCounters() {
+
+    try {
+
+        const total = rooms.length;
 
         const available =
             rooms.filter(function (room) {
-                return (
-                    getRoomStatus(room) !==
-                    "booked"
-                );
+                return getRoomStatus(room) === "available";
             }).length;
 
         const booked =
             rooms.filter(function (room) {
-                return (
-                    getRoomStatus(room) ===
-                    "booked"
-                );
+                return getRoomStatus(room) === "booked";
             }).length;
 
         let average = 0;
 
         if (total > 0) {
+
             const sum =
                 rooms.reduce(
                     function (result, room) {
@@ -1676,9 +1673,7 @@ if (
                 );
 
             average =
-                Math.round(
-                    sum / total
-                );
+                Math.round(sum / total);
         }
 
         const totalEl =
@@ -1700,6 +1695,32 @@ if (
             document.getElementById(
                 "roomAverage"
             );
+
+        if (totalEl) {
+            totalEl.textContent = total;
+        }
+
+        if (availableEl) {
+            availableEl.textContent =
+                available;
+        }
+
+        if (bookedEl) {
+            bookedEl.textContent =
+                booked;
+        }
+
+        if (averageEl) {
+            averageEl.textContent =
+                money(average);
+        }
+
+    } catch (error) {
+
+        reportError(error);
+
+    }
+}
 
         if (totalEl) {
             totalEl.textContent =
