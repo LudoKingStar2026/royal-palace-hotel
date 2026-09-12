@@ -364,6 +364,25 @@
             );
         }
     }
+    /* =========================================================
+   BOOKING CHANGE NOTIFICATION
+   ========================================================= */
+
+function notifyBookingChange(eventName) {
+    try {
+        window.dispatchEvent(
+            new CustomEvent(eventName)
+        );
+    } catch (error) {
+        console.warn(
+            "Booking event error:",
+            error
+        );
+    }
+}
+     /* =========================================================
+   LOAD BOOKINGS
+   ========================================================= */
 
     /* =========================================================
        LOAD BOOKINGS
