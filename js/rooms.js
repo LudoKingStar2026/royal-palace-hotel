@@ -1640,7 +1640,7 @@ if (
     bootRooms();
 }
 
-})();
+
                 toast.id =
                     "roomToast";
 
