@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Royal Palace Hotel - Admin Panel</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+ --navy:#111827;
+ --navy2:#172033;
+ --purple:#7657f6;
+ --purple2:#6847ed;
+ --bg:#f5f6fa;
+ --white:#fff;
+ --text:#172033;
+ --muted:#7b8498;
+ --border:#e7e9ef;
+ --green:#16a36a;
+ --red:#e14d5b;
+ --orange:#e99b25;
+ --shadow:0 10px 30px rgba(20,25,45,.07)
+}
+
+html,body{
+ margin:0;
+ padding:0;
+ width:100%;
+ min-height:100%;
+ font-family:Arial,Helvetica,sans-serif;
+ background:var(--bg);
+ color:var(--text)
+}
+
+button,input,select,textarea{
+ font:inherit
+}
+
+button{
+ cursor:pointer
+}
+
+#menuToggle{
+ display:none
+}
+
+.sidebar{
+ position:fixed;
+ left:0;
+ top:0;
+ bottom:0;
+ width:255px;
+ background:var(--navy);
+ color:#fff;
+ z-index:2000;
+ padding:24px 16px;
+ overflow-y:auto;
+ transition:transform .25s ease
+}
+
+.sidebar-overlay{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.5);
+ z-index:1999
+}
+
+#menuToggle:checked~.sidebar{
+ transform:translateX(0)
+}
+
+#menuToggle:checked~.sidebar-overlay{
+ display:block
+}
+
+.logo{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding:4px 10px 28px
+}
+
+.logo-icon{
+ width:42px;
+ height:42px;
+ border-radius:12px;
+ background:var(--purple);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:22px
+}
+
+.logo-text strong{
+ display:block;
+ font-size:17px
+}
+
+.logo-text span{
+ display:block;
+ color:#98a1b6;
+ font-size:10px;
+ margin-top:4px
+}
+
+.menu-title{
+ color:#727d93;
+ font-size:11px;
+ font-weight:bold;
+ letter-spacing:1px;
+ padding:10px 12px;
+ margin-top:8px
+}
+
+.nav{
+ display:flex;
+ flex-direction:column;
+ gap:7px
+}
+
+.nav button{
+ width:100%;
+ border:0;
+ background:transparent;
+ color:#aeb6c7;
+ padding:13px 14px;
+ border-radius:10px;
+ text-align:left;
+ display:flex;
+ align-items:center;
+ gap:12px;
+ font-size:14px
+}
+
+.nav button:hover{
+ background:#1c2639;
+ color:#fff
+}
+
+.nav button.active{
+ background:var(--purple);
+ color:#fff;
+ box-shadow:0 8px 18px rgba(118,87,246,.2)
+}
+
+.nav-icon{
+ width:21px;
+ text-align:center;
+ font-size:17px
+}
+
+.sidebar-bottom{
+ position:absolute;
+ left:16px;
+ right:16px;
+ bottom:18px
+}
+
+.sidebar-user{
+ border-top:1px solid #283246;
+ padding:16px 8px 0;
+ display:flex;
+ align-items:center;
+ gap:10px
+}
+
+.user-avatar{
+ width:38px;
+ height:38px;
+ border-radius:50%;
+ background:var(--purple);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:bold
+}
+
+.sidebar-user-text strong{
+ display:block;
+ font-size:13px
+}
+
+.sidebar-user-text span{
+ display:block;
+ color:#7f899e;
+ font-size:11px;
+ margin-top:3px
+}
+
+.main{
+ margin-left:255px;
+ min-height:100vh
+}
+
+.topbar{
+ height:72px;
+ background:#fff;
+ border-bottom:1px solid var(--border);
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 30px;
+ position:sticky;
+ top:0;
+ z-index:100
+}
+
+.top-left{
+ display:flex;
+ align-items:center;
+ gap:15px
+}
+
+.menu-button{
+ display:none;
+ border:0;
+ background:#f0edff;
+ color:var(--purple);
+ width:42px;
+ height:42px;
+ border-radius:10px;
+ font-size:22px;
+ align-items:center;
+ justify-content:center
+}
+
+.page-title{
+ font-size:20px;
+ font-weight:700
+}
+
+.top-user{
+ width:40px;
+ height:40px;
+ border-radius:50%;
+ background:var(--purple);
+ color:#fff;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:bold
+}
+
+.content{
+ padding:30px;
+ max-width:1500px;
+ margin:auto
+}
+
+.view{
+ display:none
+}
+
+.view.active{
+ display:block
+}
+
+.welcome{
+ background:linear-gradient(135deg,#7053f4,#866bf8);
+ color:#fff;
+ border-radius:18px;
+ padding:27px 30px;
+ box-shadow:0 12px 28px rgba(118,87,246,.18);
+ margin-bottom:24px
+}
+
+.welcome h1{
+ margin:0;
+ font-size:25px
+}
+
+.welcome p{
+ margin:8px 0 0;
+ color:#eeeaff;
+ font-size:14px
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:18px;
+ margin-bottom:24px
+}
+
+.stat-card{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:21px;
+ box-shadow:var(--shadow)
+}
+
+.stat-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center
+}
+
+.stat-icon{
+ width:43px;
+ height:43px;
+ border-radius:12px;
+ background:#f0edff;
+ color:var(--purple);
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ font-size:20px
+}
+
+.stat-label{
+ color:var(--muted);
+ font-size:12px;
+ margin-top:16px
+}
+
+.stat-value{
+ font-size:27px;
+ font-weight:bold;
+ margin-top:5px
+}
+
+.grid-2{
+ display:grid;
+ grid-template-columns:1.25fr .75fr;
+ gap:20px
+}
+
+.panel{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:16px;
+ box-shadow:var(--shadow);
+ overflow:hidden
+}
+
+.panel-header{
+ padding:19px 21px;
+ border-bottom:1px solid var(--border);
+ display:flex;
+ justify-content:space-between;
+ align-items:center
+}
+
+.panel-header h2{
+ margin:0;
+ font-size:16px
+}
+
+.panel-body{
+ padding:20px
+}
+
+.empty{
+ text-align:center;
+ padding:38px 15px;
+ color:var(--muted);
+ font-size:13px
+}
+
+.table-wrap{
+ overflow-x:auto
+}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:700px
+}
+
+th{
+ background:#fafbfc;
+ color:#7b8498;
+ font-size:11px;
+ text-transform:uppercase;
+ letter-spacing:.4px;
+ text-align:left;
+ padding:13px 16px;
+ border-bottom:1px solid var(--border)
+}
+
+td{
+ padding:15px 16px;
+ border-bottom:1px solid #f0f1f4;
+ font-size:13px
+}
+
+tr:last-child td{
+ border-bottom:0
+}
+
+.booking-id{
+ color:var(--purple);
+ font-weight:bold
+}
+
+.status{
+ display:inline-flex;
+ padding:6px 10px;
+ border-radius:20px;
+ font-size:11px;
+ font-weight:bold
+}
+
+.status.confirmed{
+ background:#e7f8f0;
+ color:#12945f
+}
+
+.status.pending{
+ background:#fff5df;
+ color:#bd7910
+}
+
+.status.cancelled{
+ background:#ffebee;
+ color:#d23e4d
+}
+
+.room-grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:18px
+}
+
+.room-card{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:15px;
+ overflow:hidden;
+ box-shadow:var(--shadow)
+}
+
+.room-image{
+ height:155px;
+ background:#ececf2;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ overflow:hidden
+}
+
+.room-image img{
+ width:100%;
+ height:100%;
+ object-fit:cover
+}
+
+.room-placeholder{
+ font-size:42px
+}
+
+.room-info{
+ padding:17px
+}
+
+.room-info h3{
+ margin:0;
+ font-size:16px
+}
+
+.room-info p{
+ color:var(--muted);
+ font-size:12px;
+ margin:7px 0 14px
+}
+
+.room-footer{
+ display:flex;
+ align-items:center;
+ justify-content:space-between
+}
+
+.price{
+ font-weight:bold;
+ color:var(--purple)
+}
+
+.room-badge{
+ font-size:10px;
+ padding:5px 9px;
+ border-radius:20px;
+ background:#e7f8f0;
+ color:#12945f
+}
+
+.room-badge.booked{
+ background:#ffebee;
+ color:#d23e4d
+}
+
+.page-header{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ margin-bottom:22px
+}
+
+.page-header h1{
+ margin:0;
+ font-size:24px
+}
+
+.page-header p{
+ margin:6px 0 0;
+ color:var(--muted);
+ font-size:13px
+}
+
+.primary-btn{
+ border:0;
+ background:var(--purple);
+ color:#fff;
+ padding:11px 17px;
+ border-radius:9px;
+ font-weight:bold
+}
+
+.primary-btn:hover{
+ background:var(--purple2)
+}
+
+.settings-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:20px
+}
+
+.setting-card{
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:21px;
+ box-shadow:var(--shadow)
+}
+
+.setting-card.full{
+ grid-column:1/-1
+}
+
+.setting-card h3{
+ margin:0 0 18px;
+ font-size:16px
+}
+
+.field{
+ margin-bottom:15px
+}
+
+.field label{
+ display:block;
+ font-size:12px;
+ font-weight:bold;
+ margin-bottom:7px
+}
+
+.field input,
+.field select,
+.field textarea{
+ width:100%;
+ border:1px solid #dfe2e9;
+ border-radius:9px;
+ padding:11px 12px;
+ outline:none;
+ background:#fff
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+ border-color:var(--purple)
+}
+
+.save-row{
+ display:flex;
+ justify-content:flex-end
+}
+
+.toggle-row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:12px 0;
+ border-bottom:1px solid #f0f1f4
+}
+
+.toggle{
+ width:44px;
+ height:24px;
+ border-radius:20px;
+ background:#d8dce5;
+ border:0;
+ position:relative
+}
+
+.toggle.on{
+ background:var(--purple)
+}
+
+.toggle:after{
+ content:"";
+ position:absolute;
+ width:18px;
+ height:18px;
+ background:#fff;
+ border-radius:50%;
+ top:3px;
+ left:3px;
+ transition:.2s
+}
+
+.toggle.on:after{
+ left:23px
+}
+
+.danger{
+ border-color:#ffd5d9
+}
+
+.danger h3{
+ color:var(--red)
+}
+
+.danger-btn{
+ border:1px solid #f3b9bf;
+ background:#fff;
+ color:var(--red);
+ padding:10px 15px;
+ border-radius:9px;
+ font-weight:bold
+}
+
+.modal-backdrop{
+ position:fixed;
+ inset:0;
+ background:rgba(10,15,28,.55);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ z-index:3000;
+ padding:20px
+}
+
+.modal-backdrop.show{
+ display:flex
+}
+
+.modal{
+ background:#fff;
+ width:min(600px,100%);
+ max-height:90vh;
+ overflow:auto;
+ border-radius:17px;
+ box-shadow:0 25px 70px rgba(0,0,0,.25)
+}
+
+.modal-header{
+ padding:19px 21px;
+ border-bottom:1px solid var(--border);
+ display:flex;
+ justify-content:space-between;
+ align-items:center
+}
+
+.modal-header h3{
+ margin:0
+}
+
+.close-btn{
+ border:0;
+ background:#f2f3f7;
+ width:35px;
+ height:35px;
+ border-radius:8px;
+ font-size:18px
+}
+
+.modal-body{
+ padding:21px
+}
+
+.detail-row{
+ display:flex;
+ justify-content:space-between;
+ gap:20px;
+ padding:11px 0;
+ border-bottom:1px solid #f0f1f4;
+ font-size:13px
+}
+
+.detail-row span:first-child{
+ color:var(--muted)
+}
+
+.detail-row strong{
+ text-align:right
+}
+
+.form-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:14px
+}
+
+.form-grid .full{
+ grid-column:1/-1
+}
+
+.modal-actions{
+ display:flex;
+ justify-content:flex-end;
+ gap:10px;
+ margin-top:20px
+}
+
+.secondary-btn{
+ border:1px solid var(--border);
+ background:#fff;
+ color:var(--text);
+ padding:10px 15px;
+ border-radius:9px;
+ font-weight:bold
+}
+
+.danger-solid{
+ border:0;
+ background:var(--red);
+ color:#fff;
+ padding:10px 15px;
+ border-radius:9px;
+ font-weight:bold
+}
+
+.mini-actions{
+ display:flex;
+ gap:6px;
+ flex-wrap:wrap
+}
+
+.mini-actions button{
+ border:1px solid var(--border);
+ background:#fff;
+ border-radius:7px;
+ padding:6px 8px;
+ font-size:11px
+}
+
+.mini-actions button:hover{
+ background:#f4f2ff
+}
+
+.toast{
+ position:fixed;
+ right:22px;
+ bottom:22px;
+ background:#172033;
+ color:#fff;
+ padding:13px 17px;
+ border-radius:10px;
+ box-shadow:0 12px 30px rgba(0,0,0,.18);
+ display:none;
+ z-index:5000;
+ font-size:13px
+}
+
+.toast.show{
+ display:block
+}
+
+@media(max-width:1050px){
+ .stats{
+  grid-template-columns:repeat(2,1fr)
+ }
+
+ .grid-2{
+  grid-template-columns:1fr
+ }
+
+ .room-grid{
+  grid-template-columns:repeat(2,1fr)
+ }
+}
+
+@media(max-width:800px){
+
+ .sidebar{
+  transform:translateX(-100%);
+  width:275px
+ }
+
+ .main{
+  margin-left:0
+ }
+
+ .menu-button{
+  display:flex
+ }
+
+ .topbar{
+  padding:0 15px;
+  height:65px
+ }
+
+ .page-title{
+  font-size:17px
+ }
+
+ .top-user{
+  width:36px;
+  height:36px
+ }
+
+ .content{
+  padding:18px 14px 30px
+ }
+
+ .welcome{
+  padding:22px;
+  border-radius:15px
+ }
+
+ .welcome h1{
+  font-size:21px
+ }
+
+ .stats{
+  grid-template-columns:1fr 1fr;
+  gap:12px
+ }
+
+ .stat-card{
+  padding:16px
+ }
+
+ .stat-value{
+  font-size:23px
+ }
+
+ .room-grid{
+  grid-template-columns:1fr
+ }
+
+ .settings-grid{
+  grid-template-columns:1fr
+ }
+
+ .setting-card.full{
+  grid-column:auto
+ }
+
+ .page-header{
+  align-items:flex-start;
+  gap:12px
+ }
+
+ .page-header h1{
+  font-size:21px
+ }
+
+ .form-grid{
+  grid-template-columns:1fr
+ }
+
+ .form-grid .full{
+  grid-column:auto
+ }
+
+ .mini-actions{
+  min-width:160px
+ }
+}
+</style>
+</head>
+
+<body>
+
+<input type="checkbox" id="menuToggle">
+
+<aside class="sidebar">
+
+ <div class="logo">
+  <div class="logo-icon">🏨</div>
+  <div class="logo-text">
+   <strong>Royal Palace</strong>
+   <span>HOTEL ADMIN PANEL</span>
+  </div>
+ </div>
+
+ <div class="menu-title">MAIN MENU</div>
+
+ <nav class="nav">
+
+  <button id="navDashboard"
+   type="button"
+   class="active"
+   onclick="showView('dashboard')">
+   <span class="nav-icon">📊</span>
+   Dashboard
+  </button>
+
+  <button id="navRooms"
+   type="button"
+   onclick="showView('rooms')">
+   <span class="nav-icon">🛏️</span>
+   Room Management
+  </button>
+
+  <button id="navBookings"
+   type="button"
+   onclick="showView('bookings')">
+   <span class="nav-icon">📋</span>
+   Booking History
+  </button>
+
+  <button id="navSettings"
+   type="button"
+   onclick="showView('settings')">
+   <span class="nav-icon">⚙️</span>
+   Settings
+  </button>
+
+ </nav>
+
+ <div class="sidebar-bottom">
+
+  <button
+   type="button"
+   class="nav"
+   style="width:100%;border:0;background:transparent;color:#aeb6c7;padding:13px 14px;border-radius:10px;text-align:left;display:flex;align-items:center;gap:12px;font-size:14px"
+   onclick="logout()">
+
+   <span class="nav-icon">🚪</span>
+   Logout
+
+  </button>
+
+  <div class="sidebar-user">
+   <div class="user-avatar">A</div>
+
+   <div class="sidebar-user-text">
+    <strong>Administrator</strong>
+    <span>Hotel Manager</span>
+   </div>
+  </div>
+
+ </div>
+
+</aside>
+
+<label
+ class="sidebar-overlay"
+ for="menuToggle"
+ aria-label="Close Menu">
+</label>
+
+
+<main class="main">
+
+ <header class="topbar">
+
+  <div class="top-left">
+
+   <label
+    class="menu-button"
+    for="menuToggle"
+    aria-label="Open Menu">
+    ☰
+   </label>
+
+   <div class="page-title" id="topTitle">
+    Dashboard
+   </div>
+
+  </div>
+
+  <div class="top-user">A</div>
+
+ </header>
+
+
+ <div class="content">
+
+
+  <!-- DASHBOARD -->
+
+  <section id="dashboardView" class="view active">
+
+   <div class="welcome">
+
+    <h1>Welcome back, Administrator 👋</h1>
+
+    <p>
+     Manage your Royal Palace Hotel from one powerful control panel.
+    </p>
+
+   </div>
+
+
+   <div class="stats">
+
+    <div class="stat-card">
+     <div class="stat-top">
+      <div>
+       <div class="stat-label">TOTAL ROOMS</div>
+       <div class="stat-value" id="statRooms">0</div>
+      </div>
+
+      <div class="stat-icon">🛏️</div>
+     </div>
+    </div>
+
+
+    <div class="stat-card">
+     <div class="stat-top">
+      <div>
+       <div class="stat-label">TOTAL BOOKINGS</div>
+       <div class="stat-value" id="statBookings">0</div>
+      </div>
+
+      <div class="stat-icon">📋</div>
+     </div>
+    </div>
+
+
+    <div class="stat-card">
+     <div class="stat-top">
+      <div>
+       <div class="stat-label">CONFIRMED</div>
+       <div class="stat-value" id="statConfirmed">0</div>
+      </div>
+
+      <div class="stat-icon">✅</div>
+     </div>
+    </div>
+
+
+    <div class="stat-card">
+     <div class="stat-top">
+      <div>
+       <div class="stat-label">TOTAL REVENUE</div>
+       <div class="stat-value" id="statRevenue">₹0</div>
+      </div>
+
+      <div class="stat-icon">💰</div>
+     </div>
+    </div>
+
+   </div>
+
+
+   <div class="grid-2">
+
+    <div class="panel">
+
+     <div class="panel-header">
+      <h2>Recent Bookings</h2>
+
+      <button
+       class="primary-btn"
+       onclick="showView('bookings')">
+       View All
+      </button>
+     </div>
+
+     <div class="table-wrap">
+
+      <table>
+
+       <thead>
+        <tr>
+         <th>ID</th>
+         <th>Guest</th>
+         <th>Room</th>
+         <th>Amount</th>
+         <th>Status</th>
+        </tr>
+       </thead>
+
+       <tbody id="recentBookings"></tbody>
+
+      </table>
+
+     </div>
+
+    </div>
+
+
+    <div class="panel">
+
+     <div class="panel-header">
+      <h2>Room Overview</h2>
+
+      <button
+       class="primary-btn"
+       onclick="showView('rooms')">
+       Manage
+      </button>
+     </div>
+
+     <div
+      class="panel-body"
+      id="roomOverview">
+     </div>
+
+    </div>
+
+   </div>
+
+  </section>
+
+
+  <!-- ROOMS -->
+
+  <section id="roomsView" class="view">
+
+   <div class="page-header">
+
+    <div>
+     <h1>Room Management</h1>
+
+     <p>
+      Add, edit and manage your hotel rooms.
+     </p>
+    </div>
+
+    <button
+     class="primary-btn"
+     onclick="openRoomModal()">
+     + Add Room
+    </button>
+
+   </div>
+
+
+   <div class="stats">
+
+    <div class="stat-card">
+     <div class="stat-label">TOTAL ROOMS</div>
+     <div class="stat-value" id="roomTotal">0</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">AVAILABLE</div>
+     <div class="stat-value" id="roomAvailable">0</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">BOOKED</div>
+     <div class="stat-value" id="roomBooked">0</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">AVERAGE PRICE</div>
+     <div class="stat-value" id="roomAverage">₹0</div>
+    </div>
+
+   </div>
+
+
+   <div
+    class="room-grid"
+    id="roomsGrid">
+   </div>
+
+  </section>
+
+
+  <!-- BOOKINGS -->
+
+  <section id="bookingsView" class="view">
+
+   <div class="page-header">
+
+    <div>
+     <h1>Booking History</h1>
+
+     <p>
+      View and manage all hotel bookings.
+     </p>
+    </div>
+
+    <button
+     class="primary-btn"
+     onclick="openBookingModal()">
+     + Add Booking
+    </button>
+
+   </div>
+
+
+   <div class="stats">
+
+    <div class="stat-card">
+     <div class="stat-label">TOTAL BOOKINGS</div>
+     <div class="stat-value" id="bookingTotal">0</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">PENDING</div>
+     <div class="stat-value" id="bookingPending">0</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">CONFIRMED</div>
+     <div class="stat-value" id="bookingConfirmed">0</div>
+    </div>
+
+    <div class="stat-card">
+     <div class="stat-label">CANCELLED</div>
+     <div class="stat-value" id="bookingCancelled">0</div>
+    </div>
+
+   </div>
+
+
+   <div class="panel">
+
+    <div class="panel-header">
+     <h2>All Bookings</h2>
+    </div>
+
+    <div class="table-wrap">
+
+     <table>
+
+      <thead>
+       <tr>
+        <th>Booking ID</th>
+        <th>Guest</th>
+        <th>Room</th>
+        <th>Check In</th>
+        <th>Check Out</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+       </tr>
+      </thead>
+
+      <tbody id="bookingsTable"></tbody>
+
+     </table>
+
+    </div>
+
+   </div>
+
+  </section>
+
+
+  <!-- SETTINGS -->
+
+  <section id="settingsView" class="view">
+
+   <div class="page-header">
+
+    <div>
+     <h1>Settings</h1>
+
+     <p>
+      Manage your hotel admin panel settings.
+     </p>
+    </div>
+
+   </div>
+
+
+   <div class="settings-grid">
+
+
+    <div class="setting-card">
+
+     <h3>Hotel Information</h3>
+
+     <div class="field">
+      <label>Hotel Name</label>
+      <input
+       id="hotelName"
+       type="text"
+       value="Royal Palace Hotel">
+     </div>
+
+     <div class="field">
+      <label>Email</label>
+      <input
+       id="hotelEmail"
+       type="email"
+       value="admin@royalpalacehotel.com">
+     </div>
+
+     <div class="field">
+      <label>Phone</label>
+      <input
+       id="hotelPhone"
+       type="text"
+       value="+91 98765 43210">
+     </div>
+
+     <div class="field">
+      <label>Address</label>
+      <textarea
+       id="hotelAddress"
+       rows="3">Royal Palace Hotel, India</textarea>
+     </div>
+
+    </div>
+
+
+    <div class="setting-card">
+
+     <h3>System Settings</h3>
+
+     <div class="toggle-row">
+
+      <span>Booking Notifications</span>
+
+      <button
+       id="toggleNotifications"
+       class="toggle on"
+       onclick="toggleSetting('notifications')">
+      </button>
+
+     </div>
+
+
+     <div class="toggle-row">
+
+      <span>Auto Confirm Booking</span>
+
+      <button
+       id="toggleAutoConfirm"
+       class="toggle"
+       onclick="toggleSetting('autoConfirm')">
+      </button>
+
+     </div>
+
+
+     <div class="toggle-row">
+
+      <span>Maintenance Mode</span>
+
+      <button
+       id="toggleMaintenance"
+       class="toggle"
+       onclick="toggleSetting('maintenance')">
+      </button>
+
+     </div>
+
+
+     <div class="field" style="margin-top:18px">
+
+      <label>Currency</label>
+
+      <select id="currency">
+       <option value="INR">INR - ₹</option>
+       <option value="USD">USD - $</option>
+       <option value="EUR">EUR - €</option>
+      </select>
+
+     </div>
+
+    </div>
+
+
+    <div class="setting-card full">
+
+     <div class="save-row">
+
+      <button
+       class="primary-btn"
+       onclick="saveSettings()">
+       Save Settings
+      </button>
+
+     </div>
+
+    </div>
+
+
+    <div class="setting-card full danger">
+
+     <h3>Danger Zone</h3>
+
+     <p
