@@ -1653,7 +1653,141 @@ function saveLocalBookings() {
         );
     }
 }
+/* =========================================================
+   EDIT BOOKING
+========================================================= */
 
+async function editBooking(id) {
+
+    const booking =
+        state.bookings.find(
+            function (item) {
+                return getBookingId(item) === String(id);
+            }
+        );
+
+    if (!booking) {
+        showToast("Booking not found.");
+        return;
+    }
+
+    const guestName =
+        prompt(
+            "Guest Name:",
+            getGuestName(booking)
+        );
+
+    if (guestName === null) {
+        return;
+    }
+
+    const room =
+        prompt(
+            "Room:",
+            getRoom(booking)
+        );
+
+    if (room === null) {
+        return;
+    }
+
+    const totalText =
+        prompt(
+            "Total Amount:",
+            String(getTotal(booking))
+        );
+
+    if (totalText === null) {
+        return;
+    }
+
+    const total =
+        Number(totalText);
+
+    if (!Number.isFinite(total)) {
+        showToast(
+            "Please enter a valid amount."
+        );
+        return;
+    }
+
+    try {
+
+        const url =
+            SUPABASE_URL +
+            "/rest/v1/" +
+            TABLE_NAME +
+            "?booking_id=eq." +
+            encodeURIComponent(id);
+
+        await supabaseFetch(
+            url,
+            {
+                method: "PATCH",
+
+                headers:
+                    supabaseHeaders({
+                        Prefer:
+                            "return=minimal"
+                    }),
+
+                body:
+                    JSON.stringify({
+                        guest_name:
+                            guestName.trim(),
+
+                        room:
+                            room.trim(),
+
+                        total:
+                            total
+                    })
+            }
+        );
+
+        booking.guest_name =
+            guestName.trim();
+
+        booking.room =
+            room.trim();
+
+        booking.total =
+            total;
+
+        saveLocalBookings();
+
+        renderBookings();
+
+        notifyBookingChange(
+            "royalBookingsChanged"
+        );
+
+        if (
+            typeof window.updateDashboard ===
+            "function"
+        ) {
+            window.updateDashboard();
+        }
+
+        showToast(
+            "Booking updated successfully."
+        );
+
+    } catch (error) {
+
+        reportError(
+            "BOOKING_EDIT_ERROR",
+            error.message,
+            {
+                booking_id: id
+            }
+        );
+
+        showToast(
+            "Booking update failed."
+        );
+    }
+            }
 
 /* =====================================================
    PUBLIC API
