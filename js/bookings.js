@@ -1787,7 +1787,8 @@ async function editBooking(id) {
             "Booking update failed."
         );
     }
-
+}
+    
  /* =====================================================
    BOOKING EVENT NOTIFIER
 ===================================================== */
