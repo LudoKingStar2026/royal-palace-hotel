@@ -1787,27 +1787,6 @@ function updateRoomCounters() {
     }
 }
 
-        if (totalEl) {
-            totalEl.textContent =
-                total;
-        }
-
-        if (availableEl) {
-            availableEl.textContent =
-                available;
-        }
-
-        if (bookedEl) {
-            bookedEl.textContent =
-                booked;
-        }
-
-        if (averageEl) {
-            averageEl.textContent =
-                money(average);
-        }
-    }
-
     /* =========================================================
        RENDER ROOMS
     ========================================================= */
