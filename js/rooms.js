@@ -1637,69 +1637,6 @@ if (
 } else {
     bootRooms();
 }
-
-
-                toast.id =
-                    "roomToast";
-
-                toast.style.position =
-                    "fixed";
-
-                toast.style.left =
-                    "50%";
-
-                toast.style.bottom =
-                    "25px";
-
-                toast.style.transform =
-                    "translateX(-50%)";
-
-                toast.style.zIndex =
-                    "99999";
-
-                toast.style.padding =
-                    "12px 20px";
-
-                toast.style.borderRadius =
-                    "14px";
-
-                toast.style.background =
-                    "linear-gradient(135deg,#6d28d9,#2563eb)";
-
-                toast.style.color =
-                    "#fff";
-
-                toast.style.fontWeight =
-                    "700";
-
-                toast.style.boxShadow =
-                    "0 10px 30px rgba(0,0,0,.25)";
-
-                document.body.appendChild(
-                    toast
-                );
-            }
-
-            toast.textContent =
-                message;
-
-            toast.style.display =
-                "block";
-
-            clearTimeout(
-                toast._timer
-            );
-
-            toast._timer =
-                setTimeout(function () {
-                    toast.style.display =
-                        "none";
-                }, 2200);
-        } catch (error) {
-            console.log(message);
-        }
-    }
-
     /* =========================================================
        ROOM COUNTERS
     ========================================================= */
