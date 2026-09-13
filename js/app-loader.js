@@ -173,67 +173,194 @@
         }
 
         finishLoader();
+    async function startFunctions() {
+
+    /*
+     * BOOKINGS
+     * पहले booking load पूरा होने दें।
+     * अगर bookings.js पहले से loading कर रहा है,
+     * तो royalBookingsLoaded event का इंतजार करेंगे।
+     */
+
+    let bookingLoaded = false;
+
+    const bookingReady = new Promise(function (resolve) {
+
+        function done() {
+
+            if (bookingLoaded) {
+                return;
+            }
+
+            bookingLoaded = true;
+
+            window.removeEventListener(
+                "royalBookingsLoaded",
+                done
+            );
+
+            resolve(true);
+        }
+
+        window.addEventListener(
+            "royalBookingsLoaded",
+            done,
+            {
+                once: true
+            }
+        );
+
+        /*
+         * अगर bookings पहले ही loaded हो चुका है
+         * तो event का इंतजार करने की जरूरत नहीं।
+         */
+        try {
+
+            if (
+                typeof window.getBookings ===
+                "function"
+            ) {
+
+                const current =
+                    window.getBookings();
+
+                if (
+                    Array.isArray(current) &&
+                    window.ROYAL_APP &&
+                    window.ROYAL_APP.ready
+                ) {
+                    done();
+                }
+
+            }
+
+        } catch (e) {
+            console.warn(
+                "Booking ready check:",
+                e
+            );
+        }
+
+    });
+
+    try {
+
+        if (
+            typeof window.loadBookings ===
+            "function"
+        ) {
+
+            window.loadBookings();
+
+        }
+
+    } catch (e) {
+
+        reportError(
+            "BOOKINGS",
+            e.message,
+            "bookings.js"
+        );
+
     }
 
-    function startFunctions() {
+    /*
+     * Booking event का इंतजार।
+     */
+    await Promise.race([
+        bookingReady,
+        new Promise(function (resolve) {
 
-        setTimeout(function () {
-            try {
-                if (typeof window.loadBookings === "function") {
-                    window.loadBookings();
-                }
-            } catch (e) {
-                reportError(
-                    "BOOKINGS",
-                    e.message,
-                    "bookings.js"
-                );
-            }
-        }, 100);
+            setTimeout(
+                resolve,
+                10000
+            );
 
-        setTimeout(function () {
-            try {
-                if (typeof window.updateDashboard === "function") {
-                    window.updateDashboard();
-                }
-            } catch (e) {
-                reportError(
-                    "DASHBOARD",
-                    e.message,
-                    "dashboard.js"
-                );
-            }
-        }, 150);
+        })
+    ]);
 
-        setTimeout(function () {
-            try {
-                if (typeof window.updateRoomsPage === "function") {
-                    window.updateRoomsPage();
-                }
-            } catch (e) {
-                reportError(
-                    "ROOMS",
-                    e.message,
-                    "rooms.js"
-                );
-            }
-        }, 200);
 
-        setTimeout(function () {
-            try {
-                if (typeof window.renderSettings === "function") {
-                    window.renderSettings();
-                }
-            } catch (e) {
-                reportError(
-                    "SETTINGS",
-                    e.message,
-                    "settings.js"
-                );
-            }
-        }, 250);
+    /*
+     * DASHBOARD
+     * अब booking data उपलब्ध होने के बाद
+     * dashboard को update करें।
+     */
+
+    try {
+
+        if (
+            typeof window.updateDashboard ===
+            "function"
+        ) {
+
+            window.updateDashboard();
+
+        }
+
+    } catch (e) {
+
+        reportError(
+            "DASHBOARD",
+            e.message,
+            "dashboard.js"
+        );
+
     }
 
+
+    /*
+     * ROOMS
+     */
+
+    try {
+
+        if (
+            typeof window.updateRoomsPage ===
+            "function"
+        ) {
+
+            window.updateRoomsPage();
+
+        }
+
+    } catch (e) {
+
+        reportError(
+            "ROOMS",
+            e.message,
+            "rooms.js"
+        );
+
+    }
+
+
+    /*
+     * SETTINGS
+     */
+
+    try {
+
+        if (
+            typeof window.renderSettings ===
+            "function"
+        ) {
+
+            window.renderSettings();
+
+        }
+
+    } catch (e) {
+
+        reportError(
+            "SETTINGS",
+            e.message,
+            "settings.js"
+        );
+
+    }
+
+    }
+       
     function finishLoader() {
 
         window.ROYAL_APP.loader.finishedAt =
