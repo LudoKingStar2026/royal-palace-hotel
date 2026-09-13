@@ -839,19 +839,18 @@
                          * is not silently lost.
                          */
 
-                        const index =
-                            merged.findIndex(
-                                function (
-                                    room
-                                ) {
-                                    return (
-                                        getRoomId(
-                                            room
-                                        ) === id
-                                    );
-                                }
-                            );
-
+                    
+const index =
+    merged.findIndex(
+        function (room) {
+            return (
+                getRoomId(
+                    room
+                ) === id
+            );
+        }
+    );
+                        
                                if (
                                 old !==
                                 next
