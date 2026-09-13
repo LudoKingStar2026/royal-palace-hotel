@@ -173,6 +173,8 @@
         }
 
         finishLoader();
+    }
+   
     async function startFunctions() {
 
     /*
