@@ -522,64 +522,56 @@
      * ---------------------------------------------------------
      */
 
-    async function upsertRoomToCloud(
-        room
-    ) {
+    async function upsertRoomToCloud(room) {
+    const db = await getSupabase();
 
-        const db =
-            await getSupabase();
+    if (!db) {
+        reportError(new Error("Supabase client not available"));
+        return false;
+    }
 
-        if (!db) {
-            return false;
+    try {
+        const row = {
+            room_id: getRoomId(room),
+            room_number: getRoomNumber(room),
+            room_name: getRoomName(room),
+            room_type: getRoomType(room),
+            price: getRoomPrice(room),
+            status: getRoomStatus(room)
+        };
+
+        const result = await db
+            .from("hotel_rooms")
+            .upsert(row, {
+                onConflict: "room_id"
+            })
+            .select();
+
+        if (result.error) {
+            throw result.error;
         }
 
-        try {
+        console.log(
+            "[Royal Rooms] Cloud room saved:",
+            row.room_id
+        );
 
-            const row = {
-                room_id:
-                    getRoomId(room),
+        return true;
 
-                room_number:
-                    getRoomNumber(room),
+    } catch (error) {
+        reportError(error);
 
-                room_name:
-                    getRoomName(room),
+        showRoomToast(
+            "Cloud save failed: " +
+            (
+                error && error.message
+                    ? error.message
+                    : "Please check Supabase access."
+            )
+        );
 
-                room_type:
-                    getRoomType(room),
-
-                price:
-                    getRoomPrice(room),
-
-                status:
-                    getRoomStatus(room)
-            };
-
-            const result =
-                await db
-                    .from(
-                        "hotel_rooms"
-                    )
-                    .upsert(
-                        row,
-                        {
-                            onConflict:
-                                "room_id"
-                        }
-                    );
-
-            if (result.error) {
-                throw result.error;
-            }
-
-            return true;
-
-        } catch (error) {
-
-            reportError(error);
-
-            return false;
-        }
+        return false;
+    }
     }
 
     async function deleteRoomFromCloud(
