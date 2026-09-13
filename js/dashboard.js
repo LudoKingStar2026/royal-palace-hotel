@@ -763,14 +763,14 @@
        PUBLIC EVENTS
        ========================================================= */
 
-    document.addEventListener(
+    window.addEventListener(
         "royalBookingsLoaded",
         function () {
             updateDashboard();
         }
     );
 
-    document.addEventListener(
+    window.addEventListener(
         "royalBookingsChanged",
         function () {
             updateDashboard();
