@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0">
+
+<title>Royal Palace Hotel - Admin Login</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at 15% 20%,rgba(124,58,237,.30),transparent 30%),
+        radial-gradient(circle at 85% 80%,rgba(37,99,235,.25),transparent 30%),
+        linear-gradient(135deg,#080b1c,#11152d 50%,#080b1c);
+    color:#fff;
+}
+
+.login-wrap{
+    width:100%;
+    max-width:430px;
+}
+
+.brand{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.logo{
+    width:76px;
+    height:76px;
+    margin:0 auto 14px;
+    border-radius:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    font-weight:900;
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.40),
+        0 0 35px rgba(124,58,237,.35);
+}
+
+.brand h1{
+    margin:0;
+    font-size:25px;
+    font-weight:800;
+}
+
+.brand p{
+    margin:7px 0 0;
+    color:#aeb6d0;
+    font-size:14px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:24px;
+    padding:28px;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.45),
+        inset 0 1px rgba(255,255,255,.08);
+}
+
+.card h2{
+    margin:0 0 6px;
+    font-size:22px;
+}
+
+.subtitle{
+    margin:0 0 24px;
+    color:#aeb6d0;
+    font-size:13px;
+}
+
+.field{
+    margin-bottom:17px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:8px;
+    color:#dfe4f5;
+    font-size:13px;
+    font-weight:700;
+}
+
+.field input{
+    width:100%;
+    height:50px;
+    padding:0 15px;
+    border-radius:13px;
+    border:1px solid rgba(255,255,255,.15);
+    outline:none;
+    background:rgba(0,0,0,.22);
+    color:#fff;
+    font-size:15px;
+}
+
+.field input::placeholder{
+    color:#737c98;
+}
+
+.field input:focus{
+    border-color:#8b5cf6;
+    box-shadow:0 0 0 3px rgba(139,92,246,.14);
+}
+
+.login-btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:14px;
+    color:#fff;
+    font-size:15px;
+    font-weight:800;
+    cursor:pointer;
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    box-shadow:0 12px 28px rgba(79,70,229,.32);
+    transition:.2s;
+}
+
+.login-btn:hover{
+    transform:translateY(-1px);
+}
+
+.login-btn:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.message{
+    display:none;
+    margin-top:16px;
+    padding:12px 14px;
+    border-radius:12px;
+    font-size:13px;
+    line-height:1.45;
+}
+
+.message.error{
+    display:block;
+    background:rgba(239,68,68,.12);
+    border:1px solid rgba(239,68,68,.30);
+    color:#fecaca;
+}
+
+.message.success{
+    display:block;
+    background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.30);
+    color:#bbf7d0;
+}
+
+.footer{
+    text-align:center;
+    margin-top:18px;
+    color:#737c98;
+    font-size:11px;
+}
+
+.status{
+    margin-top:16px;
+    text-align:center;
+    color:#8f98b4;
+    font-size:11px;
+}
+
+@media(max-width:480px){
+    body{
+        padding:14px;
+    }
+
+    .card{
+        padding:22px 18px;
+        border-radius:20px;
+    }
+
+    .brand h1{
+        font-size:22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-wrap">
+
+    <div class="brand">
+        <div class="logo">RP</div>
+        <h1>Royal Palace Hotel</h1>
+        <p>Premium Admin Control Panel</p>
+    </div>
+
+    <div class="card">
+
+        <h2>Admin Login</h2>
+
+        <p class="subtitle">
+            Sign in with your authorized administrator account.
+        </p>
+
+        <form id="loginForm">
+
+            <div class="field">
+                <label for="email">Admin Email</label>
+                <input
+                    id="email"
+                    type="email"
+                    autocomplete="username"
+                    placeholder="Enter admin email"
+                    required>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input
+                    id="password"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Enter password"
+                    required>
+            </div>
+
+            <button
+                id="loginBtn"
+                class="login-btn"
+                type="submit">
+                Sign In
+            </button>
+
+        </form>
+
+        <div id="message" class="message"></div>
+
+        <div id="status" class="status">
+            Secure Supabase Authentication
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Royal Palace Hotel • Admin Access
+    </div>
+
+</div>
+
+<script>
+"use strict";
+
+/* =========================================
+   SUPABASE CONFIG
+========================================= */
+
+const SUPABASE_URL =
+    "https://mvvfqkcgaxcipjkiyuae.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_YbyO8KHQxXyv6afqJZfWg_Eu2aw57x";
+
+/* =========================================
+   SUPABASE CLIENT
+========================================= */
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const form =
+    document.getElementById("loginForm");
+
+const emailInput =
+    document.getElementById("email");
+
+const passwordInput =
+    document.getElementById("password");
+
+const loginBtn =
+    document.getElementById("loginBtn");
+
+const message =
+    document.getElementById("message");
+
+const statusBox =
+    document.getElementById("status");
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(text,type){
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+}
+
+/* =========================================
+   CHECK EXISTING SESSION
+========================================= */
+
+async function checkSession(){
+
+    try{
+
+        const result =
+            await supabaseClient.auth.getSession();
+
+        const session =
+            result.data &&
+            result.data.session;
+
+        if(session){
+
+            localStorage.setItem(
+                "admin_logged_in",
+                "true"
+            );
+
+            localStorage.setItem(
+                "royal_admin_email",
+                session.user.email || ""
+            );
+
+            window.location.replace(
+                "admin.html"
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "Session check failed:",
+            error
+        );
+
+    }
+}
+
+/* =========================================
+   LOGIN
+========================================= */
+
+form.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        const email =
+            emailInput.value.trim();
+
+        const password =
+            passwordInput.value;
+
+        if(!email || !password){
+
+            showMessage(
+                "Please enter email and password.",
+                "error"
+            );
+
+            return;
+        }
+
+        loginBtn.disabled = true;
+
+        loginBtn.textContent =
+            "Signing in...";
+
+        statusBox.textContent =
+            "Authenticating securely...";
+
+        message.className =
+            "message";
+
+        try{
+
+            const result =
+                await supabaseClient.auth.signInWithPassword({
+                    email:email,
+                    password:password
+                });
+
+            if(result.error){
+
+                throw result.error;
+            }
+
+            const session =
+                result.data &&
+                result.data.session;
+
+            const user =
+                result.data &&
+                result.data.user;
+
+            if(!session || !user){
+
+                throw new Error(
+                    "Login succeeded but no session was returned."
+                );
+            }
+
+            /*
+              Keep compatibility with
+              existing Admin Panel.
+            */
+
+            localStorage.setItem(
+                "admin_logged_in",
+                "true"
+            );
+
+            localStorage.setItem(
+                "royal_admin_email",
+                user.email || email
+            );
+
+            localStorage.setItem(
+                "royal_admin_user_id",
+                user.id || ""
+            );
+
+            showMessage(
+                "Login successful. Opening Admin Panel...",
+                "success"
+            );
+
+            statusBox.textContent =
+                "Authenticated";
+
+            loginBtn.textContent =
+                "Success ✓";
+
+            /*
+              Give Supabase session a moment
+              to persist before redirect.
+            */
+
+            setTimeout(
+                function(){
+                    window.location.replace(
+                        "admin.html"
+                    );
+                },
+                500
+            );
+
+        }catch(error){
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+            let text =
+                "Login failed.";
+
+            if(
+                error &&
+                error.message
+            ){
+                text =
+                    error.message;
+            }
+
+            /*
+              Friendly Supabase message.
+            */
+
+            if(
+                text.toLowerCase()
+                    .includes("invalid login")
+            ){
+                text =
+                    "Email या password गलत है।";
+            }
+
+            showMessage(
+                text,
+                "error"
+            );
+
+            statusBox.textContent =
+                "Authentication failed";
+
+            loginBtn.disabled = false;
+
+            loginBtn.textContent =
+                "Sign In";
+        }
+
+    }
+);
+
+/* =========================================
+   AUTH STATE LISTENER
+========================================= */
+
+supabaseClient.auth.onAuthStateChange(
+    function(event,session){
+
+        if(
+            event === "SIGNED_IN" &&
+            session
+        ){
+
+            localStorage.setItem(
+                "admin_logged_in",
+                "true"
+            );
+
+            localStorage.setItem(
+                "royal_admin_email",
+                session.user.email || ""
+            );
+
+            localStorage.setItem(
+                "royal_admin_user_id",
+                session.user.id || ""
+            );
+        }
+
+        if(
+            event === "SIGNED_OUT"
+        ){
+
+            localStorage.removeItem(
+                "admin_logged_in"
+            );
+
+            localStorage.removeItem(
+                "royal_admin_email"
+            );
+
+            localStorage.removeItem(
+                "royal_admin_user_id"
+            );
+        }
+
+    }
+);
+
+/* =========================================
+   START
+========================================= */
+
+checkSession();
+
+</script>
+
+</body>
+</html>
