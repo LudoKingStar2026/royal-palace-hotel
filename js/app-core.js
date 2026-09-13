@@ -1,13 +1,13 @@
 /* =========================================================
    ROYAL PALACE HOTEL
    CENTRAL APP CORE
-   VERSION: 2.0
+   VERSION: 7.0
    ========================================================= */
 
 (function () {
     "use strict";
 
-    const CORE_VERSION = "2.0";
+    const CORE_VERSION = "7.0";
 
     /* =====================================================
        SUPABASE CONFIG
