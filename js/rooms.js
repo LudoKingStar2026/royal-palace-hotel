@@ -1070,7 +1070,267 @@ const index =
             number
         );
     }
+/* =====================================================
+   ROOM CARD RENDERING
+===================================================== */
 
+function createRoomCard(room) {
+    try {
+        const id = getRoomId(room);
+        const name = getRoomName(room) || "Room";
+        const number = getRoomNumber(room) || "";
+        const type = getRoomType(room) || "Premium";
+        const price = Number(getRoomPrice(room) || 0);
+        const status = getRoomStatus(room) || "available";
+
+        const statusText =
+            status === "booked"
+                ? "Booked"
+                : status === "maintenance"
+                    ? "Maintenance"
+                    : "Available";
+
+        const image =
+            room && room.image
+                ? String(room.image)
+                : "";
+
+        const card = document.createElement("div");
+        card.className = "room-card";
+
+        const imageBox = document.createElement("div");
+        imageBox.className = "room-image";
+
+        if (image) {
+            const img = document.createElement("img");
+
+            img.src = image;
+            img.alt = name;
+
+            img.onerror = function () {
+                this.style.display = "none";
+
+                const placeholder =
+                    document.createElement("div");
+
+                placeholder.className =
+                    "room-placeholder";
+
+                placeholder.textContent = "🏨";
+
+                imageBox.appendChild(
+                    placeholder
+                );
+            };
+
+            imageBox.appendChild(img);
+        } else {
+            const placeholder =
+                document.createElement("div");
+
+            placeholder.className =
+                "room-placeholder";
+
+            placeholder.textContent = "🏨";
+
+            imageBox.appendChild(
+                placeholder
+            );
+        }
+
+        const info = document.createElement("div");
+        info.className = "room-info";
+
+        const title =
+            document.createElement("h3");
+
+        title.textContent = name;
+
+        const description =
+            document.createElement("p");
+
+        description.textContent =
+            "Room " +
+            number +
+            " • " +
+            type;
+
+        const footer =
+            document.createElement("div");
+
+        footer.className = "room-footer";
+
+        const priceBox =
+            document.createElement("span");
+
+        priceBox.className = "price";
+
+        priceBox.textContent =
+            "₹" +
+            price.toLocaleString("en-IN") +
+            "/night";
+
+        const badge =
+            document.createElement("span");
+
+        badge.className =
+            "room-badge" +
+            (
+                status === "booked"
+                    ? " booked"
+                    : ""
+            );
+
+        badge.textContent =
+            statusText;
+
+        footer.appendChild(priceBox);
+        footer.appendChild(badge);
+
+        const actions =
+            document.createElement("div");
+
+        actions.style.marginTop = "12px";
+        actions.style.display = "flex";
+        actions.style.gap = "7px";
+        actions.style.flexWrap = "wrap";
+
+        const editButton =
+            document.createElement("button");
+
+        editButton.type = "button";
+        editButton.className =
+            "secondary-btn";
+
+        editButton.style.padding =
+            "7px 10px";
+
+        editButton.style.fontSize =
+            "11px";
+
+        editButton.textContent =
+            "✏ Edit";
+
+        editButton.onclick = function () {
+            editRoom(id);
+        };
+
+        const statusButton =
+            document.createElement("button");
+
+        statusButton.type = "button";
+        statusButton.className =
+            "secondary-btn";
+
+        statusButton.style.padding =
+            "7px 10px";
+
+        statusButton.style.fontSize =
+            "11px";
+
+        statusButton.textContent =
+            status === "booked"
+                ? "✓ Available"
+                : "🔴 Booked";
+
+        statusButton.onclick = function () {
+            toggleRoomStatus(id);
+        };
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.type = "button";
+        deleteButton.className =
+            "danger-btn";
+
+        deleteButton.style.padding =
+            "7px 10px";
+
+        deleteButton.style.fontSize =
+            "11px";
+
+        deleteButton.textContent =
+            "🗑 Delete";
+
+        deleteButton.onclick = function () {
+            deleteRoom(id);
+        };
+
+        actions.appendChild(editButton);
+        actions.appendChild(statusButton);
+        actions.appendChild(deleteButton);
+
+        info.appendChild(title);
+        info.appendChild(description);
+        info.appendChild(footer);
+        info.appendChild(actions);
+
+        card.appendChild(imageBox);
+        card.appendChild(info);
+
+        return card;
+
+    } catch (error) {
+        try {
+            reportError(error);
+        } catch (e) {}
+
+        return null;
+    }
+}
+
+
+function renderRooms(list) {
+    try {
+        const grid =
+            document.getElementById("roomsGrid");
+
+        if (!grid) {
+            return;
+        }
+
+        const data =
+            Array.isArray(list)
+                ? list
+                : rooms;
+
+        grid.innerHTML = "";
+
+        if (!Array.isArray(data) || data.length === 0) {
+            const empty =
+                document.createElement("div");
+
+            empty.className = "empty";
+
+            empty.style.gridColumn =
+                "1 / -1";
+
+            empty.textContent =
+                "No rooms found. Add a new room to get started.";
+
+            grid.appendChild(empty);
+
+            return;
+        }
+
+        data.forEach(function (room) {
+            const card =
+                createRoomCard(room);
+
+            if (card) {
+                grid.appendChild(card);
+            }
+        });
+
+    } catch (error) {
+        try {
+            reportError(error);
+        } catch (e) {
+            console.error(error);
+        }
+    }
+}
     function openRoomModal(
         roomId
     ) {
