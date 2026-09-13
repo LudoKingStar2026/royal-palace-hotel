@@ -1121,7 +1121,8 @@
 
         await window.testSupabase();
 
-
+       await window.startRoyalAdminAuth();
+       
         window.updateAppHealth();
 
 
